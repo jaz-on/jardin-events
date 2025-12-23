@@ -1,0 +1,29 @@
+/**
+ * Base styles for Jardin Events.
+ * Minimal, accessible defaults that themes can override.
+ */
+
+.jardin-events-list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.jardin-events-item {
+	margin-bottom: 1.5rem;
+}
+
+.jardin-events-item-title {
+	font-weight: 600;
+}
+
+.jardin-events-item-meta {
+	font-size: 0.9rem;
+	opacity: 0.85;
+}
+
+.jardin-events-item-link a {
+	text-decoration: underline;
+}
+
+

@@ -1,0 +1,11 @@
+{
+  "name": "jaz-on/jardin-event",
+  "description": "Mini plugin CPT Events pour le site Jardin",
+  "type": "wordpress-plugin",
+  "license": "MIT",
+  "require": {
+    "php": ">=7.4"
+  }
+}
+
+
