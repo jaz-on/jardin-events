@@ -5,6 +5,8 @@
  * Author: Jason Rouet
  * Version: 0.1.0
  * Text Domain: jardin-events
+ * GitHub Plugin URI: https://github.com/jaz-on/jardin-event
+ * Primary Branch: dev
  */
 
 // Prevent direct access.
