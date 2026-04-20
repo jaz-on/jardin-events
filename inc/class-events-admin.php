@@ -96,7 +96,7 @@ class Jardin_Events_Admin {
 	}
 
 	/**
-	 * After save: show notice if end date was before start date.
+	 * After save: show notice if dates were invalid (end before start or bad format).
 	 */
 	public function render_date_validation_notice() {
 		$user_id = get_current_user_id();
@@ -112,9 +112,25 @@ class Jardin_Events_Admin {
 		delete_transient( $key );
 		?>
 		<div class="notice notice-error is-dismissible">
-			<p><?php esc_html_e( 'La date de fin doit être identique ou postérieure à la date de début. Les modifications n’ont pas été enregistrées.', 'jardin-events' ); ?></p>
+			<p><?php esc_html_e( 'Les dates de l’événement n’ont pas été enregistrées : vérifiez qu’elles sont valides et que la fin n’est pas avant le début. Le lieu et le lien, eux, ont été enregistrés.', 'jardin-events' ); ?></p>
 		</div>
 		<?php
+	}
+
+	/**
+	 * Persist a parsed Y-m-d or empty meta value.
+	 *
+	 * @param int         $post_id  Post ID.
+	 * @param string      $meta_key Meta key.
+	 * @param string|null $parsed   Empty string, Y-m-d, or null if invalid (should not reach save when null).
+	 */
+	private function save_parsed_ymd_meta( $post_id, $meta_key, $parsed ) {
+		if ( null === $parsed || '' === $parsed ) {
+			delete_post_meta( $post_id, $meta_key );
+			return;
+		}
+
+		update_post_meta( $post_id, $meta_key, $parsed );
 	}
 
 	/**
@@ -139,38 +155,37 @@ class Jardin_Events_Admin {
 			return;
 		}
 
-		$start_input = isset( $_POST['jardin_event_date'] ) ? sanitize_text_field( wp_unslash( $_POST['jardin_event_date'] ) ) : null;
-		$end_input   = isset( $_POST['jardin_event_end_date'] ) ? sanitize_text_field( wp_unslash( $_POST['jardin_event_end_date'] ) ) : null;
+		if ( isset( $_POST['jardin_event_date'], $_POST['jardin_event_end_date'] ) ) {
+			$raw_start    = sanitize_text_field( wp_unslash( $_POST['jardin_event_date'] ) );
+			$raw_end      = sanitize_text_field( wp_unslash( $_POST['jardin_event_end_date'] ) );
+			$parsed_start = jardin_events_parse_ymd_meta( $raw_start );
+			$parsed_end   = jardin_events_parse_ymd_meta( $raw_end );
 
-		if ( null !== $start_input && null !== $end_input && '' !== $start_input && '' !== $end_input && strcmp( $end_input, $start_input ) < 0 ) {
-			set_transient( 'jardin_events_invalid_dates_' . get_current_user_id(), 1, 45 );
-			return;
+			$check = jardin_events_validate_event_dates( $parsed_start, $parsed_end );
+			if ( is_wp_error( $check ) ) {
+				set_transient( 'jardin_events_invalid_dates_' . get_current_user_id(), 1, 45 );
+			} else {
+				$this->save_parsed_ymd_meta( $post_id, 'event_date', $parsed_start );
+				$this->save_parsed_ymd_meta( $post_id, 'event_end_date', $parsed_end );
+			}
 		}
 
-		$fields = array(
-			'event_date'     => 'jardin_event_date',
-			'event_end_date' => 'jardin_event_end_date',
-			'event_location' => 'jardin_event_location',
-			'event_link'     => 'jardin_event_link',
-		);
-
-		foreach ( $fields as $meta_key => $field_name ) {
-			if ( ! isset( $_POST[ $field_name ] ) ) {
-				continue;
+		if ( isset( $_POST['jardin_event_location'] ) ) {
+			$location_value = sanitize_text_field( wp_unslash( $_POST['jardin_event_location'] ) );
+			if ( '' === $location_value ) {
+				delete_post_meta( $post_id, 'event_location' );
+			} else {
+				update_post_meta( $post_id, 'event_location', $location_value );
 			}
+		}
 
-			$value = sanitize_text_field( wp_unslash( $_POST[ $field_name ] ) );
-
-			if ( 'event_link' === $meta_key ) {
-				$value = esc_url_raw( $value );
+		if ( isset( $_POST['jardin_event_link'] ) ) {
+			$link_value = esc_url_raw( wp_unslash( $_POST['jardin_event_link'] ) );
+			if ( '' === $link_value ) {
+				delete_post_meta( $post_id, 'event_link' );
+			} else {
+				update_post_meta( $post_id, 'event_link', $link_value );
 			}
-
-			if ( '' === $value ) {
-				delete_post_meta( $post_id, $meta_key );
-				continue;
-			}
-
-			update_post_meta( $post_id, $meta_key, $value );
 		}
 	}
 }

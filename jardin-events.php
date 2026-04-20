@@ -15,6 +15,8 @@
  * GitHub Plugin URI: https://github.com/jaz-on/jardin-event
  * Primary Branch: main
  *
+ * Keep plugin header Version: in sync with JARDIN_EVENTS_VERSION on each release.
+ *
  * @package Jardin_Events
  */
 
@@ -31,9 +33,11 @@ define( 'JARDIN_EVENTS_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'JARDIN_EVENTS_GITHUB_URL', 'https://github.com/jaz-on/jardin-event' );
 define( 'JARDIN_EVENTS_KOFI_URL', 'https://ko-fi.com/jasonrouet' );
 
-// Autoload core classes.
+// Autoload.
+require_once JARDIN_EVENTS_PLUGIN_DIR . 'inc/event-meta-helpers.php';
 require_once JARDIN_EVENTS_PLUGIN_DIR . 'inc/class-events-core.php';
 require_once JARDIN_EVENTS_PLUGIN_DIR . 'inc/class-events-admin.php';
+require_once JARDIN_EVENTS_PLUGIN_DIR . 'inc/class-events-schema.php';
 
 register_activation_hook( __FILE__, array( 'Jardin_Events_Core', 'activate' ) );
 
@@ -45,10 +49,24 @@ register_deactivation_hook(
 );
 
 /**
+ * Load translations.
+ */
+function jardin_events_load_textdomain() {
+	load_plugin_textdomain(
+		'jardin-events',
+		false,
+		dirname( plugin_basename( JARDIN_EVENTS_PLUGIN_FILE ) ) . '/languages'
+	);
+}
+add_action( 'init', 'jardin_events_load_textdomain' );
+
+/**
  * Initialize plugin.
  */
 function jardin_events_init() {
 	jardin_events_core();
+
+	new Jardin_Events_Schema();
 
 	if ( is_admin() ) {
 		new Jardin_Events_Admin();
@@ -57,7 +75,7 @@ function jardin_events_init() {
 add_action( 'plugins_loaded', 'jardin_events_init' );
 
 /**
- * Register plugin list links (Settings, GitHub, Donate).
+ * Register plugin list hooks (action row + meta row).
  */
 function jardin_events_register_plugin_list_hooks() {
 	add_filter( 'plugin_action_links_' . plugin_basename( JARDIN_EVENTS_PLUGIN_FILE ), 'jardin_events_plugin_action_links' );
@@ -66,7 +84,7 @@ function jardin_events_register_plugin_list_hooks() {
 add_action( 'admin_init', 'jardin_events_register_plugin_list_hooks' );
 
 /**
- * Add Settings link to the plugin action row.
+ * Add Events list link to the plugin action row.
  *
  * @param array $links Existing action links.
  * @return array Modified action links.
@@ -75,7 +93,7 @@ function jardin_events_plugin_action_links( $links ) {
 	$settings_link = sprintf(
 		'<a href="%s">%s</a>',
 		esc_url( admin_url( 'edit.php?post_type=event' ) ),
-		esc_html__( 'Settings', 'jardin-events' )
+		esc_html__( 'Événements', 'jardin-events' )
 	);
 	array_unshift( $links, $settings_link );
 	return $links;

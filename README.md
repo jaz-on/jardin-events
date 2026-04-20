@@ -35,6 +35,17 @@ Le type de publication de la requête doit être **uniquement** `event`. Sans ce
 
 Modèles et pattern prêts à copier : répertoire [`docs/theme-handoff/`](docs/theme-handoff/README.md).
 
+## Hooks (filtres)
+
+| Filtre | Rôle |
+|--------|------|
+| `jardin_events_register_post_type_args` | Arguments passés à `register_post_type( 'event', … )` |
+| `jardin_events_upcoming_query_args` | Tableau d’arguments `WP_Query` pour les événements à venir (`$limit` en 2e argument) |
+| `jardin_events_past_query_args` | Idem pour les événements passés (`$limit` en 2e argument) |
+| `jardin_events_query_loop_query_vars` | Variables de requête du bloc Query Loop après filtrage (`$query`, `$block`, `$is_upcoming`) |
+| `jardin_events_enable_jsonld` | Retourner `true` pour activer le script JSON-LD « Event » sur les pages événement (désactivé par défaut ; utile si aucun plugin SEO ne fournit déjà le schéma) |
+| `jardin_events_jsonld_data` | Filtrer le tableau de données structurées (`$data`, `$post_id`) avant encodage JSON |
+
 ## API PHP
 
 ```php
@@ -53,12 +64,21 @@ composer install
 composer run phpcs
 ```
 
+## Tests PHPUnit
+
+Un squelette de tests est fourni (`phpunit.xml.dist`, `tests/`). Il faut une copie des tests WordPress et la variable d’environnement `WP_TESTS_DIR` pointant vers le répertoire `tests/phpunit` de cette copie (voir la [documentation des tests automatisés WordPress](https://make.wordpress.org/core/handbook/testing/automated-testing/phpunit/)). Ensuite :
+
+```bash
+export WP_TESTS_DIR=/chemin/vers/wordpress/tests/phpunit
+composer run test
+```
+
 ## Tests manuels (checklist)
 
 - [ ] Activation du plugin sans erreur.
 - [ ] Permaliens : archive accessible (`/events/` ou slug configuré).
 - [ ] Création d’un événement avec dates, lieu, lien ; affichage des meta dans l’éditeur de blocs.
-- [ ] Date de fin strictement avant la date de début : refus d’enregistrement et message d’admin.
+- [ ] Date de fin strictement avant la date de début : les dates ne sont pas enregistrées (classique) ; lieu et lien enregistrés ; message d’admin ; via l’API REST la requête est refusée.
 - [ ] Vidage d’un champ meta : meta supprimée en base.
 - [ ] Template archive avec deux Query Loops (`--upcoming` / `--past`) : listes cohérentes.
 - [ ] Événement multi-jours : encore listé tant que `event_end_date` ≥ aujourd’hui.

@@ -24,6 +24,8 @@ Sur chaque bloc **Query Loop** (`core/query`) qui liste uniquement le CPT `event
 - `jardin-events-query--upcoming` — prochains / en cours (tri `event_date` ASC, filtre meta géré par le plugin)
 - `jardin-events-query--past` — événements passés (tri `event_date` DESC, filtre meta géré par le plugin)
 
+Si **les deux** classes sont présentes sur le même bloc, le plugin applique la logique **à venir** (la classe « upcoming » est prise en compte en premier).
+
 Sans ces classes, le plugin **ne modifie pas** la requête (comportement WordPress par défaut).
 
 Les blocs **Post Meta** utilisent les clés enregistrées par le plugin : `event_date`, `event_location`, `event_link` (valeur brute ; le thème peut formater via CSS ou filtres).

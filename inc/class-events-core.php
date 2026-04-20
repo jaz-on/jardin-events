@@ -47,6 +47,38 @@ class Jardin_Events_Core {
 		add_action( 'init', array( $this, 'register_post_type' ) );
 		add_action( 'init', array( $this, 'register_meta' ) );
 		add_filter( 'query_loop_block_query_vars', array( $this, 'filter_query_loop_block_query_vars' ), 10, 3 );
+		add_filter( 'rest_pre_insert_event', array( $this, 'rest_pre_insert_event' ), 10, 2 );
+		add_filter( 'rest_pre_update_event', array( $this, 'rest_pre_update_event' ), 10, 3 );
+	}
+
+	/**
+	 * Block REST create when merged event dates are invalid.
+	 *
+	 * @param array|\WP_Error  $prepared_post Post data.
+	 * @param \WP_REST_Request $request      Request.
+	 * @return array|\WP_Error
+	 */
+	public function rest_pre_insert_event( $prepared_post, $request ) {
+		list( $start, $end ) = jardin_events_merge_event_dates_from_request( $request, 0 );
+		$check               = jardin_events_validate_event_dates( $start, $end );
+
+		return is_wp_error( $check ) ? $check : $prepared_post;
+	}
+
+	/**
+	 * Block REST update when merged event dates are invalid.
+	 *
+	 * @param array|\WP_Error  $prepared_post Post data.
+	 * @param \WP_Post         $post          Existing post.
+	 * @param \WP_REST_Request $request      Request.
+	 * @return array|\WP_Error
+	 */
+	public function rest_pre_update_event( $prepared_post, $post, $request ) {
+		$post_id             = isset( $post->ID ) ? (int) $post->ID : 0;
+		list( $start, $end ) = jardin_events_merge_event_dates_from_request( $request, $post_id );
+		$check               = jardin_events_validate_event_dates( $start, $end );
+
+		return is_wp_error( $check ) ? $check : $prepared_post;
 	}
 
 	/**
@@ -195,7 +227,7 @@ class Jardin_Events_Core {
 			$query['meta_query'] = self::build_past_meta_query();
 		}
 
-		return $query;
+		return apply_filters( 'jardin_events_query_loop_query_vars', $query, $block, $is_upcoming );
 	}
 
 	/**
@@ -242,6 +274,8 @@ class Jardin_Events_Core {
 			'show_in_admin_bar'   => true,
 		);
 
+		$args = apply_filters( 'jardin_events_register_post_type_args', $args );
+
 		register_post_type( 'event', $args );
 	}
 
@@ -249,17 +283,53 @@ class Jardin_Events_Core {
 	 * Register post meta for events.
 	 */
 	public function register_meta() {
-		$meta_args = array(
-			'show_in_rest'  => true,
-			'single'        => true,
-			'auth_callback' => array( $this, 'meta_auth_callback' ),
-			'type'          => 'string',
+		register_post_meta(
+			'event',
+			'event_date',
+			array(
+				'show_in_rest'      => true,
+				'single'            => true,
+				'auth_callback'     => array( $this, 'meta_auth_callback' ),
+				'type'              => 'string',
+				'sanitize_callback' => 'jardin_events_sanitize_meta_event_date',
+			)
 		);
 
-		register_post_meta( 'event', 'event_date', $meta_args );
-		register_post_meta( 'event', 'event_end_date', $meta_args );
-		register_post_meta( 'event', 'event_location', $meta_args );
-		register_post_meta( 'event', 'event_link', $meta_args );
+		register_post_meta(
+			'event',
+			'event_end_date',
+			array(
+				'show_in_rest'      => true,
+				'single'            => true,
+				'auth_callback'     => array( $this, 'meta_auth_callback' ),
+				'type'              => 'string',
+				'sanitize_callback' => 'jardin_events_sanitize_meta_event_date',
+			)
+		);
+
+		register_post_meta(
+			'event',
+			'event_location',
+			array(
+				'show_in_rest'      => true,
+				'single'            => true,
+				'auth_callback'     => array( $this, 'meta_auth_callback' ),
+				'type'              => 'string',
+				'sanitize_callback' => 'jardin_events_sanitize_meta_text',
+			)
+		);
+
+		register_post_meta(
+			'event',
+			'event_link',
+			array(
+				'show_in_rest'      => true,
+				'single'            => true,
+				'auth_callback'     => array( $this, 'meta_auth_callback' ),
+				'type'              => 'string',
+				'sanitize_callback' => 'jardin_events_sanitize_meta_url',
+			)
+		);
 	}
 
 	/**
@@ -284,14 +354,18 @@ class Jardin_Events_Core {
 	 * @return WP_Query
 	 */
 	public function get_upcoming_events( $limit = 3 ) {
-		$args = array(
-			'post_type'      => 'event',
-			'posts_per_page' => $limit,
-			'meta_query'     => self::build_upcoming_meta_query(),
-			'orderby'        => 'meta_value',
-			'meta_key'       => 'event_date',
-			'meta_type'      => 'DATE',
-			'order'          => 'ASC',
+		$args = apply_filters(
+			'jardin_events_upcoming_query_args',
+			array(
+				'post_type'      => 'event',
+				'posts_per_page' => $limit,
+				'meta_query'     => self::build_upcoming_meta_query(),
+				'orderby'        => 'meta_value',
+				'meta_key'       => 'event_date',
+				'meta_type'      => 'DATE',
+				'order'          => 'ASC',
+			),
+			$limit
 		);
 
 		return new WP_Query( $args );
@@ -304,14 +378,18 @@ class Jardin_Events_Core {
 	 * @return WP_Query
 	 */
 	public function get_past_events( $limit = 10 ) {
-		$args = array(
-			'post_type'      => 'event',
-			'posts_per_page' => $limit,
-			'meta_query'     => self::build_past_meta_query(),
-			'orderby'        => 'meta_value',
-			'meta_key'       => 'event_date',
-			'meta_type'      => 'DATE',
-			'order'          => 'DESC',
+		$args = apply_filters(
+			'jardin_events_past_query_args',
+			array(
+				'post_type'      => 'event',
+				'posts_per_page' => $limit,
+				'meta_query'     => self::build_past_meta_query(),
+				'orderby'        => 'meta_value',
+				'meta_key'       => 'event_date',
+				'meta_type'      => 'DATE',
+				'order'          => 'DESC',
+			),
+			$limit
 		);
 
 		return new WP_Query( $args );
@@ -331,14 +409,12 @@ class Jardin_Events_Core {
 			return '';
 		}
 
-		$start_ts        = strtotime( $start );
-		$formatted_start = date_i18n( get_option( 'date_format' ), $start_ts );
+		$formatted_start = jardin_events_format_ymd_for_display( $start );
 
 		if ( $end ) {
-			$end_ts        = strtotime( $end );
-			$formatted_end = date_i18n( get_option( 'date_format' ), $end_ts );
+			$formatted_end = jardin_events_format_ymd_for_display( $end );
 
-			if ( $formatted_end !== $formatted_start ) {
+			if ( '' !== $formatted_end && $formatted_end !== $formatted_start ) {
 				return sprintf( '%1$s – %2$s', $formatted_start, $formatted_end );
 			}
 		}
@@ -372,7 +448,9 @@ function jardin_events_core() {
  * @return bool
  */
 function jardin_events_is_active() {
-	return post_type_exists( 'event' );
+	return post_type_exists( 'event' )
+		&& defined( 'JARDIN_EVENTS_VERSION' )
+		&& class_exists( 'Jardin_Events_Core', false );
 }
 
 /**
