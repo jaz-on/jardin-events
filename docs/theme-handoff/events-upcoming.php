@@ -1,0 +1,47 @@
+<?php
+/**
+ * Pattern : prochains événements (à placer dans le thème Jardin : patterns/events-upcoming.php).
+ *
+ * @package Jardin
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+if ( ! function_exists( 'register_block_pattern' ) ) {
+	return;
+}
+
+add_action(
+	'init',
+	function () {
+		register_block_pattern(
+			'jardin/upcoming-events',
+			array(
+				'title'       => __( 'Prochains événements', 'jardin' ),
+				'description' => __( 'Liste des prochains événements (dates et lieu via métadonnées du plugin Jardin Events).', 'jardin' ),
+				'categories'  => array( 'query', 'featured' ),
+				'content'     =>
+					'<!-- wp:group {"className":"jardin-events-upcoming","layout":{"type":"constrained"}} -->' .
+					'<div class="wp-block-group jardin-events-upcoming">' .
+					'<!-- wp:heading {"level":2} --><h2>' . __( 'Prochains événements', 'jardin' ) . '</h2><!-- /wp:heading -->' .
+					'<!-- wp:separator {"className":"is-style-wide"} --><hr class="wp-block-separator is-style-wide" /><!-- /wp:separator -->' .
+					'<!-- wp:query {"className":"jardin-events-query--upcoming","query":{"perPage":3,"postType":"event","order":"asc","orderBy":"date","inherit":false},"displayLayout":{"type":"list"}} -->' .
+					'<div class="wp-block-query">' .
+					'<!-- wp:post-template -->' .
+					'<!-- wp:group {"layout":{"type":"constrained"},"className":"jardin-events-item"} -->' .
+					'<div class="wp-block-group jardin-events-item">' .
+					'<!-- wp:post-title {"level":3,"className":"jardin-events-item-title"} /-->' .
+					'<!-- wp:post-excerpt {"showMoreOnNewLine":false} /-->' .
+					'<!-- wp:post-meta {"key":"event_date","className":"jardin-events-item-meta"} /-->' .
+					'<!-- wp:post-meta {"key":"event_location","className":"jardin-events-item-meta"} /-->' .
+					'<!-- wp:post-meta {"key":"event_link","className":"jardin-events-item-meta"} /-->' .
+					'</div><!-- /wp:group -->' .
+					'<!-- /wp:post-template -->' .
+					'</div><!-- /wp:query -->' .
+					'</div><!-- /wp:group -->',
+			)
+		);
+	}
+);

@@ -1,0 +1,73 @@
+<!-- wp:template-part {"slug":"header","tagName":"header"} /-->
+
+<!-- wp:group {"tagName":"main","layout":{"type":"constrained"}} -->
+<main class="wp-block-group">
+	<!-- wp:heading {"level":1} -->
+	<h1>Événements</h1>
+	<!-- /wp:heading -->
+
+	<!-- wp:heading {"level":2} -->
+	<h2>Prochains événements</h2>
+	<!-- /wp:heading -->
+
+	<!-- wp:query {"className":"jardin-events-query--upcoming","query":{"perPage":10,"pages":0,"offset":0,"postType":"event","order":"asc","orderBy":"date","inherit":false},"displayLayout":{"type":"list"}} -->
+	<div class="wp-block-query">
+		<!-- wp:post-template -->
+		<!-- wp:group {"layout":{"type":"constrained"},"className":"jardin-events-item"} -->
+		<div class="wp-block-group jardin-events-item">
+			<!-- wp:post-title {"level":3,"isLink":true,"className":"jardin-events-item-title"} /-->
+			<!-- wp:post-excerpt {"showMoreOnNewLine":false} /-->
+			<!-- wp:post-meta {"key":"event_date","className":"jardin-events-item-meta"} /-->
+			<!-- wp:post-meta {"key":"event_location","className":"jardin-events-item-meta"} /-->
+		</div>
+		<!-- /wp:group -->
+		<!-- /wp:post-template -->
+
+		<!-- wp:query-pagination -->
+		<!-- wp:query-pagination-previous /-->
+		<!-- wp:query-pagination-numbers /-->
+		<!-- wp:query-pagination-next /-->
+		<!-- /wp:query-pagination -->
+
+		<!-- wp:query-no-results -->
+		<!-- wp:paragraph -->
+		<p></p>
+		<!-- /wp:paragraph -->
+		<!-- /wp:query-no-results -->
+	</div>
+	<!-- /wp:query -->
+
+	<!-- wp:heading {"level":2} -->
+	<h2>Événements passés</h2>
+	<!-- /wp:heading -->
+
+	<!-- wp:query {"className":"jardin-events-query--past","query":{"perPage":10,"pages":0,"offset":0,"postType":"event","order":"desc","orderBy":"date","inherit":false},"displayLayout":{"type":"list"}} -->
+	<div class="wp-block-query">
+		<!-- wp:post-template -->
+		<!-- wp:group {"layout":{"type":"constrained"},"className":"jardin-events-item"} -->
+		<div class="wp-block-group jardin-events-item">
+			<!-- wp:post-title {"level":3,"isLink":true,"className":"jardin-events-item-title"} /-->
+			<!-- wp:post-excerpt {"showMoreOnNewLine":false} /-->
+			<!-- wp:post-meta {"key":"event_date","className":"jardin-events-item-meta"} /-->
+			<!-- wp:post-meta {"key":"event_location","className":"jardin-events-item-meta"} /-->
+		</div>
+		<!-- /wp:group -->
+		<!-- /wp:post-template -->
+
+		<!-- wp:query-pagination -->
+		<!-- wp:query-pagination-previous /-->
+		<!-- wp:query-pagination-numbers /-->
+		<!-- wp:query-pagination-next /-->
+		<!-- /wp:query-pagination -->
+
+		<!-- wp:query-no-results -->
+		<!-- wp:paragraph -->
+		<p></p>
+		<!-- /wp:paragraph -->
+		<!-- /wp:query-no-results -->
+	</div>
+	<!-- /wp:query -->
+</main>
+<!-- /wp:group -->
+
+<!-- wp:template-part {"slug":"footer","tagName":"footer"} /-->

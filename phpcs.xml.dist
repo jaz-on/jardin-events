@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<ruleset name="Jardin Events">
+	<description>PHPCS for Jardin Events plugin</description>
+
+	<file>jardin-events.php</file>
+	<file>inc</file>
+
+	<exclude-pattern>*/vendor/*</exclude-pattern>
+	<exclude-pattern>*/docs/*</exclude-pattern>
+
+	<rule ref="WordPress">
+		<!-- Legacy filenames (class-events-*.php); rename would break requires. -->
+		<exclude name="WordPress.Files.FileName.InvalidClassFileName"/>
+		<!-- Helpers suivent la classe dans class-events-core.php (usage courant plugins). -->
+		<exclude name="Universal.Files.SeparateFunctionsFromOO"/>
+		<!-- Requêtes par meta nécessaires pour le CPT événements. -->
+		<exclude name="WordPress.DB.SlowDBQuery"/>
+	</rule>
+</ruleset>
