@@ -92,7 +92,7 @@ function jardin_events_get_role_counts() {
 	$counts = array_fill_keys( $slugs, 0 );
 
 	foreach ( $slugs as $slug ) {
-		$q = new WP_Query(
+		$q               = new WP_Query(
 			apply_filters(
 				'jardin_events_role_query_args',
 				array(

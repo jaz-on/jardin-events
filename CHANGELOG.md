@@ -4,6 +4,10 @@ Toutes les notes importantes de ce projet sont listées ici. La version distribu
 
 ## [Unreleased]
 
+### Removed
+
+- Taxonomies WordPress `category` et `post_tag` sur le CPT `event` (classification : meta `event_role` et filtres d’archive `?event_role=`).
+
 ### Added
 
 - Fichier `inc/event-meta-helpers.php` : validation des dates, fusion des meta REST, formatage des dates d’affichage avec fuseau du site.

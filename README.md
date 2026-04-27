@@ -27,8 +27,6 @@ Archive publique **`/events/`** : ajouter **`?event_role=speaker`** (ou un autre
 
 Bloc **Event role filters** (`jardin-events/event-filter`) : puces avec comptes, rendu serveur (FSE / éditeur).
 
-Le CPT supporte aussi les taxonomies **catégories** et **étiquettes** (articles).
-
 ## Thème FSE : Query Loop
 
 Pour qu’une liste d’événements soit filtrée et triée sur **`event_date`** (et non sur la date de publication), ajoutez sur le bloc **Query Loop** une classe CSS supplémentaire :
@@ -87,7 +85,6 @@ composer run test
 - [ ] Vidage d’un champ meta : meta supprimée en base.
 - [ ] Template archive avec deux Query Loops (`--upcoming` / `--past`) : listes cohérentes.
 - [ ] Événement multi-jours : encore listé tant que `event_end_date` ≥ aujourd’hui.
-- [ ] Catégorie / étiquette assignée à un événement.
 
 ## Licence
 

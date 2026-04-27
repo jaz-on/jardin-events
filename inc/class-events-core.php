@@ -266,7 +266,6 @@ class Jardin_Events_Core {
 				'excerpt',
 				'thumbnail',
 			),
-			'taxonomies'          => array( 'category', 'post_tag' ),
 			'show_in_menu'        => true,
 			'menu_icon'           => 'dashicons-calendar-alt',
 			'menu_position'       => 6,
@@ -358,7 +357,7 @@ class Jardin_Events_Core {
 			return $classes;
 		}
 		$pid = (int) $post_id;
-		if ( $pid > 0 && $pid === (int) get_queried_object_id() && 'event' === get_post_type( $pid ) ) {
+		if ( 0 < $pid && (int) get_queried_object_id() === $pid && 'event' === get_post_type( $pid ) ) {
 			$classes[] = 'h-event';
 		}
 		return $classes;
