@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Jardin Events
- * Plugin URI: https://github.com/jaz-on/jardin-event
+ * Plugin URI: https://github.com/jaz-on/jardin-events
  * Description: Registers an event custom post type with metadata and front-end styles for Jardin-style sites.
  * Version: 0.1.0
  * Requires at least: 6.4
@@ -12,7 +12,7 @@
  * License: GPL v2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: jardin-events
- * GitHub Plugin URI: https://github.com/jaz-on/jardin-event
+ * GitHub Plugin URI: https://github.com/jaz-on/jardin-events
  * Primary Branch: main
  *
  * Keep plugin header Version: in sync with JARDIN_EVENTS_VERSION on each release.
@@ -30,7 +30,7 @@ define( 'JARDIN_EVENTS_VERSION', '0.1.0' );
 define( 'JARDIN_EVENTS_PLUGIN_FILE', __FILE__ );
 define( 'JARDIN_EVENTS_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'JARDIN_EVENTS_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
-define( 'JARDIN_EVENTS_GITHUB_URL', 'https://github.com/jaz-on/jardin-event' );
+define( 'JARDIN_EVENTS_GITHUB_URL', 'https://github.com/jaz-on/jardin-events' );
 define( 'JARDIN_EVENTS_KOFI_URL', 'https://ko-fi.com/jasonrouet' );
 
 // Autoload.

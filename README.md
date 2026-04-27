@@ -9,7 +9,7 @@ Plugin WordPress pour le CPT **événement** (`event`) sur les sites utilisant l
 
 ## Installation
 
-1. Placer le dossier du plugin dans `wp-content/plugins/jardin-event/` (ou le nom de dossier de votre choix).
+1. Placer le dossier du plugin dans `wp-content/plugins/jardin-events/` (recommandé pour correspondre au dépôt Git et à Git Updater).
 2. Activer l’extension dans **Réglages → Extensions**.
 3. En cas de 404 sur `/events/`, enregistrez à nouveau les permaliens (**Réglages → Permaliens** → Enregistrer).
 
