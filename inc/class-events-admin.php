@@ -22,6 +22,32 @@ class Jardin_Events_Admin {
 		add_action( 'add_meta_boxes', array( $this, 'register_meta_box' ) );
 		add_action( 'save_post_event', array( $this, 'save_meta_box' ) );
 		add_action( 'admin_notices', array( $this, 'render_date_validation_notice' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_meta_styles' ) );
+	}
+
+	/**
+	 * Metabox editor: light layout stylesheet.
+	 *
+	 * @param string $hook_suffix Current admin page.
+	 */
+	public function enqueue_admin_meta_styles( $hook_suffix ) {
+		if ( 'post.php' !== $hook_suffix && 'post-new.php' !== $hook_suffix ) {
+			return;
+		}
+		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+		if ( ! $screen || 'event' !== $screen->post_type ) {
+			return;
+		}
+		$path = JARDIN_EVENTS_PLUGIN_DIR . 'assets/css/admin-meta.css';
+		if ( ! is_readable( $path ) ) {
+			return;
+		}
+		wp_enqueue_style(
+			'jardin-events-admin-meta',
+			JARDIN_EVENTS_PLUGIN_URL . 'assets/css/admin-meta.css',
+			array(),
+			(string) filemtime( $path )
+		);
 	}
 
 	/**
@@ -53,6 +79,7 @@ class Jardin_Events_Admin {
 		$roles_current  = jardin_events_get_event_roles( $post->ID );
 		$role_labels    = jardin_events_get_role_labels();
 		?>
+		<div class="jardin-events-meta">
 		<p>
 			<label for="jardin-event-date"><?php esc_html_e( 'Date de début', 'jardin-events' ); ?></label><br />
 			<input
@@ -97,7 +124,7 @@ class Jardin_Events_Admin {
 		<fieldset class="jardin-events-roles">
 			<legend><?php esc_html_e( 'Roles', 'jardin-events' ); ?></legend>
 			<?php foreach ( jardin_events_get_role_slugs() as $slug ) : ?>
-				<label style="display:block;margin:0.25em 0;">
+				<label>
 					<input
 						type="checkbox"
 						name="jardin_event_role[]"
@@ -108,6 +135,7 @@ class Jardin_Events_Admin {
 				</label>
 			<?php endforeach; ?>
 		</fieldset>
+		</div>
 		<?php
 	}
 

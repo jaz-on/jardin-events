@@ -1,0 +1,17 @@
+/**
+ * Jardin Events — post editor metabox spacing (admin only).
+ */
+
+.jardin-events-meta .jardin-events-roles label {
+	display: block;
+	margin: 0.25em 0;
+}
+
+.jardin-events-meta > p {
+	margin-top: 0.75em;
+	margin-bottom: 0.75em;
+}
+
+.jardin-events-meta > p:first-of-type {
+	margin-top: 0;
+}
