@@ -1,2 +1,5 @@
 /vendor/
 .DS_Store
+
+# Local Cursor rules (product docs live in ../jardin-docs — see jardin-docs README)
+.cursor/rules/local-*.mdc
