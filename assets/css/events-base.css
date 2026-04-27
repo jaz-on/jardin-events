@@ -25,4 +25,21 @@
 	text-decoration: underline;
 }
 
+.jardin-events-filter__inner {
+	margin: 0;
+	font-size: 0.9rem;
+}
+
+.jardin-events-filter__link {
+	text-decoration: none;
+}
+
+.jardin-events-filter__link:hover,
+.jardin-events-filter__link:focus {
+	text-decoration: underline;
+}
+
+.jardin-events-filter__link.is-active {
+	font-weight: 600;
+}
 

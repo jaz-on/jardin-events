@@ -50,6 +50,8 @@ class Jardin_Events_Admin {
 		$event_end_date = get_post_meta( $post->ID, 'event_end_date', true );
 		$event_location = get_post_meta( $post->ID, 'event_location', true );
 		$event_link     = get_post_meta( $post->ID, 'event_link', true );
+		$roles_current  = jardin_events_get_event_roles( $post->ID );
+		$role_labels    = jardin_events_get_role_labels();
 		?>
 		<p>
 			<label for="jardin-event-date"><?php esc_html_e( 'Date de début', 'jardin-events' ); ?></label><br />
@@ -92,6 +94,20 @@ class Jardin_Events_Admin {
 				placeholder="https://"
 			/>
 		</p>
+		<fieldset class="jardin-events-roles">
+			<legend><?php esc_html_e( 'Roles', 'jardin-events' ); ?></legend>
+			<?php foreach ( jardin_events_get_role_slugs() as $slug ) : ?>
+				<label style="display:block;margin:0.25em 0;">
+					<input
+						type="checkbox"
+						name="jardin_event_role[]"
+						value="<?php echo esc_attr( $slug ); ?>"
+						<?php checked( in_array( $slug, $roles_current, true ) ); ?>
+					/>
+					<?php echo esc_html( isset( $role_labels[ $slug ] ) ? $role_labels[ $slug ] : $slug ); ?>
+				</label>
+			<?php endforeach; ?>
+		</fieldset>
 		<?php
 	}
 
@@ -185,6 +201,16 @@ class Jardin_Events_Admin {
 				delete_post_meta( $post_id, 'event_link' );
 			} else {
 				update_post_meta( $post_id, 'event_link', $link_value );
+			}
+		}
+
+		delete_post_meta( $post_id, 'event_role' );
+		if ( ! empty( $_POST['jardin_event_role'] ) && is_array( $_POST['jardin_event_role'] ) ) {
+			foreach ( wp_unslash( $_POST['jardin_event_role'] ) as $raw_role ) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+				$role = jardin_events_sanitize_event_role_meta( $raw_role );
+				if ( '' !== $role ) {
+					add_post_meta( $post_id, 'event_role', $role, false );
+				}
 			}
 		}
 	}

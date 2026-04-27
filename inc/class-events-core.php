@@ -46,6 +46,7 @@ class Jardin_Events_Core {
 
 		add_action( 'init', array( $this, 'register_post_type' ) );
 		add_action( 'init', array( $this, 'register_meta' ) );
+		add_filter( 'post_class', array( $this, 'filter_post_class_h_event' ), 10, 3 );
 		add_filter( 'query_loop_block_query_vars', array( $this, 'filter_query_loop_block_query_vars' ), 10, 3 );
 		add_filter( 'rest_pre_insert_event', array( $this, 'rest_pre_insert_event' ), 10, 2 );
 		add_filter( 'rest_pre_update_event', array( $this, 'rest_pre_update_event' ), 10, 3 );
@@ -330,6 +331,37 @@ class Jardin_Events_Core {
 				'sanitize_callback' => 'jardin_events_sanitize_meta_url',
 			)
 		);
+
+		register_post_meta(
+			'event',
+			'event_role',
+			array(
+				'show_in_rest'      => false,
+				'single'            => false,
+				'auth_callback'     => array( $this, 'meta_auth_callback' ),
+				'type'              => 'string',
+				'sanitize_callback' => 'jardin_events_sanitize_event_role_meta',
+			)
+		);
+	}
+
+	/**
+	 * Add h-event microformat class on singular events.
+	 *
+	 * @param string[] $classes Post classes.
+	 * @param string[] $css_class Unused.
+	 * @param int      $post_id   Post ID.
+	 * @return string[]
+	 */
+	public function filter_post_class_h_event( $classes, $css_class, $post_id ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
+		if ( ! is_singular( 'event' ) ) {
+			return $classes;
+		}
+		$pid = (int) $post_id;
+		if ( $pid > 0 && $pid === (int) get_queried_object_id() && 'event' === get_post_type( $pid ) ) {
+			$classes[] = 'h-event';
+		}
+		return $classes;
 	}
 
 	/**

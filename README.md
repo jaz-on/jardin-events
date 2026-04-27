@@ -21,6 +21,11 @@ Plugin WordPress pour le CPT **événement** (`event`) sur les sites utilisant l
 | `event_end_date`  | Date de fin (optionnel)                   |
 | `event_location`  | Lieu (texte)                              |
 | `event_link`      | URL « En savoir plus »                    |
+| `event_role`      | Rôles multiples (`speaker`, `organizer`, `sponsor`, `attendee`) — cases à cocher dans l’éditeur classique |
+
+Archive publique **`/events/`** : ajouter **`?event_role=speaker`** (ou un autre rôle) pour filtrer la requête principale.
+
+Bloc **Event role filters** (`jardin-events/event-filter`) : puces avec comptes, rendu serveur (FSE / éditeur).
 
 Le CPT supporte aussi les taxonomies **catégories** et **étiquettes** (articles).
 

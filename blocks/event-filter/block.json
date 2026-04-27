@@ -1,0 +1,17 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "jardin-events/event-filter",
+	"title": "Event role filters",
+	"category": "widgets",
+	"icon": "filter",
+	"description": "Chip links to filter the events archive by role (?event_role=).",
+	"textdomain": "jardin-events",
+	"supports": {
+		"html": false,
+		"spacing": {
+			"margin": true
+		}
+	},
+	"render": "file:./render.php"
+}

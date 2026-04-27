@@ -35,9 +35,11 @@ define( 'JARDIN_EVENTS_KOFI_URL', 'https://ko-fi.com/jasonrouet' );
 
 // Autoload.
 require_once JARDIN_EVENTS_PLUGIN_DIR . 'inc/event-meta-helpers.php';
+require_once JARDIN_EVENTS_PLUGIN_DIR . 'inc/class-events-helpers.php';
 require_once JARDIN_EVENTS_PLUGIN_DIR . 'inc/class-events-core.php';
 require_once JARDIN_EVENTS_PLUGIN_DIR . 'inc/class-events-admin.php';
 require_once JARDIN_EVENTS_PLUGIN_DIR . 'inc/class-events-schema.php';
+require_once JARDIN_EVENTS_PLUGIN_DIR . 'inc/class-events-filters.php';
 
 register_activation_hook( __FILE__, array( 'Jardin_Events_Core', 'activate' ) );
 
@@ -143,3 +145,14 @@ function jardin_events_enqueue_styles() {
 	}
 }
 add_action( 'wp_enqueue_scripts', 'jardin_events_enqueue_styles' );
+
+/**
+ * Register dynamic blocks (server-rendered).
+ */
+function jardin_events_register_blocks() {
+	$path = JARDIN_EVENTS_PLUGIN_DIR . 'blocks/event-filter';
+	if ( is_readable( $path . '/block.json' ) ) {
+		register_block_type( $path );
+	}
+}
+add_action( 'init', 'jardin_events_register_blocks' );
