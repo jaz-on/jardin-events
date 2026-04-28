@@ -66,6 +66,8 @@ add_action( 'init', 'jardin_events_load_textdomain' );
  * Initialize plugin.
  */
 function jardin_events_init() {
+	Jardin_Events_Core::migrate_legacy_meta_keys();
+
 	jardin_events_core();
 
 	new Jardin_Events_Schema();
@@ -150,9 +152,22 @@ add_action( 'wp_enqueue_scripts', 'jardin_events_enqueue_styles' );
  * Register dynamic blocks (server-rendered).
  */
 function jardin_events_register_blocks() {
-	$path = JARDIN_EVENTS_PLUGIN_DIR . 'blocks/event-filter';
-	if ( is_readable( $path . '/block.json' ) ) {
-		register_block_type( $path );
+	$dir         = JARDIN_EVENTS_PLUGIN_DIR . 'blocks/';
+	$to_register = array(
+		'event-filter',
+		'event-status-bar',
+		'event-archive-meta',
+		'event-single-meta',
+		'event-inline-date',
+		'event-external-link',
+		'event-inline-location',
+	);
+
+	foreach ( $to_register as $slug ) {
+		$path = $dir . $slug;
+		if ( is_readable( $path . '/block.json' ) ) {
+			register_block_type( $path );
+		}
 	}
 }
 add_action( 'init', 'jardin_events_register_blocks' );

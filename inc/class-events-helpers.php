@@ -10,6 +10,24 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
+ * Registered event CPT slug (filterable).
+ *
+ * @return string
+ */
+function jardin_events_get_post_type() {
+	return apply_filters( 'jardin_events_post_type', 'event' );
+}
+
+/**
+ * Default rewrite slug for the event archive/single prefix (filterable).
+ *
+ * @return string
+ */
+function jardin_events_get_rewrite_slug() {
+	return apply_filters( 'jardin_events_slug', 'evenements' );
+}
+
+/**
  * Default role slugs (closed enum).
  *
  * @return string[]
@@ -27,9 +45,9 @@ function jardin_events_get_role_slugs() {
 function jardin_events_get_role_labels() {
 	$labels = array(
 		'speaker'   => __( 'Speaker', 'jardin-events' ),
-		'organizer' => __( 'Organizer', 'jardin-events' ),
+		'organizer' => __( 'Organisateur·rice', 'jardin-events' ),
 		'sponsor'   => __( 'Sponsor', 'jardin-events' ),
-		'attendee'  => __( 'Attendee', 'jardin-events' ),
+		'attendee'  => __( 'Participant·e', 'jardin-events' ),
 	);
 	return apply_filters( 'jardin_events_role_labels', $labels );
 }
@@ -96,7 +114,7 @@ function jardin_events_get_role_counts() {
 			apply_filters(
 				'jardin_events_role_query_args',
 				array(
-					'post_type'      => 'event',
+					'post_type'      => jardin_events_get_post_type(),
 					'post_status'    => 'publish',
 					'posts_per_page' => 1,
 					'fields'         => 'ids',
@@ -119,6 +137,26 @@ function jardin_events_get_role_counts() {
 }
 
 /**
+ * Filters payload for archive UI: role slugs, labels, counts, published total.
+ *
+ * @return array{roles: string[], labels: array<string,string>, counts: array<string,int>, total: int}
+ */
+function jardin_events_get_filters() {
+	$pt        = jardin_events_get_post_type();
+	$counters  = wp_count_posts( $pt );
+	$published = isset( $counters->publish ) ? (int) $counters->publish : 0;
+
+	$data = array(
+		'roles'  => jardin_events_get_role_slugs(),
+		'labels' => jardin_events_get_role_labels(),
+		'counts' => jardin_events_get_role_counts(),
+		'total'  => $published,
+	);
+
+	return apply_filters( 'jardin_events_filters', $data );
+}
+
+/**
  * Whether the event is still upcoming or ongoing (same logic as core meta query).
  *
  * @param int $post_id Post ID.
@@ -137,7 +175,7 @@ function jardin_events_is_upcoming( $post_id ) {
 	if ( strcmp( $start, $today ) >= 0 ) {
 		return true;
 	}
-	$end = (string) get_post_meta( $post_id, 'event_end_date', true );
+	$end = (string) jardin_events_get_event_date_end( $post_id );
 	if ( '' !== $end && strcmp( $end, $today ) >= 0 ) {
 		return true;
 	}
@@ -168,4 +206,229 @@ function jardin_events_days_until( $post_id ) {
 	$t0 = (int) $today->format( 'U' );
 	$t1 = (int) $start_dt->setTime( 0, 0 )->format( 'U' );
 	return (int) round( ( $t1 - $t0 ) / DAY_IN_SECONDS );
+}
+
+/**
+ * Primary role slug for markup (first stored role), or empty string.
+ *
+ * @param int $post_id Post ID.
+ * @return string
+ */
+function jardin_events_get_primary_role_slug( $post_id ) {
+	$roles = jardin_events_get_event_roles( $post_id );
+	return isset( $roles[0] ) ? (string) $roles[0] : '';
+}
+
+/**
+ * Short status label for badges (à venir / en cours / passé).
+ *
+ * @param int $post_id Event post ID.
+ * @return string
+ */
+function jardin_events_status_label( $post_id ) {
+	$post_id = (int) $post_id;
+	if ( $post_id <= 0 ) {
+		return '';
+	}
+	if ( ! jardin_events_is_upcoming( $post_id ) ) {
+		return __( 'Passé', 'jardin-events' );
+	}
+	$start = (string) get_post_meta( $post_id, 'event_date', true );
+	$today = Jardin_Events_Core::get_today_ymd();
+	if ( '' !== $start && strcmp( $start, $today ) > 0 ) {
+		return __( 'À venir', 'jardin-events' );
+	}
+	return __( 'En cours', 'jardin-events' );
+}
+
+/**
+ * Human-readable countdown / offset from today (start date).
+ *
+ * @param int $post_id Event post ID.
+ * @return string Empty when no start date.
+ */
+function jardin_events_countdown_text( $post_id ) {
+	$d = jardin_events_days_until( $post_id );
+	if ( null === $d ) {
+		return '';
+	}
+	if ( $d > 1 ) {
+		return sprintf(
+			/* translators: %d: full days until start */
+			__( 'dans %d jours', 'jardin-events' ),
+			$d
+		);
+	}
+	if ( 1 === $d ) {
+		return __( 'demain', 'jardin-events' );
+	}
+	if ( 0 === $d ) {
+		return __( 'aujourd’hui', 'jardin-events' );
+	}
+	return sprintf(
+		/* translators: %d: full days since start */
+		__( 'il y a %d jours', 'jardin-events' ),
+		abs( $d )
+	);
+}
+
+/**
+ * End date meta value (canonical key event_date_end; legacy event_end_date ignored after migration).
+ *
+ * @param int $post_id Event post ID.
+ * @return string Y-m-d or empty.
+ */
+function jardin_events_get_event_date_end( $post_id ) {
+	$post_id = (int) $post_id;
+	if ( $post_id <= 0 ) {
+		return '';
+	}
+	$v = get_post_meta( $post_id, 'event_date_end', true );
+	return is_string( $v ) ? $v : '';
+}
+
+/**
+ * Recap article post ID from event meta (event_article).
+ *
+ * @param int $post_id Event post ID.
+ * @return int
+ */
+function jardin_events_get_event_article_id( $post_id ) {
+	$post_id = (int) $post_id;
+	if ( $post_id <= 0 ) {
+		return 0;
+	}
+	return absint( get_post_meta( $post_id, 'event_article', true ) );
+}
+
+/**
+ * Linked recap article post ID from event meta (alias).
+ *
+ * @param int $post_id Event post ID.
+ * @return int
+ */
+function jardin_events_get_linked_post_id( $post_id ) {
+	return jardin_events_get_event_article_id( $post_id );
+}
+
+/**
+ * Linked recap article post object if valid.
+ *
+ * @param int $post_id Event post ID.
+ * @return \WP_Post|null
+ */
+function jardin_events_get_linked_post( $post_id ) {
+	$lid = jardin_events_get_event_article_id( $post_id );
+	if ( $lid <= 0 ) {
+		return null;
+	}
+	$p = get_post( $lid );
+	return ( $p instanceof \WP_Post ) ? $p : null;
+}
+
+/**
+ * Find a published event that links to this article as recap (event_article).
+ *
+ * @param int $post_id Article post ID.
+ * @return \WP_Post|null
+ */
+function jardin_events_find_event_for_recap_post( $post_id ) {
+	$post_id = (int) $post_id;
+	if ( $post_id <= 0 ) {
+		return null;
+	}
+	$q = new \WP_Query(
+		array(
+			'post_type'              => jardin_events_get_post_type(),
+			'post_status'            => 'publish',
+			'posts_per_page'         => 1,
+			'no_found_rows'          => true,
+			'update_post_meta_cache' => false,
+			'update_post_term_cache' => false,
+			'meta_query'             => array(
+				array(
+					'key'     => 'event_article',
+					'value'   => $post_id,
+					'compare' => '=',
+					'type'    => 'NUMERIC',
+				),
+			),
+		)
+	);
+	if ( ! $q->have_posts() ) {
+		wp_reset_postdata();
+		return null;
+	}
+	$found = $q->posts[0];
+	wp_reset_postdata();
+	return $found instanceof \WP_Post ? $found : null;
+}
+
+/**
+ * HTML for archive row role pills (spans.entry-role).
+ *
+ * @param int $post_id Event post ID.
+ * @return string
+ */
+function jardin_events_get_role_pills_html( $post_id ) {
+	$post_id = (int) $post_id;
+	$roles   = jardin_events_get_event_roles( $post_id );
+	$labels  = jardin_events_get_role_labels();
+	$base    = get_post_type_archive_link( jardin_events_get_post_type() );
+	$parts   = array();
+	foreach ( $roles as $slug ) {
+		$url   = $base ? add_query_arg( 'event_role', $slug, $base ) : '';
+		$label = isset( $labels[ $slug ] ) ? $labels[ $slug ] : $slug;
+		if ( $url ) {
+			$parts[] = sprintf(
+				'<a class="entry-role entry-role--%1$s" href="%2$s">%3$s</a>',
+				esc_attr( $slug ),
+				esc_url( $url ),
+				esc_html( $label )
+			);
+		} else {
+			$parts[] = sprintf(
+				'<span class="entry-role entry-role--%1$s">%2$s</span>',
+				esc_attr( $slug ),
+				esc_html( $label )
+			);
+		}
+	}
+	return implode( '', $parts );
+}
+
+/**
+ * HTML for single inline role pills (links to filtered archive).
+ *
+ * @param int $post_id Event post ID.
+ * @return string
+ */
+function jardin_events_get_role_pills_inline_html( $post_id ) {
+	$post_id = (int) $post_id;
+	$roles   = jardin_events_get_event_roles( $post_id );
+	$labels  = jardin_events_get_role_labels();
+	$base    = get_post_type_archive_link( jardin_events_get_post_type() );
+	if ( empty( $roles ) ) {
+		return '';
+	}
+	$parts = array();
+	foreach ( $roles as $slug ) {
+		$url   = $base ? add_query_arg( 'event_role', $slug, $base ) : '';
+		$label = isset( $labels[ $slug ] ) ? $labels[ $slug ] : $slug;
+		if ( $url ) {
+			$parts[] = sprintf(
+				'<a class="event-role-pill %1$s" href="%2$s">%3$s</a>',
+				esc_attr( $slug ),
+				esc_url( $url ),
+				esc_html( $label )
+			);
+		} else {
+			$parts[] = sprintf(
+				'<span class="event-role-pill %1$s">%2$s</span>',
+				esc_attr( $slug ),
+				esc_html( $label )
+			);
+		}
+	}
+	return implode( ' ', $parts );
 }

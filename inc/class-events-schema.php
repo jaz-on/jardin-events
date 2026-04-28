@@ -26,7 +26,7 @@ class Jardin_Events_Schema {
 	 * Print minimal Event JSON-LD on singular events when enabled.
 	 */
 	public function maybe_print_jsonld() {
-		if ( ! is_singular( 'event' ) ) {
+		if ( ! is_singular( jardin_events_get_post_type() ) ) {
 			return;
 		}
 
@@ -40,7 +40,7 @@ class Jardin_Events_Schema {
 		}
 
 		$start = (string) get_post_meta( $post_id, 'event_date', true );
-		$end   = (string) get_post_meta( $post_id, 'event_end_date', true );
+		$end   = (string) jardin_events_get_event_date_end( $post_id );
 		$loc   = (string) get_post_meta( $post_id, 'event_location', true );
 		$name  = wp_strip_all_tags( get_the_title( $post_id ) );
 

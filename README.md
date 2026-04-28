@@ -1,6 +1,6 @@
 # Jardin Events
 
-Plugin WordPress pour le CPT **événement** (`event`) sur les sites utilisant le thème [jaz-on/jardin](https://github.com/jaz-on/jardin) : métadonnées (dates, lieu, lien), REST API, requêtes PHP et prise en charge des **Query Loops** FSE.
+Plugin WordPress pour le CPT **événement** (`event`) sur les sites utilisant le thème [jaz-on/jardin](https://github.com/jaz-on/jardin) : métadonnées (dates, lieu, lien, rôles, article récap, URLs slides/vidéo), REST API, requêtes PHP et prise en charge des **Query Loops** FSE.
 
 ## Prérequis
 
@@ -11,21 +11,30 @@ Plugin WordPress pour le CPT **événement** (`event`) sur les sites utilisant l
 
 1. Placer le dossier du plugin dans `wp-content/plugins/jardin-events/` (recommandé pour correspondre au dépôt Git et à Git Updater).
 2. Activer l’extension dans **Réglages → Extensions**.
-3. En cas de 404 sur `/events/`, enregistrez à nouveau les permaliens (**Réglages → Permaliens** → Enregistrer).
+3. En cas de 404 sur `/evenements/`, enregistrez à nouveau les permaliens (**Réglages → Permaliens** → Enregistrer).
 
 ## Métadonnées
 
 | Clé               | Rôle                                      |
 |-------------------|-------------------------------------------|
-| `event_date`      | Date de début (`Y-m-d`)                   |
-| `event_end_date`  | Date de fin (optionnel)                   |
+| `event_date`      | Date de début (`Y-m-d`), obligatoire à l’enregistrement |
+| `event_date_end`  | Date de fin (optionnelle)                 |
 | `event_location`  | Lieu (texte)                              |
 | `event_link`      | URL « En savoir plus »                    |
-| `event_role`      | Rôles multiples (`speaker`, `organizer`, `sponsor`, `attendee`) — cases à cocher dans l’éditeur classique |
+| `event_role`      | Rôles multiples (`speaker`, `organizer`, `sponsor`, `attendee`) — plusieurs lignes de meta |
+| `event_article`   | ID d’un billet `post` (récap lié)        |
+| `event_slides_url`| URL des présentations (optionnel)        |
+| `event_video_url` | URL vidéo (optionnel)                    |
 
-Archive publique **`/events/`** : ajouter **`?event_role=speaker`** (ou un autre rôle) pour filtrer la requête principale.
+Lors d’une mise à jour depuis une ancienne version du plugin qui utilisait encore `event_end_date` ou `event_linked_post`, ces clés sont renommées automatiquement en base (`event_date_end`, `event_article`).
 
-Bloc **Event role filters** (`jardin-events/event-filter`) : puces avec comptes, rendu serveur (FSE / éditeur).
+Archive publique **`/evenements/`** (slug réécriture filtrable) : ajouter **`?event_role=speaker`** pour filtrer la requête principale. Tri archive par **`event_date`** (décroissant).
+
+Bloc **Event role filters** (`jardin-events/event-filter`) : puces (classes `.feed-filters`, `.ff-btn`) avec comptes, rendu serveur (FSE / éditeur).
+
+Autres blocs dynamiques : **`event-inline-date`**, **`event-inline-location`** (liste « à venir »), **`event-archive-meta`**, **`event-external-link`**, **`event-single-meta`**, **`event-status-bar`** — utilisés dans les gabarits du thème Jardin.
+
+REST : champ calculé **`event_roles`** (tableau de slugs) ; métas **`event_article`**, **`event_slides_url`**, **`event_video_url`** exposées selon l’enregistrement.
 
 ## Thème FSE : Query Loop
 
@@ -34,7 +43,7 @@ Pour qu’une liste d’événements soit filtrée et triée sur **`event_date`*
 - `jardin-events-query--upcoming` — à venir / en cours, ordre croissant.
 - `jardin-events-query--past` — passés, ordre décroissant.
 
-Le type de publication de la requête doit être **uniquement** `event`. Sans ces classes, le plugin ne modifie pas la requête.
+Le type de publication de la requête doit être **uniquement** celui du CPT événement (par défaut `event`). Sans ces classes, le plugin ne modifie pas la requête.
 
 Modèles et pattern prêts à copier : répertoire [`docs/theme-handoff/`](docs/theme-handoff/README.md).
 
@@ -42,20 +51,32 @@ Modèles et pattern prêts à copier : répertoire [`docs/theme-handoff/`](docs/
 
 | Filtre | Rôle |
 |--------|------|
-| `jardin_events_register_post_type_args` | Arguments passés à `register_post_type( 'event', … )` |
-| `jardin_events_upcoming_query_args` | Tableau d’arguments `WP_Query` pour les événements à venir (`$limit` en 2e argument) |
-| `jardin_events_past_query_args` | Idem pour les événements passés (`$limit` en 2e argument) |
+| `jardin_events_post_type` | Slug du CPT enregistré (défaut : `event`) |
+| `jardin_events_slug` | Préfixe d’URL / réécriture (défaut : `evenements`) |
+| `jardin_events_meta_keys` | Liste canonique des clés meta (`jardin_events_get_meta_key_list()`) |
+| `jardin_events_roles` | Liste fermée des slugs de rôles |
+| `jardin_events_role_labels` | Libellés par slug |
+| `jardin_events_filters` | Tableau `roles`, `labels`, `counts`, `total` (`jardin_events_get_filters()`) |
+| `jardin_events_register_post_type_args` | Arguments passés à `register_post_type` |
+| `jardin_events_upcoming_query_args` | Arguments `WP_Query` événements à venir (`$limit` en 2e argument) |
+| `jardin_events_past_query_args` | Idem pour les événements passés |
 | `jardin_events_query_loop_query_vars` | Variables de requête du bloc Query Loop après filtrage (`$query`, `$block`, `$is_upcoming`) |
-| `jardin_events_enable_jsonld` | Retourner `true` pour activer le script JSON-LD « Event » sur les pages événement (désactivé par défaut ; utile si aucun plugin SEO ne fournit déjà le schéma) |
-| `jardin_events_jsonld_data` | Filtrer le tableau de données structurées (`$data`, `$post_id`) avant encodage JSON |
+| `jardin_events_enable_jsonld` | Retourner `true` pour activer le JSON-LD « Event » sur les pages événement |
+| `jardin_events_jsonld_data` | Données structurées avant encodage JSON |
 
 ## API PHP
 
 ```php
-jardin_events_is_active();           // bool
-jardin_events_get_upcoming( 3 );     // WP_Query
-jardin_events_get_past( 10 );       // WP_Query
-jardin_events_format_date( $id );   // chaîne localisée
+jardin_events_is_active();
+jardin_events_get_post_type();
+jardin_events_get_rewrite_slug();
+jardin_events_get_upcoming( 3 );
+jardin_events_get_past( 10 );
+jardin_events_format_date( $id );
+jardin_events_get_filters(); // roles, labels, counts, total
+jardin_events_has_role( $id, 'speaker' );
+jardin_events_is_upcoming( $id );
+jardin_events_days_until( $id );
 ```
 
 ## Qualité du code
@@ -79,12 +100,12 @@ composer run test
 ## Tests manuels (checklist)
 
 - [ ] Activation du plugin sans erreur.
-- [ ] Permaliens : archive accessible (`/events/` ou slug configuré).
-- [ ] Création d’un événement avec dates, lieu, lien ; affichage des meta dans l’éditeur de blocs.
-- [ ] Date de fin strictement avant la date de début : les dates ne sont pas enregistrées (classique) ; lieu et lien enregistrés ; message d’admin ; via l’API REST la requête est refusée.
+- [ ] Permaliens : archive accessible (`/evenements/` ou slug configuré).
+- [ ] Création d’un événement avec date de début obligatoire, lieu, lien ; métabox et REST.
+- [ ] Date de fin avant la date de début : dates non enregistrées ; lieu / lien / autres champs oui ; notice admin ; REST refusée.
 - [ ] Vidage d’un champ meta : meta supprimée en base.
 - [ ] Template archive avec deux Query Loops (`--upcoming` / `--past`) : listes cohérentes.
-- [ ] Événement multi-jours : encore listé tant que `event_end_date` ≥ aujourd’hui.
+- [ ] Événement multi-jours : encore listé tant que `event_date_end` ≥ aujourd’hui.
 
 ## Licence
 

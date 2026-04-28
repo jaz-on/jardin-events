@@ -1,0 +1,14 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "jardin-events/event-inline-date",
+	"title": "Event date (inline)",
+	"category": "widgets",
+	"icon": "calendar",
+	"description": "Formatted event_date meta with .entry-when (Query Loop / archive).",
+	"textdomain": "jardin-events",
+	"supports": {
+		"html": false
+	},
+	"render": "file:./render.php"
+}

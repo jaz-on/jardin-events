@@ -1,0 +1,14 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "jardin-events/event-archive-meta",
+	"title": "Event archive meta",
+	"category": "widgets",
+	"icon": "admin-site-alt3",
+	"description": "Roles and location row for event archive list items (.entry-meta).",
+	"textdomain": "jardin-events",
+	"supports": {
+		"html": false
+	},
+	"render": "file:./render.php"
+}

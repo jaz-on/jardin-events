@@ -1,0 +1,14 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "jardin-events/event-external-link",
+	"title": "Event external link",
+	"category": "widgets",
+	"icon": "external",
+	"description": "Outputs event_link as .entry-links when set.",
+	"textdomain": "jardin-events",
+	"supports": {
+		"html": false
+	},
+	"render": "file:./render.php"
+}

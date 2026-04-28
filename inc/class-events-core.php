@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Jardin_Events_Core {
 
 	/**
-	 * CSS class on a core/query block: upcoming events (by event_date / event_end_date).
+	 * CSS class on a core/query block: upcoming events (by event_date / event_date_end).
 	 */
 	const QUERY_CLASS_UPCOMING = 'jardin-events-query--upcoming';
 
@@ -46,7 +46,7 @@ class Jardin_Events_Core {
 
 		add_action( 'init', array( $this, 'register_post_type' ) );
 		add_action( 'init', array( $this, 'register_meta' ) );
-		add_filter( 'post_class', array( $this, 'filter_post_class_h_event' ), 10, 3 );
+		add_action( 'rest_api_init', array( $this, 'register_rest_fields' ) );
 		add_filter( 'query_loop_block_query_vars', array( $this, 'filter_query_loop_block_query_vars' ), 10, 3 );
 		add_filter( 'rest_pre_insert_event', array( $this, 'rest_pre_insert_event' ), 10, 2 );
 		add_filter( 'rest_pre_update_event', array( $this, 'rest_pre_update_event' ), 10, 3 );
@@ -61,7 +61,11 @@ class Jardin_Events_Core {
 	 */
 	public function rest_pre_insert_event( $prepared_post, $request ) {
 		list( $start, $end ) = jardin_events_merge_event_dates_from_request( $request, 0 );
-		$check               = jardin_events_validate_event_dates( $start, $end );
+		$check               = jardin_events_validate_event_dates(
+			$start,
+			$end,
+			array( 'require_non_empty_start' => true )
+		);
 
 		return is_wp_error( $check ) ? $check : $prepared_post;
 	}
@@ -77,7 +81,11 @@ class Jardin_Events_Core {
 	public function rest_pre_update_event( $prepared_post, $post, $request ) {
 		$post_id             = isset( $post->ID ) ? (int) $post->ID : 0;
 		list( $start, $end ) = jardin_events_merge_event_dates_from_request( $request, $post_id );
-		$check               = jardin_events_validate_event_dates( $start, $end );
+		$check               = jardin_events_validate_event_dates(
+			$start,
+			$end,
+			array( 'require_non_empty_start' => true )
+		);
 
 		return is_wp_error( $check ) ? $check : $prepared_post;
 	}
@@ -86,10 +94,42 @@ class Jardin_Events_Core {
 	 * Plugin activation: register types/meta and flush rewrite rules.
 	 */
 	public static function activate() {
+		self::migrate_legacy_meta_keys();
 		$core = new self( false );
 		$core->register_post_type();
 		$core->register_meta();
 		flush_rewrite_rules();
+	}
+
+	/**
+	 * Rename legacy meta keys in the database (one-time per site).
+	 */
+	public static function migrate_legacy_meta_keys() {
+		if ( '2' === get_option( 'jardin_events_db_version', '' ) ) {
+			return;
+		}
+
+		global $wpdb;
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- One-off migration.
+		$wpdb->query(
+			$wpdb->prepare(
+				"UPDATE {$wpdb->postmeta} SET meta_key = %s WHERE meta_key = %s",
+				'event_date_end',
+				'event_end_date'
+			)
+		);
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- One-off migration.
+		$wpdb->query(
+			$wpdb->prepare(
+				"UPDATE {$wpdb->postmeta} SET meta_key = %s WHERE meta_key = %s",
+				'event_article',
+				'event_linked_post'
+			)
+		);
+
+		update_option( 'jardin_events_db_version', '2' );
 	}
 
 	/**
@@ -120,11 +160,11 @@ class Jardin_Events_Core {
 			array(
 				'relation' => 'AND',
 				array(
-					'key'     => 'event_end_date',
+					'key'     => 'event_date_end',
 					'compare' => 'EXISTS',
 				),
 				array(
-					'key'     => 'event_end_date',
+					'key'     => 'event_date_end',
 					'value'   => $today,
 					'compare' => '>=',
 					'type'    => 'DATE',
@@ -152,16 +192,16 @@ class Jardin_Events_Core {
 			array(
 				'relation' => 'OR',
 				array(
-					'key'     => 'event_end_date',
+					'key'     => 'event_date_end',
 					'compare' => 'NOT EXISTS',
 				),
 				array(
-					'key'     => 'event_end_date',
+					'key'     => 'event_date_end',
 					'value'   => '',
 					'compare' => '=',
 				),
 				array(
-					'key'     => 'event_end_date',
+					'key'     => 'event_date_end',
 					'value'   => $today,
 					'compare' => '<',
 					'type'    => 'DATE',
@@ -183,12 +223,14 @@ class Jardin_Events_Core {
 
 		$pt = $query['post_type'];
 
+		$event_pt = jardin_events_get_post_type();
+
 		if ( is_string( $pt ) ) {
-			return 'event' === $pt;
+			return $event_pt === $pt;
 		}
 
 		if ( is_array( $pt ) ) {
-			return array( 'event' ) === $pt || ( 1 === count( $pt ) && 'event' === $pt[0] );
+			return array( $event_pt ) === $pt || ( 1 === count( $pt ) && $event_pt === $pt[0] );
 		}
 
 		return false;
@@ -235,6 +277,8 @@ class Jardin_Events_Core {
 	 * Register the `event` custom post type.
 	 */
 	public function register_post_type() {
+		$post_type = jardin_events_get_post_type();
+
 		$labels = array(
 			'name'               => __( 'Événements', 'jardin-events' ),
 			'singular_name'      => __( 'Événement', 'jardin-events' ),
@@ -258,7 +302,7 @@ class Jardin_Events_Core {
 			'show_in_rest'        => true,
 			'has_archive'         => true,
 			'rewrite'             => array(
-				'slug' => 'events',
+				'slug' => jardin_events_get_rewrite_slug(),
 			),
 			'supports'            => array(
 				'title',
@@ -276,15 +320,17 @@ class Jardin_Events_Core {
 
 		$args = apply_filters( 'jardin_events_register_post_type_args', $args );
 
-		register_post_type( 'event', $args );
+		register_post_type( $post_type, $args );
 	}
 
 	/**
 	 * Register post meta for events.
 	 */
 	public function register_meta() {
+		$post_type = jardin_events_get_post_type();
+
 		register_post_meta(
-			'event',
+			$post_type,
 			'event_date',
 			array(
 				'show_in_rest'      => true,
@@ -296,8 +342,8 @@ class Jardin_Events_Core {
 		);
 
 		register_post_meta(
-			'event',
-			'event_end_date',
+			$post_type,
+			'event_date_end',
 			array(
 				'show_in_rest'      => true,
 				'single'            => true,
@@ -308,7 +354,7 @@ class Jardin_Events_Core {
 		);
 
 		register_post_meta(
-			'event',
+			$post_type,
 			'event_location',
 			array(
 				'show_in_rest'      => true,
@@ -320,7 +366,7 @@ class Jardin_Events_Core {
 		);
 
 		register_post_meta(
-			'event',
+			$post_type,
 			'event_link',
 			array(
 				'show_in_rest'      => true,
@@ -332,7 +378,7 @@ class Jardin_Events_Core {
 		);
 
 		register_post_meta(
-			'event',
+			$post_type,
 			'event_role',
 			array(
 				'show_in_rest'      => false,
@@ -342,25 +388,65 @@ class Jardin_Events_Core {
 				'sanitize_callback' => 'jardin_events_sanitize_event_role_meta',
 			)
 		);
+
+		register_post_meta(
+			$post_type,
+			'event_article',
+			array(
+				'show_in_rest'      => true,
+				'single'            => true,
+				'auth_callback'     => array( $this, 'meta_auth_callback' ),
+				'type'              => 'integer',
+				'sanitize_callback' => 'jardin_events_sanitize_meta_event_article',
+			)
+		);
+
+		register_post_meta(
+			$post_type,
+			'event_slides_url',
+			array(
+				'show_in_rest'      => true,
+				'single'            => true,
+				'auth_callback'     => array( $this, 'meta_auth_callback' ),
+				'type'              => 'string',
+				'sanitize_callback' => 'jardin_events_sanitize_meta_url',
+			)
+		);
+
+		register_post_meta(
+			$post_type,
+			'event_video_url',
+			array(
+				'show_in_rest'      => true,
+				'single'            => true,
+				'auth_callback'     => array( $this, 'meta_auth_callback' ),
+				'type'              => 'string',
+				'sanitize_callback' => 'jardin_events_sanitize_meta_url',
+			)
+		);
 	}
 
 	/**
-	 * Add h-event microformat class on singular events.
-	 *
-	 * @param string[] $classes Post classes.
-	 * @param string[] $css_class Unused.
-	 * @param int      $post_id   Post ID.
-	 * @return string[]
+	 * Expose computed fields on REST API for the event post type.
 	 */
-	public function filter_post_class_h_event( $classes, $css_class, $post_id ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
-		if ( ! is_singular( 'event' ) ) {
-			return $classes;
-		}
-		$pid = (int) $post_id;
-		if ( 0 < $pid && (int) get_queried_object_id() === $pid && 'event' === get_post_type( $pid ) ) {
-			$classes[] = 'h-event';
-		}
-		return $classes;
+	public function register_rest_fields() {
+		register_rest_field(
+			jardin_events_get_post_type(),
+			'event_roles',
+			array(
+				'get_callback' => static function ( $post ) {
+					$id = isset( $post['id'] ) ? (int) $post['id'] : 0;
+					return $id ? jardin_events_get_event_roles( $id ) : array();
+				},
+				'schema'       => array(
+					'description' => __( 'Assigned role slugs for this event.', 'jardin-events' ),
+					'type'        => 'array',
+					'items'       => array( 'type' => 'string' ),
+					'context'     => array( 'view', 'edit' ),
+					'readonly'    => true,
+				),
+			)
+		);
 	}
 
 	/**
@@ -388,7 +474,7 @@ class Jardin_Events_Core {
 		$args = apply_filters(
 			'jardin_events_upcoming_query_args',
 			array(
-				'post_type'      => 'event',
+				'post_type'      => jardin_events_get_post_type(),
 				'posts_per_page' => $limit,
 				'meta_query'     => self::build_upcoming_meta_query(),
 				'orderby'        => 'meta_value',
@@ -412,7 +498,7 @@ class Jardin_Events_Core {
 		$args = apply_filters(
 			'jardin_events_past_query_args',
 			array(
-				'post_type'      => 'event',
+				'post_type'      => jardin_events_get_post_type(),
 				'posts_per_page' => $limit,
 				'meta_query'     => self::build_past_meta_query(),
 				'orderby'        => 'meta_value',
@@ -434,7 +520,7 @@ class Jardin_Events_Core {
 	 */
 	public static function format_event_date( $post_id ) {
 		$start = get_post_meta( $post_id, 'event_date', true );
-		$end   = get_post_meta( $post_id, 'event_end_date', true );
+		$end   = jardin_events_get_event_date_end( $post_id );
 
 		if ( ! $start ) {
 			return '';
@@ -479,7 +565,7 @@ function jardin_events_core() {
  * @return bool
  */
 function jardin_events_is_active() {
-	return post_type_exists( 'event' )
+	return post_type_exists( jardin_events_get_post_type() )
 		&& defined( 'JARDIN_EVENTS_VERSION' )
 		&& class_exists( 'Jardin_Events_Core', false );
 }

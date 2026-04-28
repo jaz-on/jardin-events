@@ -1,0 +1,14 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "jardin-events/event-single-meta",
+	"title": "Event single meta",
+	"category": "widgets",
+	"icon": "megaphone",
+	"description": "Date (dt-start), inline roles, and location on the event single.",
+	"textdomain": "jardin-events",
+	"supports": {
+		"html": false
+	},
+	"render": "file:./render.php"
+}

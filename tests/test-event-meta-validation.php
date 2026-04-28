@@ -39,4 +39,17 @@ class Jardin_Events_Event_Meta_Validation_Test extends WP_UnitTestCase {
 		$this->assertInstanceOf( 'WP_Error', $error );
 		$this->assertSame( 'jardin_events_invalid_date', $error->get_error_code() );
 	}
+
+	/**
+	 * Optional flag rejects empty start when required (REST / admin save).
+	 */
+	public function test_validate_event_dates_requires_start_when_flagged() {
+		$error = jardin_events_validate_event_dates(
+			'',
+			'',
+			array( 'require_non_empty_start' => true )
+		);
+		$this->assertInstanceOf( 'WP_Error', $error );
+		$this->assertSame( 'jardin_events_missing_start', $error->get_error_code() );
+	}
 }

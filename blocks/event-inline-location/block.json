@@ -1,0 +1,14 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "jardin-events/event-inline-location",
+	"title": "Event location (inline)",
+	"category": "widgets",
+	"icon": "location",
+	"description": "Location line (.entry-loc) for upcoming list.",
+	"textdomain": "jardin-events",
+	"supports": {
+		"html": false
+	},
+	"render": "file:./render.php"
+}

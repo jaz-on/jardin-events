@@ -1,0 +1,14 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "jardin-events/event-status-bar",
+	"title": "Event status bar",
+	"category": "widgets",
+	"icon": "calendar-alt",
+	"description": "Badge (à venir / en cours / passé) and countdown for the current event.",
+	"textdomain": "jardin-events",
+	"supports": {
+		"html": false
+	},
+	"render": "file:./render.php"
+}

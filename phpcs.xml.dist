@@ -5,6 +5,7 @@
 	<file>jardin-events.php</file>
 	<file>uninstall.php</file>
 	<file>inc</file>
+	<file>blocks</file>
 
 	<exclude-pattern>*/vendor/*</exclude-pattern>
 	<exclude-pattern>*/tests/*</exclude-pattern>

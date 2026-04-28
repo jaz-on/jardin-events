@@ -41,13 +41,14 @@ function jardin_events_parse_ymd_meta( $value ) {
 }
 
 /**
- * Validate event_date / event_end_date values after parsing.
+ * Validate event_date / event_date_end values after parsing.
  *
- * @param string $start Parsed start (Y-m-d, '', or null for invalid format of a non-empty raw).
- * @param string $end   Parsed end (same).
+ * @param string|null $start Parsed start (Y-m-d, '', or null for invalid format of a non-empty raw).
+ * @param string|null $end   Parsed end (same).
+ * @param array       $args   Optional. `require_non_empty_start` (bool) when true (admin / REST create), empty start is invalid.
  * @return true|\WP_Error
  */
-function jardin_events_validate_event_dates( $start, $end ) {
+function jardin_events_validate_event_dates( $start, $end, $args = array() ) {
 	if ( null === $start ) {
 		return new WP_Error(
 			'jardin_events_invalid_date',
@@ -60,6 +61,14 @@ function jardin_events_validate_event_dates( $start, $end ) {
 			__( 'La date de fin n’est pas une date valide.', 'jardin-events' )
 		);
 	}
+
+	if ( ! empty( $args['require_non_empty_start'] ) && '' === $start ) {
+		return new WP_Error(
+			'jardin_events_missing_start',
+			__( 'La date de début est obligatoire.', 'jardin-events' )
+		);
+	}
+
 	if ( '' !== $start && '' !== $end && strcmp( $end, $start ) < 0 ) {
 		return new WP_Error(
 			'jardin_events_invalid_range',
@@ -79,7 +88,13 @@ function jardin_events_validate_event_dates( $start, $end ) {
  */
 function jardin_events_merge_event_dates_from_request( $request, $post_id ) {
 	$stored_start = $post_id ? (string) get_post_meta( $post_id, 'event_date', true ) : '';
-	$stored_end   = $post_id ? (string) get_post_meta( $post_id, 'event_end_date', true ) : '';
+	$stored_end   = '';
+	if ( $post_id ) {
+		$stored_end = (string) get_post_meta( $post_id, 'event_date_end', true );
+		if ( '' === $stored_end ) {
+			$stored_end = (string) get_post_meta( $post_id, 'event_end_date', true );
+		}
+	}
 
 	$start = jardin_events_parse_ymd_meta( $stored_start );
 	$end   = jardin_events_parse_ymd_meta( $stored_end );
@@ -89,7 +104,9 @@ function jardin_events_merge_event_dates_from_request( $request, $post_id ) {
 		if ( array_key_exists( 'event_date', $meta ) ) {
 			$start = jardin_events_parse_ymd_meta( $meta['event_date'] );
 		}
-		if ( array_key_exists( 'event_end_date', $meta ) ) {
+		if ( array_key_exists( 'event_date_end', $meta ) ) {
+			$end = jardin_events_parse_ymd_meta( $meta['event_date_end'] );
+		} elseif ( array_key_exists( 'event_end_date', $meta ) ) {
 			$end = jardin_events_parse_ymd_meta( $meta['event_end_date'] );
 		}
 	}
@@ -129,6 +146,54 @@ function jardin_events_sanitize_meta_text( $meta_value ) {
  */
 function jardin_events_sanitize_meta_url( $meta_value ) {
 	return esc_url_raw( (string) $meta_value );
+}
+
+/**
+ * Sanitize recap article post ID (must be a post of type post).
+ *
+ * @param mixed $meta_value Meta value.
+ * @return int Zero when empty or invalid.
+ */
+function jardin_events_sanitize_meta_event_article( $meta_value ) {
+	$id = absint( $meta_value );
+	if ( $id <= 0 ) {
+		return 0;
+	}
+	if ( 'post' !== get_post_type( $id ) ) {
+		return 0;
+	}
+	return $id;
+}
+
+/**
+ * Back-compat sanitize alias for recap article meta.
+ *
+ * @deprecated Use {@see jardin_events_sanitize_meta_event_article()}
+ *
+ * @param mixed $meta_value Meta value.
+ * @return int
+ */
+function jardin_events_sanitize_meta_linked_post( $meta_value ) {
+	return jardin_events_sanitize_meta_event_article( $meta_value );
+}
+
+/**
+ * Canonical list of registered meta keys (extend via filter).
+ *
+ * @return string[]
+ */
+function jardin_events_get_meta_key_list() {
+	$keys = array(
+		'event_date',
+		'event_date_end',
+		'event_location',
+		'event_link',
+		'event_role',
+		'event_article',
+		'event_slides_url',
+		'event_video_url',
+	);
+	return apply_filters( 'jardin_events_meta_keys', $keys );
 }
 
 /**
