@@ -167,7 +167,27 @@ function jardin_events_register_blocks() {
 	foreach ( $to_register as $slug ) {
 		$path = $dir . $slug;
 		if ( is_readable( $path . '/block.json' ) ) {
-			register_block_type( $path );
+			/*
+			 * Core's default loader for block.json "render" files does:
+			 * ob_start(); require $file; return ob_get_clean();
+			 * Templates that end with `return $html` therefore output nothing (return value is discarded).
+			 * Our render/*.php files use `return`; capture require() output and merge with the buffer.
+			 */
+			$render_file = $path . '/render.php';
+			$args        = array();
+			if ( is_readable( $render_file ) ) {
+				$args['render_callback'] = static function ( $attributes, $content, $block ) use ( $render_file ) {
+					ob_start();
+					// phpcs:ignore WordPressVIPMinimum.Files.IncludingFile.UsingVariable -- Fixed path under plugin blocks/ + allowlisted slug.
+					$included = require $render_file;
+					$buffer   = ob_get_clean();
+					if ( is_string( $included ) && '' !== $included ) {
+						return $included;
+					}
+					return is_string( $buffer ) ? $buffer : '';
+				};
+			}
+			register_block_type( $path, $args );
 			continue;
 		}
 
