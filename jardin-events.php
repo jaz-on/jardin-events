@@ -167,7 +167,25 @@ function jardin_events_register_blocks() {
 		$path = $dir . $slug;
 		if ( is_readable( $path . '/block.json' ) ) {
 			register_block_type( $path );
+			continue;
 		}
+
+		$name   = 'jardin-events/' . $slug;
+		$render = $path . '/render.php';
+
+		register_block_type(
+			$name,
+			array(
+				'render_callback' => static function () use ( $render ) {
+					if ( ! is_readable( $render ) ) {
+						return '';
+					}
+
+					$output = include $render;
+					return is_string( $output ) ? $output : '';
+				},
+			)
+		);
 	}
 }
 add_action( 'init', 'jardin_events_register_blocks' );
