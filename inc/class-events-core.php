@@ -237,6 +237,16 @@ class Jardin_Events_Core {
 	}
 
 	/**
+	 * Current role filter from request when valid.
+	 *
+	 * @return string
+	 */
+	private function get_current_role_filter() {
+		$role = isset( $_GET['event_role'] ) ? sanitize_key( wp_unslash( $_GET['event_role'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		return in_array( $role, jardin_events_get_role_slugs(), true ) ? $role : '';
+	}
+
+	/**
 	 * Adjust core/query block when marked with plugin CSS classes.
 	 *
 	 * @param array     $query Query vars.
@@ -268,6 +278,19 @@ class Jardin_Events_Core {
 		} else {
 			$query['order']      = 'DESC';
 			$query['meta_query'] = self::build_past_meta_query();
+		}
+
+		$role = $this->get_current_role_filter();
+		if ( '' !== $role ) {
+			$meta_query = isset( $query['meta_query'] ) && is_array( $query['meta_query'] ) ? $query['meta_query'] : array();
+			$query['meta_query'] = array(
+				'relation' => 'AND',
+				$meta_query,
+				array(
+					'key'   => 'event_role',
+					'value' => $role,
+				),
+			);
 		}
 
 		return apply_filters( 'jardin_events_query_loop_query_vars', $query, $block, $is_upcoming );

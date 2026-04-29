@@ -147,14 +147,14 @@ class Jardin_Events_Admin {
 			/>
 		</p>
 		<p class="jardin-events-article-row">
-			<label for="jardin-event-article-search"><?php esc_html_e( 'Article récap', 'jardin-events' ); ?></label><br />
+			<label for="jardin-event-article-search"><?php esc_html_e( 'Contenu lié (récap)', 'jardin-events' ); ?></label><br />
 			<input
 				type="search"
 				id="jardin-event-article-search"
 				class="widefat jardin-events-article-search"
 				value=""
 				autocomplete="off"
-				placeholder="<?php esc_attr_e( 'Rechercher un article par titre…', 'jardin-events' ); ?>"
+				placeholder="<?php esc_attr_e( 'Rechercher un contenu lié par titre…', 'jardin-events' ); ?>"
 			/>
 			<input type="hidden" name="jardin_event_article" id="jardin-event-article-id" value="<?php echo $linked_post ? esc_attr( (string) $linked_post ) : ''; ?>" />
 			<ul class="jardin-events-article-suggest" id="jardin-event-article-suggest" hidden></ul>
@@ -249,7 +249,7 @@ class Jardin_Events_Admin {
 
 		$q = new WP_Query(
 			array(
-				'post_type'              => 'post',
+				'post_type'              => jardin_events_get_event_article_post_types(),
 				'post_status'            => 'publish',
 				's'                      => $term,
 				'posts_per_page'         => 8,

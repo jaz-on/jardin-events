@@ -149,7 +149,19 @@ function jardin_events_sanitize_meta_url( $meta_value ) {
 }
 
 /**
- * Sanitize recap article post ID (must be a post of type post).
+ * Allowed post types for `event_article` links.
+ *
+ * @return string[]
+ */
+function jardin_events_get_event_article_post_types() {
+	$defaults = array( 'post' );
+	$types    = (array) apply_filters( 'jardin_events_event_article_post_types', $defaults );
+	$types    = array_values( array_unique( array_map( 'sanitize_key', $types ) ) );
+	return empty( $types ) ? $defaults : $types;
+}
+
+/**
+ * Sanitize recap article post ID (must match allowed post types).
  *
  * @param mixed $meta_value Meta value.
  * @return int Zero when empty or invalid.
@@ -159,7 +171,8 @@ function jardin_events_sanitize_meta_event_article( $meta_value ) {
 	if ( $id <= 0 ) {
 		return 0;
 	}
-	if ( 'post' !== get_post_type( $id ) ) {
+	$post_type = get_post_type( $id );
+	if ( ! is_string( $post_type ) || ! in_array( $post_type, jardin_events_get_event_article_post_types(), true ) ) {
 		return 0;
 	}
 	return $id;
