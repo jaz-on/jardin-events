@@ -4,6 +4,10 @@ Toutes les notes importantes de ce projet sont listées ici. La version distribu
 
 ## [Unreleased]
 
+### Changed
+
+- Nom produit / dépôt canonique **jardin-events** (libellés d’en-tête, README, docs handoff, PHPCS, commentaires) ; identifiants PHP (`Jardin_Events_*`, `jardin_events_*`, `JARDIN_EVENTS_*`) inchangés (API publique).
+
 ### Added
 
 - Migration base (`jardin_events_db_version`, option `2`) : renommage des lignes de meta `event_end_date` → `event_date_end`, `event_linked_post` → `event_article`.

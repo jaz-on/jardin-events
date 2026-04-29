@@ -1,5 +1,5 @@
 /**
- * Gutenberg document panel for Jardin Events metadata.
+ * Gutenberg document panel for jardin-events metadata.
  */
 (function (wp) {
 	'use strict';

@@ -1,4 +1,4 @@
-# Jardin Events
+# jardin-events
 
 Plugin WordPress pour le CPT **événement** (`event`) sur les sites utilisant le thème [jaz-on/jardin](https://github.com/jaz-on/jardin) : métadonnées (dates, ville/pays/carte, lien, article récap, URLs slides/vidéo), taxonomie de rôles, REST API, requêtes PHP et prise en charge des **Query Loops** FSE.
 

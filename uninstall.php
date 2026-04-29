@@ -1,6 +1,6 @@
 <?php
 /**
- * Uninstall Jardin Events (plugin removal from disk).
+ * Uninstall jardin-events (plugin removal from disk).
  *
  * Event posts and post meta remain in the database; only transient notices are cleared.
  *

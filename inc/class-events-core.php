@@ -1,6 +1,6 @@
 <?php
 /**
- * Core logic for Jardin Events.
+ * Core logic for jardin-events.
  *
  * @package Jardin_Events
  */
@@ -783,7 +783,7 @@ function jardin_events_core() {
  */
 
 /**
- * Check if Jardin Events is active.
+ * Check if jardin-events is active.
  *
  * @return bool
  */

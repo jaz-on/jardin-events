@@ -1,6 +1,6 @@
 <?php
 /**
- * PHPUnit bootstrap for Jardin Events.
+ * PHPUnit bootstrap for jardin-events.
  *
  * Set WP_TESTS_DIR to your WordPress test library path (wordpress-develop/tests/phpunit
  * or similar). Example: export WP_TESTS_DIR=/path/to/wordpress/tests/phpunit

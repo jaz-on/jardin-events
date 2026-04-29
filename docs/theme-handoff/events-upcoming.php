@@ -20,7 +20,7 @@ add_action(
 			'jardin/upcoming-events',
 			array(
 				'title'       => __( 'Prochains événements', 'jardin' ),
-				'description' => __( 'Liste des prochains événements (dates et lieu via métadonnées du plugin Jardin Events).', 'jardin' ),
+				'description' => __( 'Liste des prochains événements (dates et lieu via métadonnées du plugin jardin-events).', 'jardin' ),
 				'categories'  => array( 'query', 'featured' ),
 				'content'     =>
 					'<!-- wp:group {"className":"jardin-events-upcoming","layout":{"type":"constrained"}} -->' .

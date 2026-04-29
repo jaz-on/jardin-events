@@ -1,6 +1,6 @@
 <?php
 /**
- * Block editor UI for Jardin Events.
+ * Block editor UI for jardin-events.
  *
  * @package Jardin_Events
  */

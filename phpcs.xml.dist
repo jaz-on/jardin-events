@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<ruleset name="Jardin Events">
-	<description>PHPCS for Jardin Events plugin</description>
+<ruleset name="jardin-events">
+	<description>PHPCS for the jardin-events WordPress plugin</description>
 
 	<file>jardin-events.php</file>
 	<file>uninstall.php</file>
