@@ -1,0 +1,15 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "jardin-events/event-inline-meta",
+	"title": "Event meta (inline)",
+	"category": "widgets",
+	"icon": "editor-ul",
+	"description": "Inline event metadata line for home IRL rows: date(s) - city, country.",
+	"textdomain": "jardin-events",
+	"usesContext": ["postId", "postType"],
+	"supports": {
+		"html": false
+	},
+	"render": "file:./render.php"
+}

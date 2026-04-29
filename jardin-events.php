@@ -158,6 +158,7 @@ function jardin_events_register_blocks() {
 		'event-status-bar',
 		'event-archive-meta',
 		'event-single-meta',
+		'event-inline-meta',
 		'event-inline-date',
 		'event-external-link',
 		'event-inline-location',
