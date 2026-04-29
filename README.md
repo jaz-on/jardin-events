@@ -2,6 +2,13 @@
 
 Plugin WordPress pour le CPT **événement** (`event`) sur les sites utilisant le thème [jaz-on/jardin](https://github.com/jaz-on/jardin) : métadonnées (dates, ville/pays/carte, lien, article récap, URLs slides/vidéo), taxonomie de rôles, REST API, requêtes PHP et prise en charge des **Query Loops** FSE.
 
+## Plugins compagnons
+
+- [jardin-scrobbles](https://github.com/jaz-on/jardin-scrobbles/)
+- [jardin-bookmarks](https://github.com/jaz-on/jardin-bookmarks/)
+- [jardin-toasts](https://github.com/jaz-on/jardin-toasts/)
+- [jardin-events](https://github.com/jaz-on/jardin-events/)
+
 ## Prérequis
 
 - **WordPress 6.4+** (filtre `query_loop_block_query_vars` sur les blocs Query).
