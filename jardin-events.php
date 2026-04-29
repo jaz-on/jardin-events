@@ -13,7 +13,7 @@
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: jardin-events
  * GitHub Plugin URI: https://github.com/jaz-on/jardin-events
- * Primary Branch: main
+ * Primary Branch: dev
  *
  * Keep plugin header Version: in sync with JARDIN_EVENTS_VERSION on each release.
  *
