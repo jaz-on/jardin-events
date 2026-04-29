@@ -275,6 +275,7 @@
 				value: selectedPostTokens,
 				suggestions: postOptions,
 				__experimentalExpandOnFocus: true,
+				__experimentalShowHowTo: false,
 				onInputChange: function (v) { setPostSearchValue(v || ''); },
 				onChange: function (tokens) {
 					var ids = [];
