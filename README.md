@@ -35,7 +35,6 @@ WordPress plugin: **`event`** CPT for sites using **[jardin-theme](https://githu
 | [jardin-scrobbles](https://github.com/jaz-on/jardin-scrobbles) | Last.fm / listens |
 | [jardin-toasts](https://github.com/jaz-on/jardin-toasts) | Untappd check-ins |
 | [jardin-bookmarks](https://github.com/jaz-on/jardin-bookmarks) | Feedbin → favorites / blogroll |
-| [jardin-feed](https://github.com/jaz-on/jardin-feed) | Legacy Feedbin package |
 
 ## Development
 
