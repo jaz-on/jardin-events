@@ -491,6 +491,69 @@ class Jardin_Events_Core {
 				),
 			)
 		);
+
+		register_rest_field(
+			jardin_events_get_post_type(),
+			'event_start',
+			array(
+				'get_callback' => static function ( $post ) {
+					$id = isset( $post['id'] ) ? (int) $post['id'] : 0;
+					if ( $id <= 0 ) {
+						return '';
+					}
+					$start = get_post_meta( $id, 'event_date', true );
+					return is_string( $start ) ? $start : '';
+				},
+				'schema'       => array(
+					'description' => __( 'Event start date (Y-m-d).', 'jardin-events' ),
+					'type'        => 'string',
+					'context'     => array( 'view', 'edit' ),
+					'readonly'    => true,
+				),
+			)
+		);
+
+		register_rest_field(
+			jardin_events_get_post_type(),
+			'event_end',
+			array(
+				'get_callback' => static function ( $post ) {
+					$id = isset( $post['id'] ) ? (int) $post['id'] : 0;
+					if ( $id <= 0 ) {
+						return '';
+					}
+					$end = function_exists( 'jardin_events_get_event_date_end' ) ? jardin_events_get_event_date_end( $id ) : get_post_meta( $id, 'event_date_end', true );
+					return is_string( $end ) ? $end : '';
+				},
+				'schema'       => array(
+					'description' => __( 'Event end date (Y-m-d).', 'jardin-events' ),
+					'type'        => 'string',
+					'context'     => array( 'view', 'edit' ),
+					'readonly'    => true,
+				),
+			)
+		);
+
+		register_rest_field(
+			jardin_events_get_post_type(),
+			'event_location',
+			array(
+				'get_callback' => static function ( $post ) {
+					$id = isset( $post['id'] ) ? (int) $post['id'] : 0;
+					if ( $id <= 0 ) {
+						return '';
+					}
+					$loc = get_post_meta( $id, 'event_location', true );
+					return is_string( $loc ) ? trim( $loc ) : '';
+				},
+				'schema'       => array(
+					'description' => __( 'Event location text.', 'jardin-events' ),
+					'type'        => 'string',
+					'context'     => array( 'view', 'edit' ),
+					'readonly'    => true,
+				),
+			)
+		);
 	}
 
 	/**
