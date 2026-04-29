@@ -13,6 +13,8 @@ defined( 'ABSPATH' ) || exit;
 $event_post_id = 0;
 if ( isset( $block ) && $block instanceof WP_Block ) {
 	$event_post_id = isset( $block->context['postId'] ) ? (int) $block->context['postId'] : 0;
+} elseif ( isset( $block ) && is_array( $block ) && isset( $block['context'] ) && is_array( $block['context'] ) ) {
+	$event_post_id = isset( $block['context']['postId'] ) ? (int) $block['context']['postId'] : 0;
 }
 if ( $event_post_id <= 0 ) {
 	$event_post_id = (int) get_the_ID();
