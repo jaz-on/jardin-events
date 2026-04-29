@@ -7,6 +7,7 @@
 	"icon": "location",
 	"description": "Location line (.entry-loc) for upcoming list.",
 	"textdomain": "jardin-events",
+	"usesContext": ["postId", "postType"],
 	"supports": {
 		"html": false
 	},

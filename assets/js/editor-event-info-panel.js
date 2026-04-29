@@ -13,7 +13,6 @@
 	var el = wp.element.createElement;
 	var useState = wp.element.useState;
 	var useEffect = wp.element.useEffect;
-	var Fragment = wp.element.Fragment;
 	var TextControl = wp.components.TextControl;
 	var ComboboxControl = wp.components.ComboboxControl;
 	var __ = wp.i18n.__;
@@ -239,7 +238,7 @@
 
 	registerPlugin('jardin-events-editor-info-panel', {
 		render: function () {
-			return el(Fragment, null, el(EventInfoPanel));
+			return el(EventInfoPanel);
 		}
 	});
 })(window.wp);

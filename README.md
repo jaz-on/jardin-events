@@ -1,6 +1,6 @@
 # Jardin Events
 
-Plugin WordPress pour le CPT **événement** (`event`) sur les sites utilisant le thème [jaz-on/jardin](https://github.com/jaz-on/jardin) : métadonnées (dates, lieu, lien, rôles, article récap, URLs slides/vidéo), REST API, requêtes PHP et prise en charge des **Query Loops** FSE.
+Plugin WordPress pour le CPT **événement** (`event`) sur les sites utilisant le thème [jaz-on/jardin](https://github.com/jaz-on/jardin) : métadonnées (dates, ville/pays/carte, lien, article récap, URLs slides/vidéo), taxonomie de rôles, REST API, requêtes PHP et prise en charge des **Query Loops** FSE.
 
 ## Prérequis
 
@@ -19,23 +19,30 @@ Plugin WordPress pour le CPT **événement** (`event`) sur les sites utilisant l
 |-------------------|-------------------------------------------|
 | `event_date`      | Date de début (`Y-m-d`), obligatoire à l’enregistrement |
 | `event_date_end`  | Date de fin (optionnelle)                 |
-| `event_location`  | Lieu (texte)                              |
+| `event_city`      | Ville (texte)                             |
+| `event_country`   | Pays (texte)                              |
+| `event_map_url`   | URL carte (Google Maps / OSM, optionnelle) |
 | `event_link`      | URL de la page de l’événement             |
 | `event_ticket_url`| URL de billetterie (optionnelle)          |
-| `event_role`      | Rôles multiples (`speaker`, `organizer`, `sponsor`, `attendee`) — plusieurs lignes de meta |
 | `event_article`   | ID d’un contenu lié (récap) ; par défaut type `post` |
 | `event_slides_url`| URL des présentations (optionnel)        |
 | `event_video_url` | URL vidéo (optionnel)                    |
 
+Taxonomie :
+
+| Taxonomie | Rôle |
+|-----------|------|
+| `event_role` | Rôles multiples (`speaker`, `organizer`, `sponsor`, `attendee`) |
+
 Lors d’une mise à jour depuis une ancienne version du plugin qui utilisait encore `event_end_date` ou `event_linked_post`, ces clés sont renommées automatiquement en base (`event_date_end`, `event_article`).
 
-Archive publique **`/evenements/`** (slug réécriture filtrable) : ajouter **`?event_role=speaker`** pour filtrer la requête principale. Tri archive par **`event_date`** (décroissant).
+Archive publique **`/evenements/`** (slug réécriture filtrable) : ajouter **`?event_role=speaker`** pour filtrer la requête principale. Tri archive par **`event_date`** (décroissant), filtre par taxonomie `event_role`.
 
 Bloc **Event role filters** (`jardin-events/event-filter`) : puces (classes `.feed-filters`, `.ff-btn`) avec comptes, rendu serveur (FSE / éditeur).
 
 Autres blocs dynamiques : **`event-inline-date`**, **`event-inline-location`** (liste « à venir »), **`event-archive-meta`**, **`event-external-link`**, **`event-single-meta`**, **`event-status-bar`** — utilisés dans les gabarits du thème Jardin.
 
-REST : champ calculé **`event_roles`** (tableau de slugs) ; métas **`event_article`**, **`event_ticket_url`**, **`event_slides_url`**, **`event_video_url`** exposées selon l’enregistrement.
+REST : champs calculés **`event_roles`**, **`event_start`**, **`event_end`**, **`event_location`** ; métas **`event_city`**, **`event_country`**, **`event_map_url`**, **`event_article`**, **`event_ticket_url`**, **`event_slides_url`**, **`event_video_url`** exposées selon l’enregistrement.
 
 Le type autorisé pour `event_article` est filtrable via `jardin_events_event_article_post_types` (défaut: `post`).
 
@@ -104,8 +111,8 @@ composer run test
 
 - [ ] Activation du plugin sans erreur.
 - [ ] Permaliens : archive accessible (`/evenements/` ou slug configuré).
-- [ ] Création d’un événement avec date de début obligatoire, lieu, lien ; métabox et REST.
-- [ ] Date de fin avant la date de début : dates non enregistrées ; lieu / lien / autres champs oui ; notice admin ; REST refusée.
+- [ ] Création d’un événement avec date de début obligatoire, ville/pays, lien ; panneau Gutenberg et REST.
+- [ ] Date de fin avant la date de début : validation empêchée côté éditeur REST.
 - [ ] Vidage d’un champ meta : meta supprimée en base.
 - [ ] Template archive avec deux Query Loops (`--upcoming` / `--past`) : listes cohérentes.
 - [ ] Événement multi-jours : encore listé tant que `event_date_end` ≥ aujourd’hui.

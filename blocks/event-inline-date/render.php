@@ -21,7 +21,10 @@ if ( $event_post_id <= 0 ) {
 	$event_post_id = (int) get_the_ID();
 }
 if ( $event_post_id <= 0 ) {
-	$event_post_id = (int) get_queried_object_id();
+	$post = get_post();
+	if ( $post instanceof WP_Post ) {
+		$event_post_id = (int) $post->ID;
+	}
 }
 if ( ! $event_post_id || jardin_events_get_post_type() !== get_post_type( $event_post_id ) ) {
 	return '';
