@@ -111,6 +111,65 @@
 				.catch(function () {});
 		}, [postSearchValue]);
 
+		useEffect(function () {
+			function normalize(s) {
+				return String(s || '')
+					.normalize('NFD')
+					.replace(/[\u0300-\u036f]/g, '')
+					.trim()
+					.toLowerCase();
+			}
+
+			function ensurePanelOrder() {
+				var buttons = Array.prototype.slice.call(
+					document.querySelectorAll('.components-panel__body-title .components-panel__body-toggle')
+				);
+				if (!buttons.length) {
+					return;
+				}
+
+				var roleBtn = null;
+				var infoBtn = null;
+				buttons.forEach(function (btn) {
+					var txt = normalize(btn.textContent);
+					if (txt === 'roles') {
+						roleBtn = btn;
+					}
+					if (txt === 'informations') {
+						infoBtn = btn;
+					}
+				});
+
+				if (!roleBtn || !infoBtn) {
+					return;
+				}
+
+				var rolePanel = roleBtn.closest('.components-panel__body');
+				var infoPanel = infoBtn.closest('.components-panel__body');
+				if (!rolePanel || !infoPanel || rolePanel === infoPanel) {
+					return;
+				}
+
+				var parent = rolePanel.parentElement;
+				if (!parent || parent !== infoPanel.parentElement) {
+					return;
+				}
+
+				if (rolePanel.nextElementSibling !== infoPanel) {
+					parent.insertBefore(infoPanel, rolePanel.nextElementSibling);
+				}
+			}
+
+			ensurePanelOrder();
+			var observer = new MutationObserver(function () {
+				ensurePanelOrder();
+			});
+			observer.observe(document.body, { childList: true, subtree: true });
+			return function () {
+				observer.disconnect();
+			};
+		}, []);
+
 		return el(
 			PluginDocumentSettingPanel,
 			{
