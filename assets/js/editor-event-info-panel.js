@@ -160,9 +160,30 @@
 				}
 			}
 
+			function ensurePanelsOpened() {
+				var buttons = Array.prototype.slice.call(
+					document.querySelectorAll('.components-panel__body-title .components-panel__body-toggle')
+				);
+				if (!buttons.length) {
+					return;
+				}
+
+				buttons.forEach(function (btn) {
+					var txt = normalize(btn.textContent);
+					if (txt === 'roles' || txt === 'informations') {
+						var expanded = btn.getAttribute('aria-expanded') === 'true';
+						if (!expanded) {
+							btn.click();
+						}
+					}
+				});
+			}
+
 			ensurePanelOrder();
+			ensurePanelsOpened();
 			var observer = new MutationObserver(function () {
 				ensurePanelOrder();
+				ensurePanelsOpened();
 			});
 			observer.observe(document.body, { childList: true, subtree: true });
 			return function () {
