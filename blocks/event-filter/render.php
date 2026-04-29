@@ -26,11 +26,13 @@ $published_total = isset( $p_filters['total'] ) ? (int) $p_filters['total'] : 0;
 $parts = array();
 
 $parts[] = sprintf(
-	'<a class="ff-btn%1$s" href="%2$s" data-type="all">%3$s <span class="ff-count">%4$d</span></a>',
+	'<a class="ff-btn%1$s" href="%2$s" data-type="all" aria-pressed="%5$s"%6$s>%3$s <span class="ff-count">%4$d</span></a>',
 	'' === $current ? ' active' : '',
 	esc_url( $base ),
 	esc_html__( 'tous', 'jardin-events' ),
-	$published_total
+	$published_total,
+	'' === $current ? 'true' : 'false',
+	'' === $current ? ' aria-current="page"' : ''
 );
 
 foreach ( jardin_events_get_role_slugs() as $slug ) {
@@ -38,12 +40,14 @@ foreach ( jardin_events_get_role_slugs() as $slug ) {
 	$label   = isset( $labels[ $slug ] ) ? $labels[ $slug ] : $slug;
 	$cnt     = isset( $counts[ $slug ] ) ? (int) $counts[ $slug ] : 0;
 	$parts[] = sprintf(
-		'<a class="ff-btn%1$s" href="%2$s" data-type="%3$s">%4$s <span class="ff-count">%5$d</span></a>',
+		'<a class="ff-btn%1$s" href="%2$s" data-type="%3$s" aria-pressed="%6$s"%7$s>%4$s <span class="ff-count">%5$d</span></a>',
 		$current === $slug ? ' active' : '',
 		esc_url( $url ),
 		esc_attr( $slug ),
 		esc_html( $label ),
-		$cnt
+		$cnt,
+		$current === $slug ? 'true' : 'false',
+		$current === $slug ? ' aria-current="page"' : ''
 	);
 }
 

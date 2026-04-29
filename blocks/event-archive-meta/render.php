@@ -12,9 +12,12 @@ if ( ! $event_post_id || jardin_events_get_post_type() !== get_post_type( $event
 	return '';
 }
 
-$pills = function_exists( 'jardin_events_get_role_pills_html' ) ? jardin_events_get_role_pills_html( $event_post_id ) : '';
-$loc   = get_post_meta( $event_post_id, 'event_location', true );
-$loc   = is_string( $loc ) ? trim( $loc ) : '';
+$roles        = function_exists( 'jardin_events_get_event_roles' ) ? jardin_events_get_event_roles( $event_post_id ) : array();
+$primary_role = ! empty( $roles ) ? (string) $roles[0] : '';
+$roles_attr   = ! empty( $roles ) ? implode( ',', array_map( 'sanitize_key', $roles ) ) : '';
+$pills        = function_exists( 'jardin_events_get_role_pills_html' ) ? jardin_events_get_role_pills_html( $event_post_id ) : '';
+$loc          = get_post_meta( $event_post_id, 'event_location', true );
+$loc          = is_string( $loc ) ? trim( $loc ) : '';
 
 if ( '' === $pills && '' === $loc ) {
 	return '';
@@ -22,7 +25,7 @@ if ( '' === $pills && '' === $loc ) {
 
 ob_start();
 ?>
-<div class="entry-meta">
+<div class="entry-meta" data-primary-role="<?php echo esc_attr( $primary_role ); ?>" data-event-roles="<?php echo esc_attr( $roles_attr ); ?>">
 	<?php
 	echo $pills // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML built with esc_* in helper.
 	?>
