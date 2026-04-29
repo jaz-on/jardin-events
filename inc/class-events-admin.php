@@ -35,7 +35,7 @@ class Jardin_Events_Admin {
 		wp_enqueue_script(
 			'jardin-events-editor-info-panel',
 			JARDIN_EVENTS_PLUGIN_URL . 'assets/js/editor-event-info-panel.js',
-			array( 'wp-plugins', 'wp-edit-post', 'wp-element', 'wp-components', 'wp-data', 'wp-api-fetch', 'wp-i18n' ),
+			array( 'wp-plugins', 'wp-editor', 'wp-element', 'wp-components', 'wp-data', 'wp-api-fetch', 'wp-i18n' ),
 			(string) filemtime( $script_path ),
 			true
 		);

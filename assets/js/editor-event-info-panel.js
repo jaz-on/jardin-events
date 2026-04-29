@@ -4,12 +4,12 @@
 (function (wp) {
 	'use strict';
 
-	if (!wp || !wp.plugins || !wp.editPost || !wp.element || !wp.components || !wp.data || !wp.apiFetch || !wp.i18n) {
+	if (!wp || !wp.plugins || !wp.editor || !wp.element || !wp.components || !wp.data || !wp.apiFetch || !wp.i18n) {
 		return;
 	}
 
 	var registerPlugin = wp.plugins.registerPlugin;
-	var PluginDocumentSettingPanel = wp.editPost.PluginDocumentSettingPanel;
+	var PluginDocumentSettingPanel = wp.editor.PluginDocumentSettingPanel;
 	var el = wp.element.createElement;
 	var useState = wp.element.useState;
 	var useEffect = wp.element.useEffect;
