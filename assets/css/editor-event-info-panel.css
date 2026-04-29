@@ -1,0 +1,24 @@
+.jardin-events-info-panel .components-base-control {
+	margin-bottom: 12px;
+}
+
+.jardin-events-info-panel .components-base-control:last-child {
+	margin-bottom: 4px;
+}
+
+.jardin-events-info-panel .components-base-control__label {
+	margin-bottom: 4px;
+	font-size: 11px;
+	font-weight: 600;
+	letter-spacing: 0.02em;
+}
+
+.jardin-events-info-panel .components-base-control .components-text-control__input,
+.jardin-events-info-panel .components-base-control .components-form-token-field__input,
+.jardin-events-info-panel .components-base-control .components-combobox-control__input {
+	min-height: 34px;
+}
+
+.jardin-events-info-panel .components-form-token-field__help {
+	margin-top: 4px;
+}

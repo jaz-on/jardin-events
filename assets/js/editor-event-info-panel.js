@@ -14,7 +14,7 @@
 	var useState = wp.element.useState;
 	var useEffect = wp.element.useEffect;
 	var TextControl = wp.components.TextControl;
-	var ComboboxControl = wp.components.ComboboxControl;
+	var FormTokenField = wp.components.FormTokenField;
 	var __ = wp.i18n.__;
 	var useSelect = wp.data.useSelect;
 	var useDispatch = wp.data.useDispatch;
@@ -48,7 +48,18 @@
 		var eventMapUrl = meta.event_map_url || '';
 		var eventLink = meta.event_link || '';
 		var eventTicketUrl = meta.event_ticket_url || '';
-		var eventArticle = meta.event_article || 0;
+		var rawEventArticle = meta.event_article;
+		var eventArticleIds = [];
+		if (Array.isArray(rawEventArticle)) {
+			eventArticleIds = rawEventArticle
+				.map(function (id) { return parseInt(id, 10) || 0; })
+				.filter(function (id) { return id > 0; });
+		} else {
+			var singleRelatedId = parseInt(rawEventArticle || 0, 10);
+			if (singleRelatedId > 0) {
+				eventArticleIds = [singleRelatedId];
+			}
+		}
 		var eventSlidesUrl = meta.event_slides_url || '';
 		var eventVideoUrl = meta.event_video_url || '';
 
@@ -58,54 +69,94 @@
 		var postOptionsState = useState([]);
 		var postOptions = postOptionsState[0];
 		var setPostOptions = postOptionsState[1];
+		var postTokenMapState = useState({});
+		var postTokenMap = postTokenMapState[0];
+		var setPostTokenMap = postTokenMapState[1];
+		var postIdTitleMapState = useState({});
+		var postIdTitleMap = postIdTitleMapState[0];
+		var setPostIdTitleMap = postIdTitleMapState[1];
+
+		function tokenFor(id, title) {
+			var cleanTitle = String(title || '').trim();
+			if (!cleanTitle) {
+				return '#' + String(id);
+			}
+			return cleanTitle + ' (#' + String(id) + ')';
+		}
 
 		useEffect(function () {
-			var selectedId = parseInt(eventArticle || 0, 10);
-			if (!selectedId) {
+			if (!eventArticleIds.length) {
 				return;
 			}
-			apiFetch({ path: '/wp/v2/posts/' + selectedId + '?_fields=id,title' })
-				.then(function (post) {
-					if (!post || !post.id) {
+			var pending = eventArticleIds.map(function (id) {
+				return apiFetch({ path: '/wp/v2/search?type=post&include=' + String(id) + '&per_page=1' })
+					.then(function (items) {
+						var item = Array.isArray(items) && items.length ? items[0] : null;
+						if (!item || !item.id) {
+							return null;
+						}
+						return { id: parseInt(item.id, 10), title: item.title || '' };
+					})
+					.catch(function () { return null; });
+			});
+			Promise.all(pending).then(function (results) {
+				var nextTokenMap = {};
+				var nextIdTitleMap = {};
+				results.forEach(function (entry) {
+					if (!entry || !entry.id) {
 						return;
 					}
-					var title = post.title && post.title.rendered ? post.title.rendered : '#' + String(post.id);
-					setPostOptions(function (prev) {
-						var out = prev.slice();
-						var found = false;
-						out.forEach(function (opt) {
-							if (String(opt.value) === String(post.id)) {
-								opt.label = title;
-								found = true;
-							}
-						});
-						if (!found) {
-							out.push({ value: String(post.id), label: title });
-						}
-						return out;
+					var token = tokenFor(entry.id, entry.title);
+					nextTokenMap[token] = entry.id;
+					nextIdTitleMap[String(entry.id)] = entry.title || '';
+				});
+				if (Object.keys(nextTokenMap).length) {
+					setPostTokenMap(function (prev) {
+						return Object.assign({}, prev, nextTokenMap);
 					});
-				})
-				.catch(function () {});
-		}, [eventArticle]);
+				}
+				if (Object.keys(nextIdTitleMap).length) {
+					setPostIdTitleMap(function (prev) {
+						return Object.assign({}, prev, nextIdTitleMap);
+					});
+				}
+			});
+		}, [eventArticleIds.join(',')]);
 
 		useEffect(function () {
 			var term = (postSearchValue || '').trim();
 			if (term.length < 2) {
 				return;
 			}
-			var path = '/wp/v2/search?type=post&subtype=post&search=' + encodeURIComponent(term) + '&per_page=10';
+			var path = '/wp/v2/search?type=post&search=' + encodeURIComponent(term) + '&per_page=20';
 			apiFetch({ path: path })
 				.then(function (items) {
 					if (!Array.isArray(items)) {
 						return;
 					}
-					var mapped = items.map(function (item) {
-						return {
-							value: String(item.id),
-							label: item.title || ('#' + String(item.id))
-						};
+					var mapped = [];
+					var nextTokenMap = {};
+					var nextIdTitleMap = {};
+					items.forEach(function (item) {
+						if (!item || !item.id) {
+							return;
+						}
+						var numericId = parseInt(item.id, 10);
+						if (!numericId) {
+							return;
+						}
+						var token = tokenFor(numericId, item.title || '');
+						mapped.push(token);
+						nextTokenMap[token] = numericId;
+						nextIdTitleMap[String(numericId)] = item.title || '';
 					});
 					setPostOptions(mapped);
+					setPostTokenMap(function (prev) {
+						return Object.assign({}, prev, nextTokenMap);
+					});
+					setPostIdTitleMap(function (prev) {
+						return Object.assign({}, prev, nextIdTitleMap);
+					});
 				})
 				.catch(function () {});
 		}, [postSearchValue]);
@@ -168,11 +219,16 @@
 			};
 		}, []);
 
+		var selectedPostTokens = eventArticleIds.map(function (id) {
+			return tokenFor(id, postIdTitleMap[String(id)] || '');
+		});
+
 		return el(
 			PluginDocumentSettingPanel,
 			{
 				name: 'jardin-events-informations',
-				title: __('Informations', 'jardin-events')
+				title: __('Informations', 'jardin-events'),
+				className: 'jardin-events-info-panel'
 			},
 			el(TextControl, {
 				label: __('Date de début', 'jardin-events'),
@@ -181,7 +237,7 @@
 				onChange: function (v) { setMeta('event_date', v || ''); }
 			}),
 			el(TextControl, {
-				label: __('Date de fin (optionnelle)', 'jardin-events'),
+				label: __('Date de fin', 'jardin-events'),
 				type: 'date',
 				value: eventEndDate,
 				onChange: function (v) { setMeta('event_date_end', v || ''); }
@@ -197,7 +253,7 @@
 				onChange: function (v) { setMeta('event_country', v || ''); }
 			}),
 			el(TextControl, {
-				label: __('Lien carte (Google Maps/OSM)', 'jardin-events'),
+				label: __('Lien carte', 'jardin-events'),
 				type: 'url',
 				value: eventMapUrl,
 				onChange: function (v) { setMeta('event_map_url', v || ''); }
@@ -209,26 +265,51 @@
 				onChange: function (v) { setMeta('event_link', v || ''); }
 			}),
 			el(TextControl, {
-				label: __('Billetterie (optionnel)', 'jardin-events'),
+				label: __('Billetterie', 'jardin-events'),
 				type: 'url',
 				value: eventTicketUrl,
 				onChange: function (v) { setMeta('event_ticket_url', v || ''); }
 			}),
-			el(ComboboxControl, {
+			el(FormTokenField, {
 				label: __('Contenu lié (récap)', 'jardin-events'),
-				value: eventArticle ? String(eventArticle) : '',
-				options: postOptions,
-				onFilterValueChange: function (v) { setPostSearchValue(v || ''); },
-				onChange: function (v) { setMeta('event_article', v ? parseInt(v, 10) : 0); }
+				value: selectedPostTokens,
+				suggestions: postOptions,
+				__experimentalExpandOnFocus: true,
+				onInputChange: function (v) { setPostSearchValue(v || ''); },
+				onChange: function (tokens) {
+					var ids = [];
+					(tokens || []).forEach(function (token) {
+						var raw = String(token || '').trim();
+						if (!raw) {
+							return;
+						}
+						var fromMap = postTokenMap[raw];
+						if (fromMap) {
+							ids.push(fromMap);
+							return;
+						}
+						var match = raw.match(/#(\d+)\)?$/);
+						if (match && match[1]) {
+							ids.push(parseInt(match[1], 10));
+						}
+					});
+					var uniqueIds = [];
+					ids.forEach(function (id) {
+						if (id > 0 && uniqueIds.indexOf(id) === -1) {
+							uniqueIds.push(id);
+						}
+					});
+					setMeta('event_article', uniqueIds);
+				}
 			}),
 			el(TextControl, {
-				label: __('URL des slides (optionnel)', 'jardin-events'),
+				label: __('URL slides', 'jardin-events'),
 				type: 'url',
 				value: eventSlidesUrl,
 				onChange: function (v) { setMeta('event_slides_url', v || ''); }
 			}),
 			el(TextControl, {
-				label: __('URL vidéo (optionnel)', 'jardin-events'),
+				label: __('URL vidéo', 'jardin-events'),
 				type: 'url',
 				value: eventVideoUrl,
 				onChange: function (v) { setMeta('event_video_url', v || ''); }

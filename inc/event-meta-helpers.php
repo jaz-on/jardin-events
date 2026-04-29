@@ -154,28 +154,68 @@ function jardin_events_sanitize_meta_url( $meta_value ) {
  * @return string[]
  */
 function jardin_events_get_event_article_post_types() {
-	$defaults = array( 'post' );
+	$defaults = array_values(
+		array_filter(
+			get_post_types(
+				array(
+					'public'             => true,
+					'publicly_queryable' => true,
+				),
+				'names'
+			),
+			static function ( $post_type ) {
+				return ! in_array( $post_type, array( 'attachment', 'revision', 'nav_menu_item' ), true );
+			}
+		)
+	);
+	if ( empty( $defaults ) ) {
+		$defaults = array( 'post' );
+	}
 	$types    = (array) apply_filters( 'jardin_events_event_article_post_types', $defaults );
 	$types    = array_values( array_unique( array_map( 'sanitize_key', $types ) ) );
 	return empty( $types ) ? $defaults : $types;
 }
 
 /**
- * Sanitize recap article post ID (must match allowed post types).
+ * Normalize recap related content IDs from scalar/array value.
+ *
+ * @param mixed $meta_value Raw meta value.
+ * @return int[]
+ */
+function jardin_events_normalize_related_content_ids( $meta_value ) {
+	$raw = array();
+	if ( is_array( $meta_value ) ) {
+		$raw = $meta_value;
+	} elseif ( null !== $meta_value && '' !== $meta_value ) {
+		$raw = array( $meta_value );
+	}
+	$ids = array();
+	foreach ( $raw as $value ) {
+		$id = absint( $value );
+		if ( $id > 0 ) {
+			$ids[] = $id;
+		}
+	}
+	return array_values( array_unique( $ids ) );
+}
+
+/**
+ * Sanitize recap related content IDs (must match allowed post types).
  *
  * @param mixed $meta_value Meta value.
- * @return int Zero when empty or invalid.
+ * @return int[] Empty when invalid.
  */
 function jardin_events_sanitize_meta_event_article( $meta_value ) {
-	$id = absint( $meta_value );
-	if ( $id <= 0 ) {
-		return 0;
+	$ids          = jardin_events_normalize_related_content_ids( $meta_value );
+	$allowed      = jardin_events_get_event_article_post_types();
+	$validated_ids = array();
+	foreach ( $ids as $id ) {
+		$post_type = get_post_type( $id );
+		if ( is_string( $post_type ) && in_array( $post_type, $allowed, true ) ) {
+			$validated_ids[] = $id;
+		}
 	}
-	$post_type = get_post_type( $id );
-	if ( ! is_string( $post_type ) || ! in_array( $post_type, jardin_events_get_event_article_post_types(), true ) ) {
-		return 0;
-	}
-	return $id;
+	return array_values( array_unique( $validated_ids ) );
 }
 
 /**
@@ -187,7 +227,8 @@ function jardin_events_sanitize_meta_event_article( $meta_value ) {
  * @return int
  */
 function jardin_events_sanitize_meta_linked_post( $meta_value ) {
-	return jardin_events_sanitize_meta_event_article( $meta_value );
+	$ids = jardin_events_sanitize_meta_event_article( $meta_value );
+	return empty( $ids ) ? 0 : (int) $ids[0];
 }
 
 /**

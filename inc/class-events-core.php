@@ -493,10 +493,17 @@ class Jardin_Events_Core {
 			$post_type,
 			'event_article',
 			array(
-				'show_in_rest'      => true,
+				'show_in_rest'      => array(
+					'schema' => array(
+						'type'  => 'array',
+						'items' => array(
+							'type' => 'integer',
+						),
+					),
+				),
 				'single'            => true,
 				'auth_callback'     => array( $this, 'meta_auth_callback' ),
-				'type'              => 'integer',
+				'type'              => 'array',
 				'sanitize_callback' => 'jardin_events_sanitize_meta_event_article',
 			)
 		);

@@ -39,5 +39,15 @@ class Jardin_Events_Admin {
 			(string) filemtime( $script_path ),
 			true
 		);
+
+		$style_path = JARDIN_EVENTS_PLUGIN_DIR . 'assets/css/editor-event-info-panel.css';
+		if ( is_readable( $style_path ) ) {
+			wp_enqueue_style(
+				'jardin-events-editor-info-panel',
+				JARDIN_EVENTS_PLUGIN_URL . 'assets/css/editor-event-info-panel.css',
+				array(),
+				(string) filemtime( $style_path )
+			);
+		}
 	}
 }
