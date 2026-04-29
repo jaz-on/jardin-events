@@ -1,0 +1,12 @@
+---
+description: Workspace racine multi-repo, livraison repo par repo
+alwaysApply: true
+---
+
+# Multi-repo delivery rule
+
+- La racine `jardin/` est un workspace d'agrégation, pas un dépôt Git unique.
+- Toujours détecter le ou les sous-dépôts impactés (`jardin-theme`, `jardin-events`, `jardin-feed`, `jardin-scrobbler`, `jardin-beer`) avant les opérations Git.
+- Ne jamais lancer `git commit` ou `git push` à la racine du workspace.
+- Commit/push repo par repo, avec message ciblé et vérification `status` propre après push.
+- `jardin-docs/` sert de documentation locale ; ne pas inclure ses fichiers dans un flux de livraison code sauf demande explicite.

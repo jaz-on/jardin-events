@@ -109,29 +109,32 @@ function jardin_events_get_role_counts() {
 	$slugs  = jardin_events_get_role_slugs();
 	$counts = array_fill_keys( $slugs, 0 );
 
-	foreach ( $slugs as $slug ) {
-		$q               = new WP_Query(
-			apply_filters(
-				'jardin_events_role_query_args',
-				array(
-					'post_type'      => jardin_events_get_post_type(),
-					'post_status'    => 'publish',
-					'posts_per_page' => 1,
-					'fields'         => 'ids',
-					'no_found_rows'  => false,
-					'meta_query'     => array(
-						array(
-							'key'   => 'event_role',
-							'value' => $slug,
-						),
-					),
-				),
-				$slug
+	$q = new WP_Query(
+		apply_filters(
+			'jardin_events_role_counts_query_args',
+			array(
+				'post_type'              => jardin_events_get_post_type(),
+				'post_status'            => 'publish',
+				'posts_per_page'         => -1,
+				'fields'                 => 'ids',
+				'no_found_rows'          => true,
+				'update_post_meta_cache' => false,
+				'update_post_term_cache' => false,
 			)
-		);
-		$counts[ $slug ] = (int) $q->found_posts;
-		wp_reset_postdata();
+		)
+	);
+
+	if ( ! empty( $q->posts ) ) {
+		foreach ( $q->posts as $post_id ) {
+			$roles = jardin_events_get_event_roles( (int) $post_id );
+			foreach ( $roles as $role ) {
+				if ( isset( $counts[ $role ] ) ) {
+					$counts[ $role ] += 1;
+				}
+			}
+		}
 	}
+	wp_reset_postdata();
 
 	return apply_filters( 'jardin_events_role_filter_counts', $counts );
 }
