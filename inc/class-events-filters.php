@@ -27,13 +27,14 @@ function jardin_events_pre_get_posts_event_role( $query ) {
 		return;
 	}
 
-	$meta_query   = $query->get( 'meta_query' );
-	$meta_query   = is_array( $meta_query ) ? $meta_query : array();
-	$meta_query[] = array(
-		'key'   => 'event_role',
-		'value' => $role,
+	$tax_query   = $query->get( 'tax_query' );
+	$tax_query   = is_array( $tax_query ) ? $tax_query : array();
+	$tax_query[] = array(
+		'taxonomy' => jardin_events_get_role_taxonomy(),
+		'field'    => 'slug',
+		'terms'    => array( $role ),
 	);
-	$query->set( 'meta_query', $meta_query );
+	$query->set( 'tax_query', $tax_query );
 }
 
 /**

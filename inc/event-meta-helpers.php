@@ -199,10 +199,11 @@ function jardin_events_get_meta_key_list() {
 	$keys = array(
 		'event_date',
 		'event_date_end',
-		'event_location',
+		'event_city',
+		'event_country',
+		'event_map_url',
 		'event_link',
 		'event_ticket_url',
-		'event_role',
 		'event_article',
 		'event_slides_url',
 		'event_video_url',

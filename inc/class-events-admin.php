@@ -96,13 +96,13 @@ class Jardin_Events_Admin {
 
 		$event_date     = get_post_meta( $post->ID, 'event_date', true );
 		$event_end_date = jardin_events_get_event_date_end( $post->ID );
-		$event_location = get_post_meta( $post->ID, 'event_location', true );
+		$event_city     = get_post_meta( $post->ID, 'event_city', true );
+		$event_country  = get_post_meta( $post->ID, 'event_country', true );
+		$event_map_url  = get_post_meta( $post->ID, 'event_map_url', true );
 		$event_link     = get_post_meta( $post->ID, 'event_link', true );
 		$event_ticket   = get_post_meta( $post->ID, 'event_ticket_url', true );
 		$event_slides   = get_post_meta( $post->ID, 'event_slides_url', true );
 		$event_video    = get_post_meta( $post->ID, 'event_video_url', true );
-		$roles_current  = jardin_events_get_event_roles( $post->ID );
-		$role_labels    = jardin_events_get_role_labels();
 		$linked_post    = jardin_events_get_event_article_id( $post->ID );
 		?>
 		<div class="jardin-events-meta">
@@ -127,13 +127,34 @@ class Jardin_Events_Admin {
 			/>
 		</p>
 		<p>
-			<label for="jardin-event-location"><?php esc_html_e( 'Lieu', 'jardin-events' ); ?></label><br />
+			<label for="jardin-event-city"><?php esc_html_e( 'Ville', 'jardin-events' ); ?></label><br />
 			<input
 				type="text"
-				id="jardin-event-location"
-				name="jardin_event_location"
-				value="<?php echo esc_attr( $event_location ); ?>"
+				id="jardin-event-city"
+				name="jardin_event_city"
+				value="<?php echo esc_attr( (string) $event_city ); ?>"
 				class="widefat"
+			/>
+		</p>
+		<p>
+			<label for="jardin-event-country"><?php esc_html_e( 'Pays', 'jardin-events' ); ?></label><br />
+			<input
+				type="text"
+				id="jardin-event-country"
+				name="jardin_event_country"
+				value="<?php echo esc_attr( (string) $event_country ); ?>"
+				class="widefat"
+			/>
+		</p>
+		<p>
+			<label for="jardin-event-map-url"><?php esc_html_e( 'Lien carte (Google Maps/OSM, optionnel)', 'jardin-events' ); ?></label><br />
+			<input
+				type="url"
+				id="jardin-event-map-url"
+				name="jardin_event_map_url"
+				value="<?php echo esc_attr( (string) $event_map_url ); ?>"
+				class="widefat"
+				placeholder="https://"
 			/>
 		</p>
 		<p>
@@ -196,20 +217,6 @@ class Jardin_Events_Admin {
 				placeholder="https://"
 			/>
 		</p>
-		<fieldset class="jardin-events-roles">
-			<legend><?php esc_html_e( 'Roles', 'jardin-events' ); ?></legend>
-			<?php foreach ( jardin_events_get_role_slugs() as $slug ) : ?>
-				<label>
-					<input
-						type="checkbox"
-						name="jardin_event_role[]"
-						value="<?php echo esc_attr( $slug ); ?>"
-						<?php checked( in_array( $slug, $roles_current, true ) ); ?>
-					/>
-					<?php echo esc_html( isset( $role_labels[ $slug ] ) ? $role_labels[ $slug ] : $slug ); ?>
-				</label>
-			<?php endforeach; ?>
-		</fieldset>
 		</div>
 		<?php
 	}
@@ -345,12 +352,30 @@ class Jardin_Events_Admin {
 			}
 		}
 
-		if ( isset( $_POST['jardin_event_location'] ) ) {
-			$location_value = sanitize_text_field( wp_unslash( $_POST['jardin_event_location'] ) );
-			if ( '' === $location_value ) {
-				delete_post_meta( $post_id, 'event_location' );
+		if ( isset( $_POST['jardin_event_city'] ) ) {
+			$city_value = sanitize_text_field( wp_unslash( $_POST['jardin_event_city'] ) );
+			if ( '' === $city_value ) {
+				delete_post_meta( $post_id, 'event_city' );
 			} else {
-				update_post_meta( $post_id, 'event_location', $location_value );
+				update_post_meta( $post_id, 'event_city', $city_value );
+			}
+		}
+
+		if ( isset( $_POST['jardin_event_country'] ) ) {
+			$country_value = sanitize_text_field( wp_unslash( $_POST['jardin_event_country'] ) );
+			if ( '' === $country_value ) {
+				delete_post_meta( $post_id, 'event_country' );
+			} else {
+				update_post_meta( $post_id, 'event_country', $country_value );
+			}
+		}
+
+		if ( isset( $_POST['jardin_event_map_url'] ) ) {
+			$map_value = esc_url_raw( wp_unslash( $_POST['jardin_event_map_url'] ) );
+			if ( '' === $map_value ) {
+				delete_post_meta( $post_id, 'event_map_url' );
+			} else {
+				update_post_meta( $post_id, 'event_map_url', $map_value );
 			}
 		}
 
@@ -404,14 +429,5 @@ class Jardin_Events_Admin {
 			}
 		}
 
-		delete_post_meta( $post_id, 'event_role' );
-		if ( ! empty( $_POST['jardin_event_role'] ) && is_array( $_POST['jardin_event_role'] ) ) {
-			foreach ( wp_unslash( $_POST['jardin_event_role'] ) as $raw_role ) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-				$role = jardin_events_sanitize_event_role_meta( $raw_role );
-				if ( '' !== $role ) {
-					add_post_meta( $post_id, 'event_role', $role, false );
-				}
-			}
-		}
 	}
 }

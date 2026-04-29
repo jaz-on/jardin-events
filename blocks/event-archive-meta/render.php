@@ -16,7 +16,7 @@ $roles        = function_exists( 'jardin_events_get_event_roles' ) ? jardin_even
 $primary_role = ! empty( $roles ) ? (string) $roles[0] : '';
 $roles_attr   = ! empty( $roles ) ? implode( ',', array_map( 'sanitize_key', $roles ) ) : '';
 $pills        = function_exists( 'jardin_events_get_role_pills_html' ) ? jardin_events_get_role_pills_html( $event_post_id ) : '';
-$loc          = get_post_meta( $event_post_id, 'event_location', true );
+$loc          = function_exists( 'jardin_events_get_event_location_label' ) ? jardin_events_get_event_location_label( $event_post_id ) : '';
 $loc          = is_string( $loc ) ? trim( $loc ) : '';
 
 if ( '' === $pills ) {

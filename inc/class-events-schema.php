@@ -41,7 +41,7 @@ class Jardin_Events_Schema {
 
 		$start = (string) get_post_meta( $post_id, 'event_date', true );
 		$end   = (string) jardin_events_get_event_date_end( $post_id );
-		$loc   = (string) get_post_meta( $post_id, 'event_location', true );
+		$loc   = function_exists( 'jardin_events_get_event_location_label' ) ? (string) jardin_events_get_event_location_label( $post_id ) : '';
 		$name  = wp_strip_all_tags( get_the_title( $post_id ) );
 
 		$data = array(
