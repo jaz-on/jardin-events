@@ -120,7 +120,7 @@
 					.toLowerCase();
 			}
 
-			function ensurePanelOrder() {
+			var timer = setTimeout(function () {
 				var buttons = Array.prototype.slice.call(
 					document.querySelectorAll('.components-panel__body-title .components-panel__body-toggle')
 				);
@@ -130,64 +130,42 @@
 
 				var roleBtn = null;
 				var infoBtn = null;
+				var yoastBtn = null;
+
 				buttons.forEach(function (btn) {
 					var txt = normalize(btn.textContent);
 					if (txt === 'roles') {
 						roleBtn = btn;
-					}
-					if (txt === 'informations') {
+					} else if (txt === 'informations') {
 						infoBtn = btn;
+					} else if (txt.indexOf('yoast') !== -1) {
+						yoastBtn = btn;
 					}
-				});
 
-				if (!roleBtn || !infoBtn) {
-					return;
-				}
-
-				var rolePanel = roleBtn.closest('.components-panel__body');
-				var infoPanel = infoBtn.closest('.components-panel__body');
-				if (!rolePanel || !infoPanel || rolePanel === infoPanel) {
-					return;
-				}
-
-				var parent = rolePanel.parentElement;
-				if (!parent || parent !== infoPanel.parentElement) {
-					return;
-				}
-
-				if (rolePanel.nextElementSibling !== infoPanel) {
-					parent.insertBefore(infoPanel, rolePanel.nextElementSibling);
-				}
-			}
-
-			function ensurePanelsOpened() {
-				var buttons = Array.prototype.slice.call(
-					document.querySelectorAll('.components-panel__body-title .components-panel__body-toggle')
-				);
-				if (!buttons.length) {
-					return;
-				}
-
-				buttons.forEach(function (btn) {
-					var txt = normalize(btn.textContent);
 					if (txt === 'roles' || txt === 'informations') {
-						var expanded = btn.getAttribute('aria-expanded') === 'true';
-						if (!expanded) {
+						if (btn.getAttribute('aria-expanded') !== 'true') {
 							btn.click();
 						}
 					}
 				});
-			}
 
-			ensurePanelOrder();
-			ensurePanelsOpened();
-			var observer = new MutationObserver(function () {
-				ensurePanelOrder();
-				ensurePanelsOpened();
-			});
-			observer.observe(document.body, { childList: true, subtree: true });
+				var rolePanel = roleBtn ? roleBtn.closest('.components-panel__body') : null;
+				var infoPanel = infoBtn ? infoBtn.closest('.components-panel__body') : null;
+				var yoastPanel = yoastBtn ? yoastBtn.closest('.components-panel__body') : null;
+
+				if (rolePanel && infoPanel && rolePanel.parentElement === infoPanel.parentElement) {
+					var parent = rolePanel.parentElement;
+					if (rolePanel.nextElementSibling !== infoPanel) {
+						parent.insertBefore(infoPanel, rolePanel.nextElementSibling);
+					}
+					if (yoastPanel && yoastPanel.parentElement === parent && infoPanel.nextElementSibling !== yoastPanel) {
+						parent.insertBefore(yoastPanel, infoPanel.nextElementSibling);
+					}
+				}
+			}, 300);
+
 			return function () {
-				observer.disconnect();
+				clearTimeout(timer);
 			};
 		}, []);
 
