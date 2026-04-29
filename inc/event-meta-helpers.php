@@ -201,6 +201,7 @@ function jardin_events_get_meta_key_list() {
 		'event_date_end',
 		'event_location',
 		'event_link',
+		'event_ticket_url',
 		'event_role',
 		'event_article',
 		'event_slides_url',

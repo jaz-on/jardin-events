@@ -20,7 +20,8 @@ Plugin WordPress pour le CPT **événement** (`event`) sur les sites utilisant l
 | `event_date`      | Date de début (`Y-m-d`), obligatoire à l’enregistrement |
 | `event_date_end`  | Date de fin (optionnelle)                 |
 | `event_location`  | Lieu (texte)                              |
-| `event_link`      | URL « En savoir plus »                    |
+| `event_link`      | URL de la page de l’événement             |
+| `event_ticket_url`| URL de billetterie (optionnelle)          |
 | `event_role`      | Rôles multiples (`speaker`, `organizer`, `sponsor`, `attendee`) — plusieurs lignes de meta |
 | `event_article`   | ID d’un contenu lié (récap) ; par défaut type `post` |
 | `event_slides_url`| URL des présentations (optionnel)        |
@@ -34,7 +35,7 @@ Bloc **Event role filters** (`jardin-events/event-filter`) : puces (classes `.fe
 
 Autres blocs dynamiques : **`event-inline-date`**, **`event-inline-location`** (liste « à venir »), **`event-archive-meta`**, **`event-external-link`**, **`event-single-meta`**, **`event-status-bar`** — utilisés dans les gabarits du thème Jardin.
 
-REST : champ calculé **`event_roles`** (tableau de slugs) ; métas **`event_article`**, **`event_slides_url`**, **`event_video_url`** exposées selon l’enregistrement.
+REST : champ calculé **`event_roles`** (tableau de slugs) ; métas **`event_article`**, **`event_ticket_url`**, **`event_slides_url`**, **`event_video_url`** exposées selon l’enregistrement.
 
 Le type autorisé pour `event_article` est filtrable via `jardin_events_event_article_post_types` (défaut: `post`).
 

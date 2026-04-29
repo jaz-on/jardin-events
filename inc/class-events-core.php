@@ -60,6 +60,15 @@ class Jardin_Events_Core {
 	 * @return array|\WP_Error
 	 */
 	public function rest_pre_insert_event( $prepared_post, $request ) {
+		$meta            = $request->get_param( 'meta' );
+		$has_start_in_request = is_array( $meta ) && array_key_exists( 'event_date', $meta );
+
+		// In the block editor, our sidebar metabox fields can be posted outside REST `meta`.
+		// If REST payload has no `event_date`, let classic metabox validation run on save_post.
+		if ( ! $has_start_in_request ) {
+			return $prepared_post;
+		}
+
 		list( $start, $end ) = jardin_events_merge_event_dates_from_request( $request, 0 );
 		$check               = jardin_events_validate_event_dates(
 			$start,
@@ -391,6 +400,18 @@ class Jardin_Events_Core {
 		register_post_meta(
 			$post_type,
 			'event_link',
+			array(
+				'show_in_rest'      => true,
+				'single'            => true,
+				'auth_callback'     => array( $this, 'meta_auth_callback' ),
+				'type'              => 'string',
+				'sanitize_callback' => 'jardin_events_sanitize_meta_url',
+			)
+		);
+
+		register_post_meta(
+			$post_type,
+			'event_ticket_url',
 			array(
 				'show_in_rest'      => true,
 				'single'            => true,

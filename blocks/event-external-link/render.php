@@ -12,16 +12,33 @@ if ( ! $event_post_id || jardin_events_get_post_type() !== get_post_type( $event
 	return '';
 }
 
-$url = get_post_meta( $event_post_id, 'event_link', true );
-$url = is_string( $url ) ? trim( $url ) : '';
-if ( '' === $url ) {
+$event_url = get_post_meta( $event_post_id, 'event_link', true );
+$event_url = is_string( $event_url ) ? trim( $event_url ) : '';
+$ticket    = get_post_meta( $event_post_id, 'event_ticket_url', true );
+$ticket    = is_string( $ticket ) ? trim( $ticket ) : '';
+
+if ( '' === $event_url && '' === $ticket ) {
 	return '';
 }
 
-$label = __( 'En savoir plus', 'jardin-events' );
+$links = array();
+if ( '' !== $event_url ) {
+	$links[] = sprintf(
+		'<a href="%1$s" rel="noopener noreferrer">%2$s</a>',
+		esc_url( $event_url ),
+		esc_html__( 'Page de l’événement', 'jardin-events' )
+	);
+}
+
+if ( '' !== $ticket ) {
+	$links[] = sprintf(
+		'<a href="%1$s" rel="noopener noreferrer">%2$s</a>',
+		esc_url( $ticket ),
+		esc_html__( 'Billetterie', 'jardin-events' )
+	);
+}
 
 return sprintf(
-	'<div class="entry-links"><a href="%1$s" rel="noopener noreferrer">%2$s</a></div>',
-	esc_url( $url ),
-	esc_html( $label )
+	'<div class="entry-links">%s</div>',
+	implode( ' · ', $links )
 );

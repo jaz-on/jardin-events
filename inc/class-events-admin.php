@@ -98,6 +98,7 @@ class Jardin_Events_Admin {
 		$event_end_date = jardin_events_get_event_date_end( $post->ID );
 		$event_location = get_post_meta( $post->ID, 'event_location', true );
 		$event_link     = get_post_meta( $post->ID, 'event_link', true );
+		$event_ticket   = get_post_meta( $post->ID, 'event_ticket_url', true );
 		$event_slides   = get_post_meta( $post->ID, 'event_slides_url', true );
 		$event_video    = get_post_meta( $post->ID, 'event_video_url', true );
 		$roles_current  = jardin_events_get_event_roles( $post->ID );
@@ -136,12 +137,23 @@ class Jardin_Events_Admin {
 			/>
 		</p>
 		<p>
-			<label for="jardin-event-link"><?php esc_html_e( 'Lien « En savoir plus »', 'jardin-events' ); ?></label><br />
+			<label for="jardin-event-link"><?php esc_html_e( 'Page de l’événement', 'jardin-events' ); ?></label><br />
 			<input
 				type="url"
 				id="jardin-event-link"
 				name="jardin_event_link"
 				value="<?php echo esc_attr( $event_link ); ?>"
+				class="widefat"
+				placeholder="https://"
+			/>
+		</p>
+		<p>
+			<label for="jardin-event-ticket-url"><?php esc_html_e( 'Billetterie (optionnel)', 'jardin-events' ); ?></label><br />
+			<input
+				type="url"
+				id="jardin-event-ticket-url"
+				name="jardin_event_ticket_url"
+				value="<?php echo esc_attr( (string) $event_ticket ); ?>"
 				class="widefat"
 				placeholder="https://"
 			/>
@@ -348,6 +360,15 @@ class Jardin_Events_Admin {
 				delete_post_meta( $post_id, 'event_link' );
 			} else {
 				update_post_meta( $post_id, 'event_link', $link_value );
+			}
+		}
+
+		if ( isset( $_POST['jardin_event_ticket_url'] ) ) {
+			$ticket_value = esc_url_raw( wp_unslash( $_POST['jardin_event_ticket_url'] ) );
+			if ( '' === $ticket_value ) {
+				delete_post_meta( $post_id, 'event_ticket_url' );
+			} else {
+				update_post_meta( $post_id, 'event_ticket_url', $ticket_value );
 			}
 		}
 

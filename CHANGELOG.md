@@ -8,6 +8,7 @@ Toutes les notes importantes de ce projet sont listées ici. La version distribu
 
 - Migration base (`jardin_events_db_version`, option `2`) : renommage des lignes de meta `event_end_date` → `event_date_end`, `event_linked_post` → `event_article`.
 - Métabox : URLs `event_slides_url`, `event_video_url` ; recherche AJAX d’articles pour `event_article` (`assets/js/admin-event-article.js`).
+- Métabox : distinction `Page de l’événement` (`event_link`) et `Billetterie` (`event_ticket_url`), avec rendu front séparé.
 - Filtres `jardin_events_post_type`, `jardin_events_slug` (défaut `evenements`), `jardin_events_meta_keys`, `jardin_events_filters` ; helpers associés (`jardin_events_get_post_type()`, `jardin_events_get_rewrite_slug()`, `jardin_events_get_filters()`, `jardin_events_get_event_article_id()`, `jardin_events_get_event_date_end()`).
 - Validation « date de début obligatoire » (métabox classique + REST).
 - Analyse PHPCS sur `blocks/`.
