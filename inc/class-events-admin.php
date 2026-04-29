@@ -78,7 +78,7 @@ class Jardin_Events_Admin {
 	public function register_meta_box() {
 		add_meta_box(
 			'jardin_events_details',
-			__( 'Détails de l\'événement', 'jardin-events' ),
+			__( 'Informations', 'jardin-events' ),
 			array( $this, 'render_meta_box' ),
 			jardin_events_get_post_type(),
 			'side',
