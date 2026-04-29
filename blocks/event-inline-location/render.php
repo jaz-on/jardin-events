@@ -7,7 +7,19 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$event_post_id = (int) get_the_ID();
+/**
+ * Resolve current event ID from block context (Query Loop) with safe fallbacks.
+ */
+$event_post_id = 0;
+if ( isset( $block ) && $block instanceof WP_Block ) {
+	$event_post_id = isset( $block->context['postId'] ) ? (int) $block->context['postId'] : 0;
+}
+if ( $event_post_id <= 0 ) {
+	$event_post_id = (int) get_the_ID();
+}
+if ( $event_post_id <= 0 ) {
+	$event_post_id = (int) get_queried_object_id();
+}
 if ( ! $event_post_id || jardin_events_get_post_type() !== get_post_type( $event_post_id ) ) {
 	return '';
 }
