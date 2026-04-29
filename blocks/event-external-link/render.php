@@ -18,7 +18,7 @@ $ticket    = get_post_meta( $event_post_id, 'event_ticket_url', true );
 $ticket    = is_string( $ticket ) ? trim( $ticket ) : '';
 
 if ( '' === $event_url && '' === $ticket ) {
-	return '';
+	$event_url = get_permalink( $event_post_id );
 }
 
 $links = array();

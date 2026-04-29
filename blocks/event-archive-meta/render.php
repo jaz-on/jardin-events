@@ -19,8 +19,15 @@ $pills        = function_exists( 'jardin_events_get_role_pills_html' ) ? jardin_
 $loc          = get_post_meta( $event_post_id, 'event_location', true );
 $loc          = is_string( $loc ) ? trim( $loc ) : '';
 
-if ( '' === $pills && '' === $loc ) {
-	return '';
+if ( '' === $pills ) {
+	$pills = sprintf(
+		'<span class="entry-role entry-role--unknown">%s</span>',
+		esc_html__( 'Evenement', 'jardin-events' )
+	);
+}
+
+if ( '' === $primary_role ) {
+	$primary_role = 'unknown';
 }
 
 ob_start();

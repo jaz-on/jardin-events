@@ -13,15 +13,22 @@ if ( ! $event_post_id || jardin_events_get_post_type() !== get_post_type( $event
 }
 
 $start = (string) get_post_meta( $event_post_id, 'event_date', true );
-if ( '' === $start ) {
-	return '';
+$class     = 'entry-when';
+$formatted = '';
+
+if ( '' !== $start ) {
+	$formatted = function_exists( 'jardin_events_format_ymd_for_display' ) ? jardin_events_format_ymd_for_display( $start ) : $start;
+	$today     = class_exists( 'Jardin_Events_Core' ) ? Jardin_Events_Core::get_today_ymd() : gmdate( 'Y-m-d' );
+	if ( preg_match( '/^\d{4}-\d{2}-\d{2}$/', $start ) && strcmp( $start, $today ) >= 0 ) {
+		$class .= ' is-upcoming';
+	}
+} else {
+	$formatted = get_the_date( 'd/m/Y', $event_post_id );
+	$class    .= ' is-fallback';
 }
 
-$formatted = function_exists( 'jardin_events_format_ymd_for_display' ) ? jardin_events_format_ymd_for_display( $start ) : $start;
-$today     = class_exists( 'Jardin_Events_Core' ) ? Jardin_Events_Core::get_today_ymd() : gmdate( 'Y-m-d' );
-$class     = 'entry-when';
-if ( preg_match( '/^\d{4}-\d{2}-\d{2}$/', $start ) && strcmp( $start, $today ) >= 0 ) {
-	$class .= ' is-upcoming';
+if ( '' === trim( (string) $formatted ) ) {
+	return '';
 }
 
 return sprintf(

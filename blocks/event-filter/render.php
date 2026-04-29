@@ -7,21 +7,36 @@
 
 defined( 'ABSPATH' ) || exit;
 
-if ( ! function_exists( 'jardin_events_get_role_counts' ) ) {
-	return '';
-}
+$labels = function_exists( 'jardin_events_get_role_labels' )
+	? jardin_events_get_role_labels()
+	: array(
+		'speaker'   => __( 'Speaker', 'jardin-events' ),
+		'organizer' => __( 'Organisateur·rice', 'jardin-events' ),
+		'sponsor'   => __( 'Sponsor', 'jardin-events' ),
+		'attendee'  => __( 'Participant·e', 'jardin-events' ),
+	);
+$counts = function_exists( 'jardin_events_get_role_counts' )
+	? jardin_events_get_role_counts()
+	: array(
+		'speaker'   => 0,
+		'organizer' => 0,
+		'sponsor'   => 0,
+		'attendee'  => 0,
+	);
 
-$labels = jardin_events_get_role_labels();
-$counts = jardin_events_get_role_counts();
-$base   = get_post_type_archive_link( jardin_events_get_post_type() );
+$post_type = function_exists( 'jardin_events_get_post_type' ) ? jardin_events_get_post_type() : 'event';
+$base      = get_post_type_archive_link( $post_type );
 if ( ! $base ) {
-	return '';
+	$base = home_url( '/evenements/' );
 }
 
 $current = isset( $_GET['event_role'] ) ? sanitize_key( wp_unslash( $_GET['event_role'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
-$p_filters       = jardin_events_get_filters();
-$published_total = isset( $p_filters['total'] ) ? (int) $p_filters['total'] : 0;
+$published_total = 0;
+if ( function_exists( 'jardin_events_get_filters' ) ) {
+	$p_filters       = jardin_events_get_filters();
+	$published_total = isset( $p_filters['total'] ) ? (int) $p_filters['total'] : 0;
+}
 
 $parts = array();
 
@@ -35,7 +50,11 @@ $parts[] = sprintf(
 	'' === $current ? ' aria-current="page"' : ''
 );
 
-foreach ( jardin_events_get_role_slugs() as $slug ) {
+$role_slugs = function_exists( 'jardin_events_get_role_slugs' )
+	? jardin_events_get_role_slugs()
+	: array( 'speaker', 'organizer', 'sponsor', 'attendee' );
+
+foreach ( $role_slugs as $slug ) {
 	$url     = add_query_arg( 'event_role', $slug, $base );
 	$label   = isset( $labels[ $slug ] ) ? $labels[ $slug ] : $slug;
 	$cnt     = isset( $counts[ $slug ] ) ? (int) $counts[ $slug ] : 0;
