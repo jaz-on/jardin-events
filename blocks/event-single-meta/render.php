@@ -39,19 +39,29 @@ if ( $upcoming && '' !== $start && strcmp( $start, $today ) >= 0 ) {
 	$when_class .= ' is-upcoming';
 }
 
+$has_when = '' !== $formatted;
+$has_role = '' !== $roles_html;
+$has_loc  = '' !== $loc;
+
 ob_start();
 ?>
 <div class="post-meta">
-	<?php if ( '' !== $formatted ) : ?>
+	<?php if ( $has_when ) : ?>
 		<time class="<?php echo esc_attr( $when_class ); ?> dt-start" datetime="<?php echo esc_attr( $dt_attr ); ?>"><?php echo esc_html( $formatted ); ?></time>
 	<?php endif; ?>
-	<?php if ( '' !== $roles_html ) : ?>
+	<?php if ( $has_when && ( $has_role || $has_loc ) ) : ?>
+		<span class="post-meta-sep" aria-hidden="true">·</span>
+	<?php endif; ?>
+	<?php if ( $has_role ) : ?>
 		<span class="event-roles-inline" aria-label="<?php esc_attr_e( 'Mes rôles sur cet événement', 'jardin-events' ); ?>">
 			<span class="role-label"><?php esc_html_e( 'rôle :', 'jardin-events' ); ?></span>
 			<?php echo $roles_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in helper. ?>
 		</span>
 	<?php endif; ?>
-	<?php if ( '' !== $loc ) : ?>
+	<?php if ( $has_loc && $has_role ) : ?>
+		<span class="post-meta-sep" aria-hidden="true">·</span>
+	<?php endif; ?>
+	<?php if ( $has_loc ) : ?>
 		<span class="p-location"><?php echo esc_html( $loc ); ?></span>
 	<?php endif; ?>
 </div>
