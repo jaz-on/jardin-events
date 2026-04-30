@@ -11,9 +11,9 @@ $labels = function_exists( 'jardin_events_get_role_labels' )
 	? jardin_events_get_role_labels()
 	: array(
 		'speaker'   => __( 'Speaker', 'jardin-events' ),
-		'organizer' => __( 'Organisateur·rice', 'jardin-events' ),
+		'organizer' => __( 'Organisateur', 'jardin-events' ),
 		'sponsor'   => __( 'Sponsor', 'jardin-events' ),
-		'attendee'  => __( 'Participant·e', 'jardin-events' ),
+		'attendee'  => __( 'Participant', 'jardin-events' ),
 	);
 $counts = function_exists( 'jardin_events_get_role_counts' )
 	? jardin_events_get_role_counts()

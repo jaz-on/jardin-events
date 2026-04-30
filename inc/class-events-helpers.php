@@ -54,9 +54,9 @@ function jardin_events_get_role_slugs() {
 function jardin_events_get_role_labels() {
 	$labels = array(
 		'speaker'   => __( 'Speaker', 'jardin-events' ),
-		'organizer' => __( 'Organisateur·rice', 'jardin-events' ),
+		'organizer' => __( 'Organisateur', 'jardin-events' ),
 		'sponsor'   => __( 'Sponsor', 'jardin-events' ),
-		'attendee'  => __( 'Participant·e', 'jardin-events' ),
+		'attendee'  => __( 'Participant', 'jardin-events' ),
 	);
 	return apply_filters( 'jardin_events_role_labels', $labels );
 }
