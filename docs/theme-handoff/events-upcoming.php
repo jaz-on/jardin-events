@@ -1,6 +1,6 @@
 <?php
 /**
- * Pattern : prochains événements (à placer dans le thème Jardin : patterns/events-upcoming.php).
+ * Pattern sample: upcoming events (drop into jardin-theme as patterns/events-upcoming.php if useful).
  *
  * @package Jardin
  */
@@ -19,13 +19,13 @@ add_action(
 		register_block_pattern(
 			'jardin/upcoming-events',
 			array(
-				'title'       => __( 'Prochains événements', 'jardin' ),
-				'description' => __( 'Liste des prochains événements (dates et lieu via métadonnées du plugin jardin-events).', 'jardin' ),
+				'title'       => __( 'Upcoming events', 'jardin-events' ),
+				'description' => __( 'Upcoming events list (dates and location via jardin-events meta).', 'jardin-events' ),
 				'categories'  => array( 'query', 'featured' ),
 				'content'     =>
 					'<!-- wp:group {"className":"jardin-events-upcoming","layout":{"type":"constrained"}} -->' .
 					'<div class="wp-block-group jardin-events-upcoming">' .
-					'<!-- wp:heading {"level":2} --><h2>' . __( 'Prochains événements', 'jardin' ) . '</h2><!-- /wp:heading -->' .
+					'<!-- wp:heading {"level":2} --><h2>' . __( 'Upcoming events', 'jardin-events' ) . '</h2><!-- /wp:heading -->' .
 					'<!-- wp:separator {"className":"is-style-wide"} --><hr class="wp-block-separator is-style-wide" /><!-- /wp:separator -->' .
 					'<!-- wp:query {"className":"jardin-events-query--upcoming","query":{"perPage":3,"postType":"event","order":"asc","orderBy":"date","inherit":false},"displayLayout":{"type":"list"}} -->' .
 					'<div class="wp-block-query">' .

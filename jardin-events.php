@@ -97,7 +97,7 @@ function jardin_events_plugin_action_links( $links ) {
 	$settings_link = sprintf(
 		'<a href="%s">%s</a>',
 		esc_url( admin_url( 'edit.php?post_type=event' ) ),
-		esc_html__( 'Événements', 'jardin-events' )
+		esc_html__( 'Events', 'jardin-events' )
 	);
 	array_unshift( $links, $settings_link );
 	return $links;

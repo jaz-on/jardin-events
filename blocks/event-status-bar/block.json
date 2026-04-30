@@ -5,7 +5,7 @@
 	"title": "Event status bar",
 	"category": "widgets",
 	"icon": "calendar-alt",
-	"description": "Badge (à venir / en cours / passé) and countdown for the current event.",
+	"description": "Badge (upcoming / ongoing / past) and countdown for the current event.",
 	"textdomain": "jardin-events",
 	"supports": {
 		"html": false

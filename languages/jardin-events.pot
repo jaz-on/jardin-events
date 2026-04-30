@@ -1,0 +1,353 @@
+# Copyright (C) 2026 Jason Rouet
+# This file is distributed under the GPL v2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: jardin-events 0.1.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/jardin-events\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-04-30T18:28:00+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.8.1\n"
+"X-Domain: jardin-events\n"
+
+#. Plugin Name of the plugin
+msgid "jardin-events"
+msgstr ""
+
+#. Plugin URI of the plugin
+msgid "https://github.com/jaz-on/jardin-events"
+msgstr ""
+
+#. Description of the plugin
+msgid "Registers an event custom post type with metadata and front-end styles for Jardin-style sites."
+msgstr ""
+
+#. Author of the plugin
+msgid "Jason Rouet"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://jasonrouet.com"
+msgstr ""
+
+#: blocks/event-archive-meta/render.php:25
+#: inc/class-events-core.php:351
+msgid "Event"
+msgstr ""
+
+#: blocks/event-external-link/render.php:29
+#: assets/js/editor-event-info-panel.js:262
+msgid "Event page"
+msgstr ""
+
+#: blocks/event-external-link/render.php:37
+#: assets/js/editor-event-info-panel.js:268
+msgid "Tickets"
+msgstr ""
+
+#: blocks/event-filter/render.php:37
+msgid "All"
+msgstr ""
+
+#: blocks/event-filter/render.php:68
+msgid "Filter events by role"
+msgstr ""
+
+#: blocks/event-single-meta/render.php:56
+msgid "My roles for this event"
+msgstr ""
+
+#: blocks/event-single-meta/render.php:57
+msgid "role:"
+msgstr ""
+
+#: docs/theme-handoff/events-upcoming.php:22
+#: docs/theme-handoff/events-upcoming.php:28
+msgid "Upcoming events"
+msgstr ""
+
+#: docs/theme-handoff/events-upcoming.php:23
+msgid "Upcoming events list (dates and location via jardin-events meta)."
+msgstr ""
+
+#: inc/class-events-core.php:315
+#: inc/class-events-core.php:323
+msgid "Roles"
+msgstr ""
+
+#: inc/class-events-core.php:316
+msgid "Role"
+msgstr ""
+
+#: inc/class-events-core.php:317
+msgid "Search roles"
+msgstr ""
+
+#: inc/class-events-core.php:318
+msgid "All roles"
+msgstr ""
+
+#: inc/class-events-core.php:319
+msgid "Edit role"
+msgstr ""
+
+#: inc/class-events-core.php:320
+msgid "Update role"
+msgstr ""
+
+#: inc/class-events-core.php:321
+msgid "Add role"
+msgstr ""
+
+#: inc/class-events-core.php:322
+msgid "New role"
+msgstr ""
+
+#: inc/class-events-core.php:350
+#: inc/class-events-core.php:362
+#: inc/class-events-core.php:366
+#: jardin-events.php:100
+msgid "Events"
+msgstr ""
+
+#: inc/class-events-core.php:352
+msgid "Add event"
+msgstr ""
+
+#: inc/class-events-core.php:353
+msgid "Add new event"
+msgstr ""
+
+#: inc/class-events-core.php:354
+msgid "Edit event"
+msgstr ""
+
+#: inc/class-events-core.php:355
+msgid "New event"
+msgstr ""
+
+#: inc/class-events-core.php:356
+msgid "View event"
+msgstr ""
+
+#: inc/class-events-core.php:357
+msgid "Search events"
+msgstr ""
+
+#: inc/class-events-core.php:358
+msgid "No events found"
+msgstr ""
+
+#: inc/class-events-core.php:359
+msgid "No events found in Trash"
+msgstr ""
+
+#: inc/class-events-core.php:360
+msgid "All events"
+msgstr ""
+
+#: inc/class-events-core.php:361
+msgid "Event archives"
+msgstr ""
+
+#: inc/class-events-core.php:542
+msgid "Assigned role slugs for this event."
+msgstr ""
+
+#: inc/class-events-core.php:564
+msgid "Event start date (Y-m-d)."
+msgstr ""
+
+#: inc/class-events-core.php:585
+msgid "Event end date (Y-m-d)."
+msgstr ""
+
+#: inc/class-events-core.php:605
+msgid "Event location text."
+msgstr ""
+
+#: inc/class-events-core.php:623
+msgid "Event city."
+msgstr ""
+
+#: inc/class-events-core.php:641
+msgid "Event country."
+msgstr ""
+
+#: inc/class-events-core.php:659
+msgid "Event map URL."
+msgstr ""
+
+#: inc/class-events-helpers.php:285
+msgid "Past"
+msgstr ""
+
+#: inc/class-events-helpers.php:290
+msgid "Upcoming"
+msgstr ""
+
+#: inc/class-events-helpers.php:292
+msgid "Ongoing"
+msgstr ""
+
+#. translators: %d: full days until start
+#: inc/class-events-helpers.php:309
+msgid "in %d days"
+msgstr ""
+
+#: inc/class-events-helpers.php:314
+msgid "tomorrow"
+msgstr ""
+
+#: inc/class-events-helpers.php:317
+msgid "today"
+msgstr ""
+
+#. translators: %d: full days since start
+#: inc/class-events-helpers.php:321
+msgid "%d days ago"
+msgstr ""
+
+#: inc/event-meta-helpers.php:55
+msgid "The start date is not a valid date."
+msgstr ""
+
+#: inc/event-meta-helpers.php:61
+msgid "The end date is not a valid date."
+msgstr ""
+
+#: inc/event-meta-helpers.php:68
+msgid "The start date is required."
+msgstr ""
+
+#: inc/event-meta-helpers.php:75
+msgid "The end date must be the same as or after the start date."
+msgstr ""
+
+#: jardin-events.php:122
+msgid "GitHub"
+msgstr ""
+
+#: jardin-events.php:127
+msgid "Donate"
+msgstr ""
+
+#: assets/js/editor-event-info-panel.js:230
+msgid "Event details"
+msgstr ""
+
+#: assets/js/editor-event-info-panel.js:234
+msgid "Start date"
+msgstr ""
+
+#: assets/js/editor-event-info-panel.js:240
+msgid "End date"
+msgstr ""
+
+#: assets/js/editor-event-info-panel.js:246
+msgid "City"
+msgstr ""
+
+#: assets/js/editor-event-info-panel.js:251
+msgid "Country"
+msgstr ""
+
+#: assets/js/editor-event-info-panel.js:256
+msgid "Map link"
+msgstr ""
+
+#: assets/js/editor-event-info-panel.js:274
+msgid "Related content (recap)"
+msgstr ""
+
+#: assets/js/editor-event-info-panel.js:307
+msgid "URL slides"
+msgstr ""
+
+#: assets/js/editor-event-info-panel.js:313
+msgid "Video URL"
+msgstr ""
+
+#: blocks/event-archive-meta/block.json
+msgctxt "block title"
+msgid "Event archive meta"
+msgstr ""
+
+#: blocks/event-archive-meta/block.json
+msgctxt "block description"
+msgid "Roles and location row for event archive list items (.entry-meta)."
+msgstr ""
+
+#: blocks/event-external-link/block.json
+msgctxt "block title"
+msgid "Event external link"
+msgstr ""
+
+#: blocks/event-external-link/block.json
+msgctxt "block description"
+msgid "Outputs event_link as .entry-links when set."
+msgstr ""
+
+#: blocks/event-filter/block.json
+msgctxt "block title"
+msgid "Event role filters"
+msgstr ""
+
+#: blocks/event-filter/block.json
+msgctxt "block description"
+msgid "Chip links to filter the events archive by role (?event_role=)."
+msgstr ""
+
+#: blocks/event-inline-date/block.json
+msgctxt "block title"
+msgid "Event date (inline)"
+msgstr ""
+
+#: blocks/event-inline-date/block.json
+msgctxt "block description"
+msgid "Formatted event_date meta with .entry-when (Query Loop / archive)."
+msgstr ""
+
+#: blocks/event-inline-location/block.json
+msgctxt "block title"
+msgid "Event location (inline)"
+msgstr ""
+
+#: blocks/event-inline-location/block.json
+msgctxt "block description"
+msgid "Location line (.entry-loc) for upcoming list."
+msgstr ""
+
+#: blocks/event-inline-meta/block.json
+msgctxt "block title"
+msgid "Event meta (inline)"
+msgstr ""
+
+#: blocks/event-inline-meta/block.json
+msgctxt "block description"
+msgid "Inline event metadata line for home IRL rows: date(s) - city, country."
+msgstr ""
+
+#: blocks/event-single-meta/block.json
+msgctxt "block title"
+msgid "Event single meta"
+msgstr ""
+
+#: blocks/event-single-meta/block.json
+msgctxt "block description"
+msgid "Date (dt-start), inline roles, and location on the event single."
+msgstr ""
+
+#: blocks/event-status-bar/block.json
+msgctxt "block title"
+msgid "Event status bar"
+msgstr ""
+
+#: blocks/event-status-bar/block.json
+msgctxt "block description"
+msgid "Badge (upcoming / ongoing / past) and countdown for the current event."
+msgstr ""

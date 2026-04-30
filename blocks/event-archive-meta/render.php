@@ -22,7 +22,7 @@ $loc          = is_string( $loc ) ? trim( $loc ) : '';
 if ( '' === $pills ) {
 	$pills = sprintf(
 		'<span class="entry-role entry-role--unknown">%s</span>',
-		esc_html__( 'Evenement', 'jardin-events' )
+		esc_html__( 'Event', 'jardin-events' )
 	);
 }
 

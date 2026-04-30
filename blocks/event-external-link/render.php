@@ -1,6 +1,6 @@
 <?php
 /**
- * External « En savoir plus » link (.entry-links).
+ * External event info / ticketing links (.entry-links).
  *
  * @package Jardin_Events
  */
@@ -26,7 +26,7 @@ if ( '' !== $event_url ) {
 	$links[] = sprintf(
 		'<a href="%1$s" rel="noopener noreferrer">%2$s</a>',
 		esc_url( $event_url ),
-		esc_html__( 'Page de l’événement', 'jardin-events' )
+		esc_html__( 'Event page', 'jardin-events' )
 	);
 }
 
@@ -34,7 +34,7 @@ if ( '' !== $ticket ) {
 	$links[] = sprintf(
 		'<a href="%1$s" rel="noopener noreferrer">%2$s</a>',
 		esc_url( $ticket ),
-		esc_html__( 'Billetterie', 'jardin-events' )
+		esc_html__( 'Tickets', 'jardin-events' )
 	);
 }
 

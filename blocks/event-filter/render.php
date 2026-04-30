@@ -34,7 +34,7 @@ $parts[] = sprintf(
 	'<a class="ff-btn%1$s" href="%2$s" data-type="all" aria-pressed="%5$s"%6$s>%3$s <span class="ff-count">%4$d</span></a>',
 	'' === $current ? ' active' : '',
 	esc_url( $base ),
-	esc_html__( 'tous', 'jardin-events' ),
+	esc_html__( 'All', 'jardin-events' ),
 	$published_total,
 	'' === $current ? 'true' : 'false',
 	'' === $current ? ' aria-current="page"' : ''

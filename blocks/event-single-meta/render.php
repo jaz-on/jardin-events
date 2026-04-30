@@ -53,8 +53,8 @@ ob_start();
 		<span class="post-meta-sep" aria-hidden="true">·</span>
 	<?php endif; ?>
 	<?php if ( $has_role ) : ?>
-		<span class="event-roles-inline" aria-label="<?php esc_attr_e( 'Mes rôles sur cet événement', 'jardin-events' ); ?>">
-			<span class="role-label"><?php esc_html_e( 'rôle :', 'jardin-events' ); ?></span>
+		<span class="event-roles-inline" aria-label="<?php esc_attr_e( 'My roles for this event', 'jardin-events' ); ?>">
+			<span class="role-label"><?php esc_html_e( 'role:', 'jardin-events' ); ?></span>
 			<?php echo $roles_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in helper. ?>
 		</span>
 	<?php endif; ?>

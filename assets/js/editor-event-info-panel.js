@@ -1,5 +1,5 @@
 /**
- * Gutenberg document panel for jardin-events metadata.
+ * Gutenberg document panel for jardin-events post meta.
  */
 (function (wp) {
 	'use strict';
@@ -186,13 +186,13 @@
 					var txt = normalize(btn.textContent);
 					if (txt === 'roles') {
 						roleBtn = btn;
-					} else if (txt === 'informations') {
+					} else if (txt === 'event details') {
 						infoBtn = btn;
 					} else if (txt.indexOf('yoast') !== -1) {
 						yoastBtn = btn;
 					}
 
-					if (txt === 'roles' || txt === 'informations') {
+					if (txt === 'roles' || txt === 'event details') {
 						if (btn.getAttribute('aria-expanded') !== 'true') {
 							btn.click();
 						}
@@ -227,51 +227,51 @@
 			PluginDocumentSettingPanel,
 			{
 				name: 'jardin-events-informations',
-				title: __('Informations', 'jardin-events'),
+				title: __('Event details', 'jardin-events'),
 				className: 'jardin-events-info-panel'
 			},
 			el(TextControl, {
-				label: __('Date de début', 'jardin-events'),
+				label: __('Start date', 'jardin-events'),
 				type: 'date',
 				value: eventDate,
 				onChange: function (v) { setMeta('event_date', v || ''); }
 			}),
 			el(TextControl, {
-				label: __('Date de fin', 'jardin-events'),
+				label: __('End date', 'jardin-events'),
 				type: 'date',
 				value: eventEndDate,
 				onChange: function (v) { setMeta('event_date_end', v || ''); }
 			}),
 			el(TextControl, {
-				label: __('Ville', 'jardin-events'),
+				label: __('City', 'jardin-events'),
 				value: eventCity,
 				onChange: function (v) { setMeta('event_city', v || ''); }
 			}),
 			el(TextControl, {
-				label: __('Pays', 'jardin-events'),
+				label: __('Country', 'jardin-events'),
 				value: eventCountry,
 				onChange: function (v) { setMeta('event_country', v || ''); }
 			}),
 			el(TextControl, {
-				label: __('Lien carte', 'jardin-events'),
+				label: __('Map link', 'jardin-events'),
 				type: 'url',
 				value: eventMapUrl,
 				onChange: function (v) { setMeta('event_map_url', v || ''); }
 			}),
 			el(TextControl, {
-				label: __('Page de l’événement', 'jardin-events'),
+				label: __('Event page', 'jardin-events'),
 				type: 'url',
 				value: eventLink,
 				onChange: function (v) { setMeta('event_link', v || ''); }
 			}),
 			el(TextControl, {
-				label: __('Billetterie', 'jardin-events'),
+				label: __('Tickets', 'jardin-events'),
 				type: 'url',
 				value: eventTicketUrl,
 				onChange: function (v) { setMeta('event_ticket_url', v || ''); }
 			}),
 			el(FormTokenField, {
-				label: __('Contenu lié (récap)', 'jardin-events'),
+				label: __('Related content (recap)', 'jardin-events'),
 				value: selectedPostTokens,
 				suggestions: postOptions,
 				__experimentalExpandOnFocus: true,
@@ -310,7 +310,7 @@
 				onChange: function (v) { setMeta('event_slides_url', v || ''); }
 			}),
 			el(TextControl, {
-				label: __('URL vidéo', 'jardin-events'),
+				label: __('Video URL', 'jardin-events'),
 				type: 'url',
 				value: eventVideoUrl,
 				onChange: function (v) { setMeta('event_video_url', v || ''); }

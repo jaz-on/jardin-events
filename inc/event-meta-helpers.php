@@ -52,27 +52,27 @@ function jardin_events_validate_event_dates( $start, $end, $args = array() ) {
 	if ( null === $start ) {
 		return new WP_Error(
 			'jardin_events_invalid_date',
-			__( 'La date de début n’est pas une date valide.', 'jardin-events' )
+			__( 'The start date is not a valid date.', 'jardin-events' )
 		);
 	}
 	if ( null === $end ) {
 		return new WP_Error(
 			'jardin_events_invalid_end_date',
-			__( 'La date de fin n’est pas une date valide.', 'jardin-events' )
+			__( 'The end date is not a valid date.', 'jardin-events' )
 		);
 	}
 
 	if ( ! empty( $args['require_non_empty_start'] ) && '' === $start ) {
 		return new WP_Error(
 			'jardin_events_missing_start',
-			__( 'La date de début est obligatoire.', 'jardin-events' )
+			__( 'The start date is required.', 'jardin-events' )
 		);
 	}
 
 	if ( '' !== $start && '' !== $end && strcmp( $end, $start ) < 0 ) {
 		return new WP_Error(
 			'jardin_events_invalid_range',
-			__( 'La date de fin doit être identique ou postérieure à la date de début.', 'jardin-events' )
+			__( 'The end date must be the same as or after the start date.', 'jardin-events' )
 		);
 	}
 

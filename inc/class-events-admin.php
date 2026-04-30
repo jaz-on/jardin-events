@@ -19,7 +19,7 @@ class Jardin_Events_Admin {
 	}
 
 	/**
-	 * Enqueue the native Gutenberg "Informations" panel for event metadata.
+	 * Enqueue the Gutenberg document panel for event metadata.
 	 */
 	public function enqueue_editor_panel_assets() {
 		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
@@ -38,6 +38,12 @@ class Jardin_Events_Admin {
 			array( 'wp-plugins', 'wp-editor', 'wp-element', 'wp-components', 'wp-data', 'wp-api-fetch', 'wp-i18n' ),
 			(string) filemtime( $script_path ),
 			true
+		);
+
+		wp_set_script_translations(
+			'jardin-events-editor-info-panel',
+			'jardin-events',
+			JARDIN_EVENTS_PLUGIN_DIR . 'languages'
 		);
 
 		$style_path = JARDIN_EVENTS_PLUGIN_DIR . 'assets/css/editor-event-info-panel.css';

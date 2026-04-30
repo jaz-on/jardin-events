@@ -271,7 +271,7 @@ function jardin_events_get_primary_role_slug( $post_id ) {
 }
 
 /**
- * Short status label for badges (à venir / en cours / passé).
+ * Short status label for badges (upcoming / ongoing / past).
  *
  * @param int $post_id Event post ID.
  * @return string
@@ -282,14 +282,14 @@ function jardin_events_status_label( $post_id ) {
 		return '';
 	}
 	if ( ! jardin_events_is_upcoming( $post_id ) ) {
-		return __( 'Passé', 'jardin-events' );
+		return __( 'Past', 'jardin-events' );
 	}
 	$start = (string) get_post_meta( $post_id, 'event_date', true );
 	$today = Jardin_Events_Core::get_today_ymd();
 	if ( '' !== $start && strcmp( $start, $today ) > 0 ) {
-		return __( 'À venir', 'jardin-events' );
+		return __( 'Upcoming', 'jardin-events' );
 	}
-	return __( 'En cours', 'jardin-events' );
+	return __( 'Ongoing', 'jardin-events' );
 }
 
 /**
@@ -306,19 +306,19 @@ function jardin_events_countdown_text( $post_id ) {
 	if ( $d > 1 ) {
 		return sprintf(
 			/* translators: %d: full days until start */
-			__( 'dans %d jours', 'jardin-events' ),
+			__( 'in %d days', 'jardin-events' ),
 			$d
 		);
 	}
 	if ( 1 === $d ) {
-		return __( 'demain', 'jardin-events' );
+		return __( 'tomorrow', 'jardin-events' );
 	}
 	if ( 0 === $d ) {
-		return __( 'aujourd’hui', 'jardin-events' );
+		return __( 'today', 'jardin-events' );
 	}
 	return sprintf(
 		/* translators: %d: full days since start */
-		__( 'il y a %d jours', 'jardin-events' ),
+		__( '%d days ago', 'jardin-events' ),
 		abs( $d )
 	);
 }

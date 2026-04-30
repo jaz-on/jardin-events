@@ -312,15 +312,15 @@ class Jardin_Events_Core {
 		$post_type = jardin_events_get_post_type();
 
 		$labels = array(
-			'name'              => __( 'Rôles', 'jardin-events' ),
-			'singular_name'     => __( 'Rôle', 'jardin-events' ),
-			'search_items'      => __( 'Rechercher des rôles', 'jardin-events' ),
-			'all_items'         => __( 'Tous les rôles', 'jardin-events' ),
-			'edit_item'         => __( 'Modifier le rôle', 'jardin-events' ),
-			'update_item'       => __( 'Mettre à jour le rôle', 'jardin-events' ),
-			'add_new_item'      => __( 'Ajouter un rôle', 'jardin-events' ),
-			'new_item_name'     => __( 'Nouveau rôle', 'jardin-events' ),
-			'menu_name'         => __( 'Rôles', 'jardin-events' ),
+			'name'              => __( 'Roles', 'jardin-events' ),
+			'singular_name'     => __( 'Role', 'jardin-events' ),
+			'search_items'      => __( 'Search roles', 'jardin-events' ),
+			'all_items'         => __( 'All roles', 'jardin-events' ),
+			'edit_item'         => __( 'Edit role', 'jardin-events' ),
+			'update_item'       => __( 'Update role', 'jardin-events' ),
+			'add_new_item'      => __( 'Add role', 'jardin-events' ),
+			'new_item_name'     => __( 'New role', 'jardin-events' ),
+			'menu_name'         => __( 'Roles', 'jardin-events' ),
 		);
 
 		register_taxonomy(
@@ -347,23 +347,23 @@ class Jardin_Events_Core {
 		$post_type = jardin_events_get_post_type();
 
 		$labels = array(
-			'name'               => __( 'Événements', 'jardin-events' ),
-			'singular_name'      => __( 'Événement', 'jardin-events' ),
-			'add_new'            => __( 'Ajouter un événement', 'jardin-events' ),
-			'add_new_item'       => __( 'Ajouter un nouvel événement', 'jardin-events' ),
-			'edit_item'          => __( 'Modifier l\'événement', 'jardin-events' ),
-			'new_item'           => __( 'Nouvel événement', 'jardin-events' ),
-			'view_item'          => __( 'Voir l\'événement', 'jardin-events' ),
-			'search_items'       => __( 'Rechercher des événements', 'jardin-events' ),
-			'not_found'          => __( 'Aucun événement trouvé', 'jardin-events' ),
-			'not_found_in_trash' => __( 'Aucun événement dans la corbeille', 'jardin-events' ),
-			'all_items'          => __( 'Tous les événements', 'jardin-events' ),
-			'archives'           => __( 'Archives des événements', 'jardin-events' ),
-			'menu_name'          => __( 'Événements', 'jardin-events' ),
+			'name'               => __( 'Events', 'jardin-events' ),
+			'singular_name'      => __( 'Event', 'jardin-events' ),
+			'add_new'            => __( 'Add event', 'jardin-events' ),
+			'add_new_item'       => __( 'Add new event', 'jardin-events' ),
+			'edit_item'          => __( 'Edit event', 'jardin-events' ),
+			'new_item'           => __( 'New event', 'jardin-events' ),
+			'view_item'          => __( 'View event', 'jardin-events' ),
+			'search_items'       => __( 'Search events', 'jardin-events' ),
+			'not_found'          => __( 'No events found', 'jardin-events' ),
+			'not_found_in_trash' => __( 'No events found in Trash', 'jardin-events' ),
+			'all_items'          => __( 'All events', 'jardin-events' ),
+			'archives'           => __( 'Event archives', 'jardin-events' ),
+			'menu_name'          => __( 'Events', 'jardin-events' ),
 		);
 
 		$args = array(
-			'label'               => __( 'Événements', 'jardin-events' ),
+			'label'               => __( 'Events', 'jardin-events' ),
 			'labels'              => $labels,
 			'public'              => true,
 			'show_in_rest'        => true,
