@@ -9,20 +9,10 @@ defined( 'ABSPATH' ) || exit;
 
 $labels = function_exists( 'jardin_events_get_role_labels' )
 	? jardin_events_get_role_labels()
-	: array(
-		'speaker'   => __( 'Speaker', 'jardin-events' ),
-		'organizer' => __( 'Organisateur', 'jardin-events' ),
-		'sponsor'   => __( 'Sponsor', 'jardin-events' ),
-		'attendee'  => __( 'Participant', 'jardin-events' ),
-	);
+	: array();
 $counts = function_exists( 'jardin_events_get_role_counts' )
 	? jardin_events_get_role_counts()
-	: array(
-		'speaker'   => 0,
-		'organizer' => 0,
-		'sponsor'   => 0,
-		'attendee'  => 0,
-	);
+	: array();
 
 $post_type = function_exists( 'jardin_events_get_post_type' ) ? jardin_events_get_post_type() : 'event';
 $base      = get_post_type_archive_link( $post_type );
@@ -52,7 +42,7 @@ $parts[] = sprintf(
 
 $role_slugs = function_exists( 'jardin_events_get_role_slugs' )
 	? jardin_events_get_role_slugs()
-	: array( 'speaker', 'organizer', 'sponsor', 'attendee' );
+	: array();
 
 foreach ( $role_slugs as $slug ) {
 	$url     = add_query_arg( 'event_role', $slug, $base );

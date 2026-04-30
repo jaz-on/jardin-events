@@ -37,27 +37,53 @@ function jardin_events_get_role_taxonomy() {
 }
 
 /**
- * Default role slugs (closed enum).
+ * Role slugs from taxonomy terms.
  *
  * @return string[]
  */
 function jardin_events_get_role_slugs() {
-	$roles = array( 'speaker', 'organizer', 'sponsor', 'attendee' );
+	$terms = get_terms(
+		array(
+			'taxonomy'   => jardin_events_get_role_taxonomy(),
+			'hide_empty' => false,
+		)
+	);
+	if ( is_wp_error( $terms ) || ! is_array( $terms ) ) {
+		return apply_filters( 'jardin_events_roles', array() );
+	}
+	$roles = array();
+	foreach ( $terms as $term ) {
+		$slug = sanitize_key( (string) $term->slug );
+		if ( '' !== $slug && ! in_array( $slug, $roles, true ) ) {
+			$roles[] = $slug;
+		}
+	}
 	return apply_filters( 'jardin_events_roles', $roles );
 }
 
 /**
- * Human-readable labels for roles (i18n).
+ * Human-readable labels from taxonomy term names.
  *
  * @return array<string,string> slug => label
  */
 function jardin_events_get_role_labels() {
-	$labels = array(
-		'speaker'   => __( 'Speaker', 'jardin-events' ),
-		'organizer' => __( 'Organisateur', 'jardin-events' ),
-		'sponsor'   => __( 'Sponsor', 'jardin-events' ),
-		'attendee'  => __( 'Participant', 'jardin-events' ),
+	$terms = get_terms(
+		array(
+			'taxonomy'   => jardin_events_get_role_taxonomy(),
+			'hide_empty' => false,
+		)
 	);
+	if ( is_wp_error( $terms ) || ! is_array( $terms ) ) {
+		return apply_filters( 'jardin_events_role_labels', array() );
+	}
+	$labels = array();
+	foreach ( $terms as $term ) {
+		$slug = sanitize_key( (string) $term->slug );
+		$name = is_string( $term->name ) ? trim( $term->name ) : '';
+		if ( '' !== $slug && '' !== $name ) {
+			$labels[ $slug ] = $name;
+		}
+	}
 	return apply_filters( 'jardin_events_role_labels', $labels );
 }
 
@@ -69,7 +95,14 @@ function jardin_events_get_role_labels() {
  */
 function jardin_events_sanitize_event_role_slug( $value ) {
 	$slug = sanitize_key( is_string( $value ) ? $value : (string) $value );
-	return in_array( $slug, jardin_events_get_role_slugs(), true ) ? $slug : '';
+	if ( '' === $slug ) {
+		return '';
+	}
+	$term = get_term_by( 'slug', $slug, jardin_events_get_role_taxonomy() );
+	if ( ! $term || is_wp_error( $term ) ) {
+		return '';
+	}
+	return $slug;
 }
 
 /**
@@ -131,24 +164,26 @@ function jardin_events_has_role( $post_id, $role ) {
  * @return array<string,int>
  */
 function jardin_events_get_role_counts() {
-	$slugs  = jardin_events_get_role_slugs();
-	$counts = array_fill_keys( $slugs, 0 );
-
 	$terms = get_terms(
 		array(
 			'taxonomy'   => jardin_events_get_role_taxonomy(),
 			'hide_empty' => false,
 		)
 	);
-	if ( is_wp_error( $terms ) || empty( $terms ) ) {
+	if ( is_wp_error( $terms ) || ! is_array( $terms ) ) {
+		return apply_filters( 'jardin_events_role_filter_counts', array() );
+	}
+	$counts = array();
+	foreach ( $terms as $term ) {
+		$slug = sanitize_key( (string) $term->slug );
+		if ( '' === $slug ) {
+			continue;
+		}
+		$counts[ $slug ] = (int) $term->count;
+	}
+	if ( empty( $counts ) ) {
 		return apply_filters( 'jardin_events_role_filter_counts', $counts );
 	}
-	foreach ( $terms as $term ) {
-		if ( isset( $counts[ $term->slug ] ) ) {
-			$counts[ $term->slug ] = (int) $term->count;
-		}
-	}
-
 	return apply_filters( 'jardin_events_role_filter_counts', $counts );
 }
 

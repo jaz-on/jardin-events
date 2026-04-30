@@ -338,14 +338,6 @@ class Jardin_Events_Core {
 			)
 		);
 
-		foreach ( jardin_events_get_role_slugs() as $slug ) {
-			if ( term_exists( $slug, $taxonomy ) ) {
-				continue;
-			}
-			$labels_map = jardin_events_get_role_labels();
-			$name       = isset( $labels_map[ $slug ] ) ? $labels_map[ $slug ] : ucfirst( $slug );
-			wp_insert_term( $name, $taxonomy, array( 'slug' => $slug ) );
-		}
 	}
 
 	/**
