@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: jardin-events
+ * Plugin Name: Jardin Events
  * Plugin URI: https://github.com/jaz-on/jardin-events
  * Description: Registers an event custom post type with metadata and front-end styles for Jardin-style sites.
  * Version: 0.1.0
