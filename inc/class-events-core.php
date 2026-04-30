@@ -376,6 +376,7 @@ class Jardin_Events_Core {
 				'editor',
 				'excerpt',
 				'thumbnail',
+				'custom-fields',
 			),
 			'show_in_menu'        => true,
 			'menu_icon'           => 'dashicons-calendar-alt',
