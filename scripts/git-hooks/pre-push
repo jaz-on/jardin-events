@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+cd "$ROOT_DIR"
+
+if ! php -r '$it = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(".", FilesystemIterator::SKIP_DOTS)); foreach ($it as $file) { if (!$file->isFile()) { continue; } $path = $file->getPathname(); if (0 === strpos($path, "./vendor/") || 0 === strpos($path, "./.git/")) { continue; } if (".php" !== substr($path, -4)) { continue; } $content = file_get_contents($path); if (false !== $content && false !== strpos($content, "vendor/autoload.php")) { exit(0); } } exit(1);'; then
+	echo "[pre-push] OK: plugin does not load vendor/autoload.php at runtime."
+	exit 0
+fi
+
+echo "[pre-push] Building runtime Composer dependencies..."
+composer run release:dev --no-interaction --no-ansi >/dev/null
+
+AUTOLOAD_FILES="vendor/composer/autoload_files.php"
+if [[ ! -f "$AUTOLOAD_FILES" ]]; then
+	echo "[pre-push] OK: no vendor/composer autoload_files.php to validate."
+	exit 0
+fi
+
+if php -r '$content = file_get_contents("vendor/composer/autoload_files.php"); if (preg_match("/myclabs\/deep-copy|phpunit\/phpunit|phpstan\/phpstan/", $content)) { exit(1); }'; then
+	:
+else
+	echo "[pre-push] ERROR: Dev dependencies detected in $AUTOLOAD_FILES."
+	echo "[pre-push] Run 'composer run release:dev', commit vendor/composer changes, then push again."
+	exit 1
+fi
+
+TMP_MISSING_FILE="$(mktemp)"
+if ! php -r '$files = require "vendor/composer/autoload_files.php"; foreach ($files as $path) { if (!is_readable($path)) { fwrite(STDERR, $path . PHP_EOL); exit(1); } }' >"$TMP_MISSING_FILE" 2>&1; then
+	echo "[pre-push] ERROR: Missing Composer autoload file(s):"
+	sed -n '1,20p' "$TMP_MISSING_FILE"
+	rm -f "$TMP_MISSING_FILE"
+	exit 1
+fi
+rm -f "$TMP_MISSING_FILE"
+
+CHANGED_FILES="$(git status --porcelain -- vendor composer.lock | sed 's/^...//')"
+BLOCKING_CHANGES=""
+while IFS= read -r changed_file; do
+	[[ -z "$changed_file" ]] && continue
+	if [[ "$changed_file" == "vendor/composer/installed.php" ]]; then
+		continue
+	fi
+	BLOCKING_CHANGES="${BLOCKING_CHANGES}${changed_file}"$'\n'
+done <<< "$CHANGED_FILES"
+
+if [[ -n "$BLOCKING_CHANGES" ]]; then
+	echo "[pre-push] ERROR: release:dev changed vendor/composer files."
+	echo "[pre-push] Commit those changes before pushing:"
+	echo "$BLOCKING_CHANGES" | sed 's/^/  - /'
+	exit 1
+fi
+
+echo "[pre-push] OK: runtime vendor is consistent."

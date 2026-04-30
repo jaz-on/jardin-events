@@ -45,6 +45,28 @@ export WP_TESTS_DIR=/path/to/wordpress/tests/phpunit
 composer run test
 ```
 
+## Release Checklist (branch `dev`)
+
+Current state: this plugin does not load `vendor/autoload.php` at runtime. The `pre-push` hook therefore exits quickly and only activates full Composer runtime checks if runtime Composer loading is introduced later.
+
+Before each push used by Git Updater on `dev.jasonrouet.com`, run:
+
+```bash
+composer run release:dev
+```
+
+Then verify and publish:
+
+1. `rg "myclabs/deep-copy|phpunit|phpstan" vendor/composer/autoload_files.php` returns no match (if the file exists).
+2. Commit updated runtime Composer files (`vendor/composer/*` + tracked runtime `vendor/` changes).
+3. Push branch `dev`, then update plugin with Git Updater on staging.
+
+Optional but recommended (one-time per clone): install the local `pre-push` hook that runs these checks automatically and blocks invalid pushes.
+
+```bash
+composer run hooks:install
+```
+
 **Manual smoke:** activation, permalinks, create event + REST, end date validation, empty meta removal, dual Query Loops (upcoming/past), multi-day event still “upcoming” until `event_date_end` passes.
 
 ## License

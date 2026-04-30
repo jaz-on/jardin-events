@@ -22,6 +22,11 @@
   "scripts": {
     "phpcs": "phpcs",
     "phpcbf": "phpcbf",
-    "test": "phpunit"
+    "test": "phpunit",
+    "hooks:install": "bash scripts/install-git-hooks.sh",
+    "release:dev": [
+      "@composer install --no-dev --optimize-autoloader",
+      "@composer dump-autoload --no-dev --optimize"
+    ]
   }
 }
