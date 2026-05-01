@@ -91,6 +91,8 @@ class Jardin_Events_Block_Bindings {
 	}
 
 	/**
+	 * Get formatted event date (start or start–end range) for block binding output.
+	 *
 	 * @param array     $source_args     Source args from block JSON.
 	 * @param \WP_Block $block_instance  Block instance.
 	 * @param string    $attribute_name  Bound attribute (e.g. content).
@@ -106,6 +108,8 @@ class Jardin_Events_Block_Bindings {
 	}
 
 	/**
+	 * Get human-readable location (city · country) for block binding output.
+	 *
 	 * @param array     $source_args     Source args.
 	 * @param \WP_Block $block_instance  Block instance.
 	 * @param string    $attribute_name  Bound attribute.
@@ -121,6 +125,8 @@ class Jardin_Events_Block_Bindings {
 	}
 
 	/**
+	 * Get role term names as plain text (middle dot separated) for block binding output.
+	 *
 	 * @param array     $source_args     Source args.
 	 * @param \WP_Block $block_instance  Block instance.
 	 * @param string    $attribute_name  Bound attribute.

@@ -17,11 +17,11 @@ Jardin · Événements : CPT, blocs, archives et REST. Pour les sites **[jardin-
 ## What it does
 
 - **Archive** at `/evenements/` by default (slug filterable). Query arg `?event_role=speaker` filters the main query; archive sorted by `event_date`.
-- **Meta (examples):** `event_date` (required), `event_date_end`, `event_city`, `event_country`, `event_map_url`, `event_link`, `event_ticket_url`, `event_article` (linked post ID), `event_slides_url`, `event_video_url`. Old keys `event_end_date` / `event_linked_post` migrate automatically.
+- **Meta (examples):** `event_date` (required), `event_date_end`, `event_city`, `event_country`, `event_map_url`, `event_link`, `event_ticket_url`, `event_article` (array of linked post IDs), `event_slides_url`, `event_video_url`. Old keys `event_end_date` / `event_linked_post` migrate automatically.
 - **Roles taxonomy:** `event_role` — `speaker`, `organizer`, `sponsor`, `attendee` (filterable lists).
 - **Blocks:** `jardin-events/event-filter` (chips + counts), `event-inline-date`, `event-inline-location`, `event-archive-meta`, `event-external-link`, `event-single-meta`, `event-status-bar`.
 - **Query Loop CSS classes** on the block (post type must be events only): `jardin-events-query--upcoming` (ascending), `jardin-events-query--past` (descending) so lists use **`event_date`**, not post date.
-- **REST:** computed `event_roles`, `event_start`, `event_end`, `event_location`; meta exposed as saved. Filter `jardin_events_event_article_post_types` widens linked post types (default `post`).
+- **REST:** computed `event_roles`, `event_start`, `event_end`, `event_location`; other fields live under `meta` (e.g. `meta.event_city`). Filter `jardin_events_event_article_post_types` widens linked post types (default `post`).
 - **JSON-LD Event:** off by default; enable via filter `jardin_events_enable_jsonld`.
 - **Block bindings (WP 6.5+):** sources for `core/paragraph` (and other blocks that support `content` bindings) on **single event** templates or inside Query Loop with `postId` context:
   - `jardin-events/event-date-formatted` — same string as `Jardin_Events_Core::format_event_date()`.
@@ -75,7 +75,7 @@ Optional but recommended (one-time per clone): install the local `pre-push` hook
 composer run hooks:install
 ```
 
-**Manual smoke:** activation, permalinks, create event + REST, end date validation, empty meta removal, dual Query Loops (upcoming/past), multi-day event still “upcoming” until `event_date_end` passes.
+**Manual smoke:** activation, permalinks, create event + REST, end date validation, empty meta removal, dual Query Loops (upcoming/past), multi-day event still “upcoming” until `event_date_end` passes; POST `/wp/v2/event` without `meta.event_date` (or empty) → 400 with code `jardin_events_missing_start`.
 
 ## License
 

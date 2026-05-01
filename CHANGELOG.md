@@ -6,25 +6,15 @@ Toutes les notes importantes de ce projet sont listées ici. La version distribu
 
 ### Changed
 
-- Nom produit / dépôt canonique **jardin-events** (libellés d’en-tête, README, docs handoff, PHPCS, commentaires) ; identifiants PHP (`Jardin_Events_*`, `jardin_events_*`, `JARDIN_EVENTS_*`) inchangés (API publique).
+- REST : la création d’un événement requiert `meta.event_date` non vide ; sinon erreur `jardin_events_missing_start`.
+- REST : suppression des champs top-level redondants `event_city`, `event_country`, `event_map_url` (valeurs via `meta.*` ; `event_location` calculé inchangé).
+- Tests PHPUnit : rôles couverts via la taxonomie `event_role` (plus de post_meta `event_role`).
+- PHPCS : variables locales renommées dans certains `blocks/*/render.php` ; docblocks complétés (`Jardin_Events_Admin`, callbacks block bindings).
+- `uninstall.php` : plus de nettoyage de transients inutilisés (aucun code ne les créait).
 
-### Added
+### Fixed
 
-- Migration base (`jardin_events_db_version`, option `2`) : renommage des lignes de meta `event_end_date` → `event_date_end`, `event_linked_post` → `event_article`.
-- Métabox : URLs `event_slides_url`, `event_video_url` ; recherche AJAX d’articles pour `event_article` (`assets/js/admin-event-article.js`).
-- Métabox : distinction `Page de l’événement` (`event_link`) et `Billetterie` (`event_ticket_url`), avec rendu front séparé.
-- Filtres `jardin_events_post_type`, `jardin_events_slug` (défaut `evenements`), `jardin_events_meta_keys`, `jardin_events_filters` ; helpers associés (`jardin_events_get_post_type()`, `jardin_events_get_rewrite_slug()`, `jardin_events_get_filters()`, `jardin_events_get_event_article_id()`, `jardin_events_get_event_date_end()`).
-- Validation « date de début obligatoire » (métabox classique + REST).
-- Analyse PHPCS sur `blocks/`.
-
-### Changed
-
-- Réécriture d’URL du CPT : slug par défaut **`evenements`** (chemins `/evenements/`, `/evenements/{slug-de-l-evenement}/`).
-- Renommage canonique des meta fin de date et article récap pour le thème Jardin.
-
-### Removed
-
-- Taxonomies WordPress `category` et `post_tag` sur le CPT `event` (rôles via meta `event_role` et archive filtrée avec `?event_role=`).
+- Commentaire / flux REST : la validation à la création ne dépend plus d’une métabox classique absente du plugin.
 
 ## [0.1.0]
 

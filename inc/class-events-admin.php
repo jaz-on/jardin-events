@@ -9,6 +9,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Registers block editor assets (event document sidebar panel).
+ */
 class Jardin_Events_Admin {
 
 	/**

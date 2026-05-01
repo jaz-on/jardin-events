@@ -14,8 +14,8 @@ $counts = function_exists( 'jardin_events_get_role_counts' )
 	? jardin_events_get_role_counts()
 	: array();
 
-$post_type = function_exists( 'jardin_events_get_post_type' ) ? jardin_events_get_post_type() : 'event';
-$base      = get_post_type_archive_link( $post_type );
+$event_post_type = function_exists( 'jardin_events_get_post_type' ) ? jardin_events_get_post_type() : 'event';
+$base            = get_post_type_archive_link( $event_post_type );
 if ( ! $base ) {
 	$base = home_url( '/evenements/' );
 }

@@ -171,8 +171,8 @@ function jardin_events_get_event_article_post_types() {
 	if ( empty( $defaults ) ) {
 		$defaults = array( 'post' );
 	}
-	$types    = (array) apply_filters( 'jardin_events_event_article_post_types', $defaults );
-	$types    = array_values( array_unique( array_map( 'sanitize_key', $types ) ) );
+	$types = (array) apply_filters( 'jardin_events_event_article_post_types', $defaults );
+	$types = array_values( array_unique( array_map( 'sanitize_key', $types ) ) );
 	return empty( $types ) ? $defaults : $types;
 }
 
@@ -206,8 +206,8 @@ function jardin_events_normalize_related_content_ids( $meta_value ) {
  * @return int[] Empty when invalid.
  */
 function jardin_events_sanitize_meta_event_article( $meta_value ) {
-	$ids          = jardin_events_normalize_related_content_ids( $meta_value );
-	$allowed      = jardin_events_get_event_article_post_types();
+	$ids           = jardin_events_normalize_related_content_ids( $meta_value );
+	$allowed       = jardin_events_get_event_article_post_types();
 	$validated_ids = array();
 	foreach ( $ids as $id ) {
 		$post_type = get_post_type( $id );

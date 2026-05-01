@@ -61,15 +61,6 @@ class Jardin_Events_Core {
 	 * @return array|\WP_Error
 	 */
 	public function rest_pre_insert_event( $prepared_post, $request ) {
-		$meta            = $request->get_param( 'meta' );
-		$has_start_in_request = is_array( $meta ) && array_key_exists( 'event_date', $meta );
-
-		// In the block editor, our sidebar metabox fields can be posted outside REST `meta`.
-		// If REST payload has no `event_date`, let classic metabox validation run on save_post.
-		if ( ! $has_start_in_request ) {
-			return $prepared_post;
-		}
-
 		list( $start, $end ) = jardin_events_merge_event_dates_from_request( $request, 0 );
 		$check               = jardin_events_validate_event_dates(
 			$start,
@@ -293,8 +284,8 @@ class Jardin_Events_Core {
 
 		$role = $this->get_current_role_filter();
 		if ( '' !== $role ) {
-			$tax_query = isset( $query['tax_query'] ) && is_array( $query['tax_query'] ) ? $query['tax_query'] : array();
-			$tax_query[] = array(
+			$tax_query          = isset( $query['tax_query'] ) && is_array( $query['tax_query'] ) ? $query['tax_query'] : array();
+			$tax_query[]        = array(
 				'taxonomy' => jardin_events_get_role_taxonomy(),
 				'field'    => 'slug',
 				'terms'    => array( $role ),
@@ -309,19 +300,19 @@ class Jardin_Events_Core {
 	 * Register role taxonomy for events (multi-select).
 	 */
 	public function register_role_taxonomy() {
-		$taxonomy = jardin_events_get_role_taxonomy();
+		$taxonomy  = jardin_events_get_role_taxonomy();
 		$post_type = jardin_events_get_post_type();
 
 		$labels = array(
-			'name'              => __( 'Roles', 'jardin-events' ),
-			'singular_name'     => __( 'Role', 'jardin-events' ),
-			'search_items'      => __( 'Search roles', 'jardin-events' ),
-			'all_items'         => __( 'All roles', 'jardin-events' ),
-			'edit_item'         => __( 'Edit role', 'jardin-events' ),
-			'update_item'       => __( 'Update role', 'jardin-events' ),
-			'add_new_item'      => __( 'Add role', 'jardin-events' ),
-			'new_item_name'     => __( 'New role', 'jardin-events' ),
-			'menu_name'         => __( 'Roles', 'jardin-events' ),
+			'name'          => __( 'Roles', 'jardin-events' ),
+			'singular_name' => __( 'Role', 'jardin-events' ),
+			'search_items'  => __( 'Search roles', 'jardin-events' ),
+			'all_items'     => __( 'All roles', 'jardin-events' ),
+			'edit_item'     => __( 'Edit role', 'jardin-events' ),
+			'update_item'   => __( 'Update role', 'jardin-events' ),
+			'add_new_item'  => __( 'Add role', 'jardin-events' ),
+			'new_item_name' => __( 'New role', 'jardin-events' ),
+			'menu_name'     => __( 'Roles', 'jardin-events' ),
 		);
 
 		register_taxonomy(
@@ -338,7 +329,6 @@ class Jardin_Events_Core {
 				'query_var'         => false,
 			)
 		);
-
 	}
 
 	/**
@@ -482,7 +472,6 @@ class Jardin_Events_Core {
 			)
 		);
 
-
 		register_post_meta(
 			$post_type,
 			'event_article',
@@ -604,60 +593,6 @@ class Jardin_Events_Core {
 				},
 				'schema'       => array(
 					'description' => __( 'Event location text.', 'jardin-events' ),
-					'type'        => 'string',
-					'context'     => array( 'view', 'edit' ),
-					'readonly'    => true,
-				),
-			)
-		);
-
-		register_rest_field(
-			jardin_events_get_post_type(),
-			'event_city',
-			array(
-				'get_callback' => static function ( $post ) {
-					$id = isset( $post['id'] ) ? (int) $post['id'] : 0;
-					$v  = $id > 0 ? get_post_meta( $id, 'event_city', true ) : '';
-					return is_string( $v ) ? trim( $v ) : '';
-				},
-				'schema'       => array(
-					'description' => __( 'Event city.', 'jardin-events' ),
-					'type'        => 'string',
-					'context'     => array( 'view', 'edit' ),
-					'readonly'    => true,
-				),
-			)
-		);
-
-		register_rest_field(
-			jardin_events_get_post_type(),
-			'event_country',
-			array(
-				'get_callback' => static function ( $post ) {
-					$id = isset( $post['id'] ) ? (int) $post['id'] : 0;
-					$v  = $id > 0 ? get_post_meta( $id, 'event_country', true ) : '';
-					return is_string( $v ) ? trim( $v ) : '';
-				},
-				'schema'       => array(
-					'description' => __( 'Event country.', 'jardin-events' ),
-					'type'        => 'string',
-					'context'     => array( 'view', 'edit' ),
-					'readonly'    => true,
-				),
-			)
-		);
-
-		register_rest_field(
-			jardin_events_get_post_type(),
-			'event_map_url',
-			array(
-				'get_callback' => static function ( $post ) {
-					$id = isset( $post['id'] ) ? (int) $post['id'] : 0;
-					$v  = $id > 0 ? get_post_meta( $id, 'event_map_url', true ) : '';
-					return is_string( $v ) ? esc_url_raw( trim( $v ) ) : '';
-				},
-				'schema'       => array(
-					'description' => __( 'Event map URL.', 'jardin-events' ),
 					'type'        => 'string',
 					'context'     => array( 'view', 'edit' ),
 					'readonly'    => true,

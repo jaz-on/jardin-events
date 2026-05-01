@@ -177,7 +177,7 @@ function jardin_events_register_blocks() {
 			$render_file = $path . '/render.php';
 			$args        = array();
 			if ( is_readable( $render_file ) ) {
-				$args['render_callback'] = static function ( $attributes, $content, $block ) use ( $render_file ) {
+				$args['render_callback'] = static function ( $attributes, $content, $block ) use ( $render_file ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed -- WordPress render_callback signature.
 					ob_start();
 					// phpcs:ignore WordPressVIPMinimum.Files.IncludingFile.UsingVariable -- Fixed path under plugin blocks/ + allowlisted slug.
 					$included = require $render_file;

@@ -28,7 +28,7 @@ Si **les deux** classes sont présentes sur le même bloc, **jardin-events** app
 
 Sans ces classes, **jardin-events** **ne modifie pas** la requête (comportement WordPress par défaut).
 
-Les blocs **Post Meta** utilisent les clés enregistrées par **jardin-events** : `event_date`, `event_location`, `event_link` (valeur brute ; le thème peut formater via CSS ou filtres).
+Les blocs **Post Meta** utilisent les clés enregistrées par **jardin-events** : `event_date`, `meta.event_city` / `meta.event_country` (post meta réelles), champ REST calculé `event_location` (concaténation ville · pays), `event_link` (valeur brute ; le thème peut formater via CSS ou filtres).
 
 ## Template parts
 
