@@ -12,6 +12,8 @@ Jardin · Événements : CPT, blocs, archives et REST. Pour les sites **[jardin-
 1. Place in `wp-content/plugins/jardin-events` and activate.
 2. If the events archive 404s, save **Settings → Permalinks** once.
 
+**Git / Git Updater** : default branch **`dev`** ; keep plugin header `Version:` in sync with releases for remote updates.
+
 ## What it does
 
 - **Archive** at `/evenements/` by default (slug filterable). Query arg `?event_role=speaker` filters the main query; archive sorted by `event_date`.
@@ -30,13 +32,13 @@ Jardin · Événements : CPT, blocs, archives et REST. Pour les sites **[jardin-
 
 | Repository | Role |
 |------------|------|
-| [jardin-theme](https://github.com/jaz-on/jardin-theme) | FSE theme |
-| [jardin-projects](https://github.com/jaz-on/jardin-projects) | Projects CPT + GitHub changelog |
-| **jardin-events** (this repo) | Events CPT + blocks |
+| [jardin-theme](https://github.com/jaz-on/jardin-theme) | FSE theme, templates, patterns |
+| [jardin-projects](https://github.com/jaz-on/jardin-projects) | `project` CPT, GitHub changelog sync, project blocks |
+| **jardin-events** (this repo) | `event` CPT, archive, Query Loop helpers, event blocks |
 | [jardin-updates](https://github.com/jaz-on/jardin-updates) | `now` CPT, hub / permaliens, migrations |
-| [jardin-scrobbles](https://github.com/jaz-on/jardin-scrobbles) | Last.fm → listens |
-| [jardin-toasts](https://github.com/jaz-on/jardin-toasts) | Untappd check-ins |
-| [jardin-bookmarks](https://github.com/jaz-on/jardin-bookmarks) | Feedbin → favorites / blogroll |
+| [jardin-scrobbles](https://github.com/jaz-on/jardin-scrobbles) | Last.fm → `listen` CPT, `/listens/`, player blocks |
+| [jardin-toasts](https://github.com/jaz-on/jardin-toasts) | Untappd RSS + import → `beer_checkin` CPT |
+| [jardin-bookmarks](https://github.com/jaz-on/jardin-bookmarks) | Feedbin → `favorite` / `blogroll` CPTs, blogroll block |
 
 ## Development
 

@@ -6,7 +6,7 @@ alwaysApply: true
 # Multi-repo delivery rule
 
 - La racine `jardin/` est un workspace d'agrégation, pas un dépôt Git unique.
-- Toujours détecter le ou les sous-dépôts impactés (`jardin-theme`, `jardin-events`, `jardin-projects`, `jardin-bookmarks`, `jardin-scrobbles`, `jardin-toasts`, `jardin-feed`, `jardin-scrobbler`, `jardin-beer`, etc.) avant les opérations Git.
+- Toujours détecter le ou les sous-dépôts impactés (`jardin-theme`, `jardin-events`, `jardin-projects`, `jardin-bookmarks`, `jardin-scrobbles`, `jardin-toasts`, `jardin-updates`, `jardin-feed`, `jardin-scrobbler`, `jardin-beer`, etc.) avant les opérations Git.
 - Ne jamais lancer `git commit` ou `git push` à la racine du workspace.
 - Commit/push repo par repo, avec message ciblé et vérification `status` propre après push.
 - `jardin-docs/` sert de documentation locale ; ne pas inclure ses fichiers dans un flux de livraison code sauf demande explicite.
