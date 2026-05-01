@@ -31,8 +31,9 @@ WordPress plugin: **`event`** CPT for sites using **[jardin-theme](https://githu
 | Repository | Role |
 |------------|------|
 | [jardin-theme](https://github.com/jaz-on/jardin-theme) | FSE theme |
+| [jardin-projects](https://github.com/jaz-on/jardin-projects) | Projects CPT + GitHub changelog |
 | **jardin-events** (this repo) | Events CPT + blocks |
-| [jardin-scrobbles](https://github.com/jaz-on/jardin-scrobbles) | Last.fm / listens |
+| [jardin-scrobbles](https://github.com/jaz-on/jardin-scrobbles) | Last.fm → listens |
 | [jardin-toasts](https://github.com/jaz-on/jardin-toasts) | Untappd check-ins |
 | [jardin-bookmarks](https://github.com/jaz-on/jardin-bookmarks) | Feedbin → favorites / blogroll |
 
@@ -71,4 +72,4 @@ composer run hooks:install
 
 ## License
 
-GPL-2.0-or-later
+GPL-2.0-or-later — see [LICENSE](LICENSE). Sponsorship: [.github/FUNDING.yml](.github/FUNDING.yml).
