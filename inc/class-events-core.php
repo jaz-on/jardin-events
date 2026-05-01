@@ -107,6 +107,7 @@ class Jardin_Events_Core {
 		self::migrate_legacy_meta_keys();
 		$core = new self( false );
 		$core->register_post_type();
+		$core->register_role_taxonomy();
 		$core->register_meta();
 		flush_rewrite_rules();
 	}
