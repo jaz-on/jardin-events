@@ -1,5 +1,8 @@
 /vendor/
 .DS_Store
 
+# macOS Finder duplicate folders (e.g. "css 2", "js 2")
+* 2/
+
 # Local Cursor rules (product docs live in ../jardin-docs — see jardin-docs README)
 .cursor/rules/local-*.mdc
