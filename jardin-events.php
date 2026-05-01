@@ -40,6 +40,7 @@ require_once JARDIN_EVENTS_PLUGIN_DIR . 'inc/class-events-core.php';
 require_once JARDIN_EVENTS_PLUGIN_DIR . 'inc/class-events-admin.php';
 require_once JARDIN_EVENTS_PLUGIN_DIR . 'inc/class-events-schema.php';
 require_once JARDIN_EVENTS_PLUGIN_DIR . 'inc/class-events-filters.php';
+require_once JARDIN_EVENTS_PLUGIN_DIR . 'inc/class-events-block-bindings.php';
 
 register_activation_hook( __FILE__, array( 'Jardin_Events_Core', 'activate' ) );
 
