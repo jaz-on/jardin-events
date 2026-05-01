@@ -1,6 +1,6 @@
 # jardin-events
 
-WordPress plugin: **`event`** CPT for sites using **[jardin-theme](https://github.com/jaz-on/jardin-theme)** — dates, location, links, recap post, slides/video URLs, **`event_role`** taxonomy, REST fields, Query Loop integration, and Gutenberg blocks for archives and singles.
+Jardin · Événements : CPT, blocs, archives et REST. Pour les sites **[jardin-theme](https://github.com/jaz-on/jardin-theme)** : dates, lieux, liens, article lié, médias, taxonomie **`event_role`**, filtres Query Loop et blocs singles/archives.
 
 ## Requirements
 
