@@ -10,4 +10,5 @@ alwaysApply: true
 - Ne jamais lancer `git commit` ou `git push` à la racine du workspace.
 - Commit/push repo par repo, avec message ciblé et vérification `status` propre après push.
 - `jardin-docs/` sert de documentation locale ; ne pas inclure ses fichiers dans un flux de livraison code sauf demande explicite.
+- **Numéros de version** : ne pas modifier `Version` (thème `style.css`, en-tête plugin `Version:`, `package.json`, etc.) **sans confirmation explicite** de l’utilisateur ; le bump peut impacter Git Updater, caches et déploiements.
 - **PHP / WordPress** : `php-runtime-requirements.mdc` (PHP **≥ 8.2**, validation locale **8.4**, `Tested up to: 7.0`, jamais PHP **7.x**).
