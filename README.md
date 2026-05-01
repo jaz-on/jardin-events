@@ -4,8 +4,8 @@ Jardin · Événements : CPT, blocs, archives et REST. Pour les sites **[jardin-
 
 ## Requirements
 
-- WordPress **6.4+** (uses `query_loop_block_query_vars`)
-- PHP **7.4+**
+- WordPress **6.4+** (uses `query_loop_block_query_vars`) ; extension déclarée **testée jusqu’à 7.0**
+- PHP **8.2+** (valider localement sous **8.4**)
 
 ## Install
 

@@ -1,0 +1,11 @@
+---
+description: PHP 8.2 minimum, validation 8.4, WordPress testé 7.0 — interdiction PHP 7.x
+alwaysApply: true
+---
+
+# Runtime PHP et WordPress (écosystème Jardin)
+
+- **PHP minimum 8.2** : toute nouvelle contrainte ou en-tête (`Requires PHP` dans les plugins/thème, `require.php` dans `composer.json`, README) doit cibler **≥ 8.2**. Ne jamais réintroduire une cible **PHP 7.x** (branche obsolète, hors support sécurité).
+- **Validation locale** : le code livré doit être **exécuté ou testé localement sous PHP 8.4** (en plus de 8.2 si pertinent). Il n’y a **pas** de CI sur ces dépôts pour l’instant — la preuve passe par la machine du développeur.
+- **WordPress** : métadonnée **`Tested up to: 7.0`** sur les extensions et le thème (référence : `dev.jasonrouet.com` en bêta 7.0). Ajuster **`Requires at least`** seulement quand une dépendance d’API l’exige réellement.
+- **Composer** : si `require.php` change, mettre à jour le **`composer.lock`** du dépôt concerné (`composer update` raisonnable) pour rester cohérent avec la plateforme.
