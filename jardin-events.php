@@ -1,19 +1,19 @@
 <?php
 /**
- * Plugin Name: Jardin Events
- * Plugin URI: https://github.com/jaz-on/jardin-events
- * Description: Registers an event custom post type with metadata and front-end styles for Jardin-style sites.
- * Version: 0.1.0
+ * Plugin Name:       Jardin Events
+ * Plugin URI:        https://github.com/jaz-on/jardin-events
+ * Description:       Registers an event custom post type with metadata and front-end styles for Jardin-style sites.
+ * Version:           0.1.0
  * Requires at least: 6.4
- * Tested up to: 6.9
- * Requires PHP: 7.4
- * Author: Jason Rouet
- * Author URI: https://jasonrouet.com
- * License: GPL v2 or later
- * License URI: https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain: jardin-events
+ * Tested up to:      6.9
+ * Requires PHP:      7.4
+ * Author:            Jason Rouet
+ * Author URI:        https://jasonrouet.com
+ * License:           GPL-2.0-or-later
+ * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
+ * Text Domain:       jardin-events
  * GitHub Plugin URI: https://github.com/jaz-on/jardin-events
- * Primary Branch: dev
+ * Primary Branch:    dev
  *
  * Keep plugin header Version: in sync with JARDIN_EVENTS_VERSION on each release.
  *
