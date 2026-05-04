@@ -26,7 +26,7 @@ Jardin · Événements : CPT, blocs, archives et REST. Pour les sites **[jardin-
 - **Block bindings (WP 6.5+):** sources for `core/paragraph` (and other blocks that support `content` bindings) on **single event** templates or inside Query Loop with `postId` context:
   - `jardin-events/event-date-formatted` — same string as `Jardin_Events_Core::format_event_date()`.
   - `jardin-events/event-location` — `jardin_events_get_event_location_label()`.
-  - `jardin-events/event-roles-plain` — role term names, plain text (` · `). Constants: `Jardin_Events_Block_Bindings::SOURCE_*` in [`inc/class-events-block-bindings.php`](inc/class-events-block-bindings.php). Sample pattern: **jardin-theme** `event-bindings-sample`.
+  - `jardin-events/event-roles-plain` — role term names, plain text (` · `). Constants: `Jardin_Events_Block_Bindings::SOURCE_*` in [`inc/class-events-block-bindings.php`](inc/class-events-block-bindings.php). Wire bindings in the Site Editor (single event template or Query Loop with `postId` context); see [`docs/theme-handoff/`](docs/theme-handoff/README.md) for theme notes.
 
 **Hooks / PHP API:** many filters (`jardin_events_slug`, `jardin_events_roles`, `jardin_events_query_loop_query_vars`, …) and helpers `jardin_events_get_upcoming()`, `jardin_events_get_past()`, `jardin_events_get_filters()`, etc. — see plugin source.
 
