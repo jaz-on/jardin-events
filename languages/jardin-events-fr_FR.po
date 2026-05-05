@@ -1,353 +1,354 @@
-# Copyright (C) 2026 Jason Rouet
-# This file is distributed under the GPL-2.0-or-later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Jardin Events 0.1.0\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/jardin-events\n"
+"Project-Id-Version: Jardin Events\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-05T14:40:00+00:00\n"
+"PO-Revision-Date: 2026-05-05 14:40+0000\n"
 "Last-Translator: Jason Rouet\n"
 "Language-Team: French\n"
+"Language: fr_FR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-05-05T14:40:43+00:00\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.8.1\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: hand-translated\n"
 "X-Domain: jardin-events\n"
 
 #. Plugin Name of the plugin
 msgid "Jardin Events"
-msgstr ""
+msgstr "Jardin Events"
 
 #. Plugin URI of the plugin
 msgid "https://github.com/jaz-on/jardin-events"
-msgstr ""
+msgstr "https://github.com/jaz-on/jardin-events"
 
 #. Description of the plugin
 msgid "Jardin · Événements : CPT, blocs, archives et REST."
-msgstr ""
+msgstr "Jardin · Événements : CPT, blocs, archives et REST."
 
 #. Author of the plugin
 msgid "Jason Rouet"
-msgstr ""
+msgstr "Jason Rouet"
 
 #. Author URI of the plugin
 msgid "https://jasonrouet.com"
-msgstr ""
+msgstr "https://jasonrouet.com"
 
 #: blocks/event-archive-meta/render.php:25
 #: inc/class-events-core.php:370
 msgid "Event"
-msgstr ""
+msgstr "Événement"
 
 #: blocks/event-external-link/render.php:29
 #: assets/js/editor-event-info-panel.js:262
 msgid "Event page"
-msgstr ""
+msgstr "Page de l’événement"
 
 #: blocks/event-external-link/render.php:37
 #: assets/js/editor-event-info-panel.js:268
 msgid "Tickets"
-msgstr ""
+msgstr "Billetterie"
 
 #: blocks/event-filter/render.php:37
 msgid "All"
-msgstr ""
+msgstr "Tous"
 
 #: blocks/event-filter/render.php:68
 msgid "Filter events by role"
-msgstr ""
+msgstr "Filtrer les événements par rôle"
 
 #: blocks/event-single-meta/render.php:56
 msgid "My roles for this event"
-msgstr ""
+msgstr "Mes rôles pour cet événement"
 
 #: blocks/event-single-meta/render.php:57
 msgid "role:"
-msgstr ""
+msgstr "rôle :"
 
 #: docs/theme-handoff/events-upcoming.php:22
 #: docs/theme-handoff/events-upcoming.php:28
 msgid "Upcoming events"
-msgstr ""
+msgstr "Événements à venir"
 
 #: docs/theme-handoff/events-upcoming.php:23
 msgid "Upcoming events list (dates and location via jardin-events meta)."
-msgstr ""
+msgstr "Liste des événements à venir (dates et lieu via les meta jardin-events)."
 
 #: inc/class-events-block-bindings.php:45
 msgid "Event — date (formatted)"
-msgstr ""
+msgstr "Événement — date (formatée)"
 
 #: inc/class-events-block-bindings.php:54
 msgid "Event — location (city · country)"
-msgstr ""
+msgstr "Événement — lieu (ville · pays)"
 
 #: inc/class-events-block-bindings.php:63
 msgid "Event — roles (plain text)"
-msgstr ""
+msgstr "Événement — rôles (texte brut)"
 
 #: inc/class-events-core.php:335
 #: inc/class-events-core.php:343
 msgid "Roles"
-msgstr ""
+msgstr "Rôles"
 
 #: inc/class-events-core.php:336
 msgid "Role"
-msgstr ""
+msgstr "Rôle"
 
 #: inc/class-events-core.php:337
 msgid "Search roles"
-msgstr ""
+msgstr "Rechercher des rôles"
 
 #: inc/class-events-core.php:338
 msgid "All roles"
-msgstr ""
+msgstr "Tous les rôles"
 
 #: inc/class-events-core.php:339
 msgid "Edit role"
-msgstr ""
+msgstr "Modifier le rôle"
 
 #: inc/class-events-core.php:340
 msgid "Update role"
-msgstr ""
+msgstr "Mettre à jour le rôle"
 
 #: inc/class-events-core.php:341
 msgid "Add role"
-msgstr ""
+msgstr "Ajouter un rôle"
 
 #: inc/class-events-core.php:342
 msgid "New role"
-msgstr ""
+msgstr "Nouveau rôle"
 
 #: inc/class-events-core.php:369
 #: inc/class-events-core.php:381
 #: inc/class-events-core.php:385
 #: jardin-events.php:101
 msgid "Events"
-msgstr ""
+msgstr "Événements"
 
 #: inc/class-events-core.php:371
 msgid "Add event"
-msgstr ""
+msgstr "Ajouter un événement"
 
 #: inc/class-events-core.php:372
 msgid "Add new event"
-msgstr ""
+msgstr "Ajouter un nouvel événement"
 
 #: inc/class-events-core.php:373
 msgid "Edit event"
-msgstr ""
+msgstr "Modifier l’événement"
 
 #: inc/class-events-core.php:374
 msgid "New event"
-msgstr ""
+msgstr "Nouvel événement"
 
 #: inc/class-events-core.php:375
 msgid "View event"
-msgstr ""
+msgstr "Voir l’événement"
 
 #: inc/class-events-core.php:376
 msgid "Search events"
-msgstr ""
+msgstr "Rechercher des événements"
 
 #: inc/class-events-core.php:377
 msgid "No events found"
-msgstr ""
+msgstr "Aucun événement trouvé"
 
 #: inc/class-events-core.php:378
 msgid "No events found in Trash"
-msgstr ""
+msgstr "Aucun événement dans la corbeille"
 
 #: inc/class-events-core.php:379
 msgid "All events"
-msgstr ""
+msgstr "Tous les événements"
 
 #: inc/class-events-core.php:380
 msgid "Event archives"
-msgstr ""
+msgstr "Archives des événements"
 
 #: inc/class-events-core.php:560
 msgid "Assigned role slugs for this event."
-msgstr ""
+msgstr "Slugs de rôles attribués à cet événement."
 
 #: inc/class-events-core.php:582
 msgid "Event start date (Y-m-d)."
-msgstr ""
+msgstr "Date de début de l’événement (Y-m-d)."
 
 #: inc/class-events-core.php:603
 msgid "Event end date (Y-m-d)."
-msgstr ""
+msgstr "Date de fin de l’événement (Y-m-d)."
 
 #: inc/class-events-core.php:623
 msgid "Event location text."
-msgstr ""
+msgstr "Texte du lieu de l’événement."
 
 #: inc/class-events-helpers.php:285
 msgid "Past"
-msgstr ""
+msgstr "Passé"
 
 #: inc/class-events-helpers.php:290
 msgid "Upcoming"
-msgstr ""
+msgstr "À venir"
 
 #: inc/class-events-helpers.php:292
 msgid "Ongoing"
-msgstr ""
+msgstr "En cours"
 
 #. translators: %d: full days until start
 #: inc/class-events-helpers.php:309
 msgid "in %d days"
-msgstr ""
+msgstr "dans %d jours"
 
 #: inc/class-events-helpers.php:314
 msgid "tomorrow"
-msgstr ""
+msgstr "demain"
 
 #: inc/class-events-helpers.php:317
 msgid "today"
-msgstr ""
+msgstr "aujourd’hui"
 
 #. translators: %d: full days since start
 #: inc/class-events-helpers.php:321
 msgid "%d days ago"
-msgstr ""
+msgstr "il y a %d jours"
 
 #: inc/event-meta-helpers.php:55
 msgid "The start date is not a valid date."
-msgstr ""
+msgstr "La date de début n’est pas une date valide."
 
 #: inc/event-meta-helpers.php:61
 msgid "The end date is not a valid date."
-msgstr ""
+msgstr "La date de fin n’est pas une date valide."
 
 #: inc/event-meta-helpers.php:68
 msgid "The start date is required."
-msgstr ""
+msgstr "La date de début est obligatoire."
 
 #: inc/event-meta-helpers.php:75
 msgid "The end date must be the same as or after the start date."
-msgstr ""
+msgstr "La date de fin doit être identique ou postérieure à la date de début."
 
 #: jardin-events.php:123
 msgid "GitHub"
-msgstr ""
+msgstr "GitHub"
 
 #: jardin-events.php:128
 msgid "Donate"
-msgstr ""
+msgstr "Soutenir"
 
 #: assets/js/editor-event-info-panel.js:230
 msgid "Event details"
-msgstr ""
+msgstr "Détails de l’événement"
 
 #: assets/js/editor-event-info-panel.js:234
 msgid "Start date"
-msgstr ""
+msgstr "Date de début"
 
 #: assets/js/editor-event-info-panel.js:240
 msgid "End date"
-msgstr ""
+msgstr "Date de fin"
 
 #: assets/js/editor-event-info-panel.js:246
 msgid "City"
-msgstr ""
+msgstr "Ville"
 
 #: assets/js/editor-event-info-panel.js:251
 msgid "Country"
-msgstr ""
+msgstr "Pays"
 
 #: assets/js/editor-event-info-panel.js:256
 msgid "Map link"
-msgstr ""
+msgstr "Lien vers la carte"
 
 #: assets/js/editor-event-info-panel.js:274
 msgid "Related content (recap)"
-msgstr ""
+msgstr "Contenu lié (compte-rendu)"
 
 #: assets/js/editor-event-info-panel.js:307
 msgid "URL slides"
-msgstr ""
+msgstr "URL des slides"
 
 #: assets/js/editor-event-info-panel.js:313
 msgid "Video URL"
-msgstr ""
+msgstr "URL de la vidéo"
 
 #: blocks/event-archive-meta/block.json
 msgctxt "block title"
 msgid "Event archive meta"
-msgstr ""
+msgstr "Méta archive événement"
 
 #: blocks/event-archive-meta/block.json
 msgctxt "block description"
 msgid "Roles and location row for event archive list items (.entry-meta)."
-msgstr ""
+msgstr "Ligne rôles + lieu pour les items de l’archive événement (.entry-meta)."
 
 #: blocks/event-external-link/block.json
 msgctxt "block title"
 msgid "Event external link"
-msgstr ""
+msgstr "Lien externe de l’événement"
 
 #: blocks/event-external-link/block.json
 msgctxt "block description"
 msgid "Outputs event_link as .entry-links when set."
-msgstr ""
+msgstr "Affiche event_link en tant que .entry-links lorsque défini."
 
 #: blocks/event-filter/block.json
 msgctxt "block title"
 msgid "Event role filters"
-msgstr ""
+msgstr "Filtres rôles événements"
 
 #: blocks/event-filter/block.json
 msgctxt "block description"
 msgid "Chip links to filter the events archive by role (?event_role=)."
-msgstr ""
+msgstr "Liens chips pour filtrer l’archive des événements par rôle (?event_role=)."
 
 #: blocks/event-inline-date/block.json
 msgctxt "block title"
 msgid "Event date (inline)"
-msgstr ""
+msgstr "Date événement (en ligne)"
 
 #: blocks/event-inline-date/block.json
 msgctxt "block description"
 msgid "Formatted event_date meta with .entry-when (Query Loop / archive)."
-msgstr ""
+msgstr "Méta event_date formatée avec .entry-when (Query Loop / archive)."
 
 #: blocks/event-inline-location/block.json
 msgctxt "block title"
 msgid "Event location (inline)"
-msgstr ""
+msgstr "Lieu événement (en ligne)"
 
 #: blocks/event-inline-location/block.json
 msgctxt "block description"
 msgid "Location line (.entry-loc) for upcoming list."
-msgstr ""
+msgstr "Ligne de lieu (.entry-loc) pour la liste des événements à venir."
 
 #: blocks/event-inline-meta/block.json
 msgctxt "block title"
 msgid "Event meta (inline)"
-msgstr ""
+msgstr "Méta événement (en ligne)"
 
 #: blocks/event-inline-meta/block.json
 msgctxt "block description"
 msgid "Inline event metadata line for home IRL rows: date(s) - city, country."
-msgstr ""
+msgstr "Ligne de métadonnées événement en ligne pour les rangées IRL d’accueil : date(s) — ville, pays."
 
 #: blocks/event-single-meta/block.json
 msgctxt "block title"
 msgid "Event single meta"
-msgstr ""
+msgstr "Méta single événement"
 
 #: blocks/event-single-meta/block.json
 msgctxt "block description"
 msgid "Date (dt-start), inline roles, and location on the event single."
-msgstr ""
+msgstr "Date (dt-start), rôles en ligne et lieu sur le single événement."
 
 #: blocks/event-status-bar/block.json
 msgctxt "block title"
 msgid "Event status bar"
-msgstr ""
+msgstr "Barre de statut événement"
 
 #: blocks/event-status-bar/block.json
 msgctxt "block description"
 msgid "Badge (upcoming / ongoing / past) and countdown for the current event."
-msgstr ""
+msgstr "Badge (à venir / en cours / passé) et compte à rebours pour l’événement courant."
+
