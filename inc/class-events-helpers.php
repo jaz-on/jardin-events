@@ -218,7 +218,7 @@ function jardin_events_is_upcoming( $post_id ) {
 	if ( $post_id <= 0 ) {
 		return false;
 	}
-	$start = (string) get_post_meta( $post_id, 'event_date', true );
+	$start = (string) get_post_meta( $post_id, '_jardin_events_date', true );
 	if ( '' === $start ) {
 		return false;
 	}
@@ -244,7 +244,7 @@ function jardin_events_days_until( $post_id ) {
 	if ( $post_id <= 0 ) {
 		return null;
 	}
-	$start = (string) get_post_meta( $post_id, 'event_date', true );
+	$start = (string) get_post_meta( $post_id, '_jardin_events_date', true );
 	if ( '' === $start || ! preg_match( '/^\d{4}-\d{2}-\d{2}$/', $start ) ) {
 		return null;
 	}
@@ -284,7 +284,7 @@ function jardin_events_status_label( $post_id ) {
 	if ( ! jardin_events_is_upcoming( $post_id ) ) {
 		return __( 'Past', 'jardin-events' );
 	}
-	$start = (string) get_post_meta( $post_id, 'event_date', true );
+	$start = (string) get_post_meta( $post_id, '_jardin_events_date', true );
 	$today = Jardin_Events_Core::get_today_ymd();
 	if ( '' !== $start && strcmp( $start, $today ) > 0 ) {
 		return __( 'Upcoming', 'jardin-events' );
@@ -334,7 +334,7 @@ function jardin_events_get_event_date_end( $post_id ) {
 	if ( $post_id <= 0 ) {
 		return '';
 	}
-	$v = get_post_meta( $post_id, 'event_date_end', true );
+	$v = get_post_meta( $post_id, '_jardin_events_date_end', true );
 	return is_string( $v ) ? $v : '';
 }
 
@@ -349,8 +349,8 @@ function jardin_events_get_event_location_label( $post_id ) {
 	if ( $post_id <= 0 ) {
 		return '';
 	}
-	$city    = get_post_meta( $post_id, 'event_city', true );
-	$country = get_post_meta( $post_id, 'event_country', true );
+	$city    = get_post_meta( $post_id, '_jardin_events_city', true );
+	$country = get_post_meta( $post_id, '_jardin_events_country', true );
 	$city    = is_string( $city ) ? trim( $city ) : '';
 	$country = is_string( $country ) ? trim( $country ) : '';
 	if ( '' !== $city && '' !== $country ) {
@@ -373,7 +373,7 @@ function jardin_events_get_event_related_content_ids( $post_id ) {
 	if ( $post_id <= 0 ) {
 		return array();
 	}
-	$raw = get_post_meta( $post_id, 'event_article', true );
+	$raw = get_post_meta( $post_id, '_jardin_events_article', true );
 	if ( is_array( $raw ) ) {
 		$ids = array_map( 'absint', $raw );
 		$ids = array_values( array_filter( $ids ) );
@@ -441,13 +441,13 @@ function jardin_events_find_event_for_recap_post( $post_id ) {
 			'meta_query'             => array(
 				'relation' => 'OR',
 				array(
-					'key'     => 'event_article',
+					'key'     => '_jardin_events_article',
 					'value'   => $post_id,
 					'compare' => '=',
 					'type'    => 'NUMERIC',
 				),
 				array(
-					'key'     => 'event_article',
+					'key'     => '_jardin_events_article',
 					'value'   => 'i:' . $post_id . ';',
 					'compare' => 'LIKE',
 				),

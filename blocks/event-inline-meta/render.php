@@ -26,7 +26,7 @@ if ( ! $event_post_id || jardin_events_get_post_type() !== get_post_type( $event
 	return '';
 }
 
-$start          = (string) get_post_meta( $event_post_id, 'event_date', true );
+$start          = (string) get_post_meta( $event_post_id, '_jardin_events_date', true );
 $end            = (string) jardin_events_get_event_date_end( $event_post_id );
 $formatted_when = '';
 
@@ -42,8 +42,8 @@ if ( '' !== $start ) {
 	$formatted_when = get_the_date( 'd/m/Y', $event_post_id );
 }
 
-$city     = trim( (string) get_post_meta( $event_post_id, 'event_city', true ) );
-$country  = trim( (string) get_post_meta( $event_post_id, 'event_country', true ) );
+$city     = trim( (string) get_post_meta( $event_post_id, '_jardin_events_city', true ) );
+$country  = trim( (string) get_post_meta( $event_post_id, '_jardin_events_country', true ) );
 $location = '';
 if ( '' !== $city && '' !== $country ) {
 	$location = $city . ', ' . $country;

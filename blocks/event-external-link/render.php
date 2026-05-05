@@ -12,9 +12,9 @@ if ( ! $event_post_id || jardin_events_get_post_type() !== get_post_type( $event
 	return '';
 }
 
-$event_url = get_post_meta( $event_post_id, 'event_link', true );
+$event_url = get_post_meta( $event_post_id, '_jardin_events_link', true );
 $event_url = is_string( $event_url ) ? trim( $event_url ) : '';
-$ticket    = get_post_meta( $event_post_id, 'event_ticket_url', true );
+$ticket    = get_post_meta( $event_post_id, '_jardin_events_ticket_url', true );
 $ticket    = is_string( $ticket ) ? trim( $ticket ) : '';
 
 if ( '' === $event_url && '' === $ticket ) {

@@ -50,7 +50,7 @@ function jardin_events_pre_get_posts_event_archive_order( $query ) {
 		return;
 	}
 
-	$query->set( 'meta_key', 'event_date' );
+	$query->set( 'meta_key', '_jardin_events_date' );
 	$query->set( 'orderby', 'meta_value' );
 	$query->set( 'meta_type', 'DATE' );
 	$query->set( 'order', 'ASC' );

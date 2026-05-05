@@ -107,31 +107,59 @@ class Jardin_Events_Core {
 	 * Rename legacy meta keys in the database (one-time per site).
 	 */
 	public static function migrate_legacy_meta_keys() {
-		if ( '2' === get_option( 'jardin_events_db_version', '' ) ) {
+		$db_version = (string) get_option( 'jardin_events_db_version', '' );
+
+		if ( '3' === $db_version ) {
 			return;
 		}
 
 		global $wpdb;
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- One-off migration.
-		$wpdb->query(
-			$wpdb->prepare(
-				"UPDATE {$wpdb->postmeta} SET meta_key = %s WHERE meta_key = %s",
-				'event_date_end',
-				'event_end_date'
-			)
+		if ( '2' !== $db_version ) {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- One-off migration.
+			$wpdb->query(
+				$wpdb->prepare(
+					"UPDATE {$wpdb->postmeta} SET meta_key = %s WHERE meta_key = %s",
+					'event_date_end',
+					'event_end_date'
+				)
+			);
+
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- One-off migration.
+			$wpdb->query(
+				$wpdb->prepare(
+					"UPDATE {$wpdb->postmeta} SET meta_key = %s WHERE meta_key = %s",
+					'event_article',
+					'event_linked_post'
+				)
+			);
+		}
+
+		$renames = array(
+			'event_date'        => '_jardin_events_date',
+			'event_date_end'    => '_jardin_events_date_end',
+			'event_city'        => '_jardin_events_city',
+			'event_country'     => '_jardin_events_country',
+			'event_map_url'     => '_jardin_events_map_url',
+			'event_link'        => '_jardin_events_link',
+			'event_ticket_url'  => '_jardin_events_ticket_url',
+			'event_article'     => '_jardin_events_article',
+			'event_slides_url'  => '_jardin_events_slides_url',
+			'event_video_url'   => '_jardin_events_video_url',
 		);
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- One-off migration.
-		$wpdb->query(
-			$wpdb->prepare(
-				"UPDATE {$wpdb->postmeta} SET meta_key = %s WHERE meta_key = %s",
-				'event_article',
-				'event_linked_post'
-			)
-		);
+		foreach ( $renames as $old_key => $new_key ) {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- One-off migration.
+			$wpdb->query(
+				$wpdb->prepare(
+					"UPDATE {$wpdb->postmeta} SET meta_key = %s WHERE meta_key = %s",
+					$new_key,
+					$old_key
+				)
+			);
+		}
 
-		update_option( 'jardin_events_db_version', '2' );
+		update_option( 'jardin_events_db_version', '3' );
 	}
 
 	/**
@@ -154,7 +182,7 @@ class Jardin_Events_Core {
 		return array(
 			'relation' => 'OR',
 			array(
-				'key'     => 'event_date',
+				'key'     => '_jardin_events_date',
 				'value'   => $today,
 				'compare' => '>=',
 				'type'    => 'DATE',
@@ -162,11 +190,11 @@ class Jardin_Events_Core {
 			array(
 				'relation' => 'AND',
 				array(
-					'key'     => 'event_date_end',
+					'key'     => '_jardin_events_date_end',
 					'compare' => 'EXISTS',
 				),
 				array(
-					'key'     => 'event_date_end',
+					'key'     => '_jardin_events_date_end',
 					'value'   => $today,
 					'compare' => '>=',
 					'type'    => 'DATE',
@@ -186,7 +214,7 @@ class Jardin_Events_Core {
 		return array(
 			'relation' => 'AND',
 			array(
-				'key'     => 'event_date',
+				'key'     => '_jardin_events_date',
 				'value'   => $today,
 				'compare' => '<',
 				'type'    => 'DATE',
@@ -194,16 +222,16 @@ class Jardin_Events_Core {
 			array(
 				'relation' => 'OR',
 				array(
-					'key'     => 'event_date_end',
+					'key'     => '_jardin_events_date_end',
 					'compare' => 'NOT EXISTS',
 				),
 				array(
-					'key'     => 'event_date_end',
+					'key'     => '_jardin_events_date_end',
 					'value'   => '',
 					'compare' => '=',
 				),
 				array(
-					'key'     => 'event_date_end',
+					'key'     => '_jardin_events_date_end',
 					'value'   => $today,
 					'compare' => '<',
 					'type'    => 'DATE',
@@ -270,7 +298,7 @@ class Jardin_Events_Core {
 			return $query;
 		}
 
-		$query['meta_key']  = 'event_date';
+		$query['meta_key']  = '_jardin_events_date';
 		$query['orderby']   = 'meta_value';
 		$query['meta_type'] = 'DATE';
 
@@ -390,7 +418,7 @@ class Jardin_Events_Core {
 
 		register_post_meta(
 			$post_type,
-			'event_date',
+			'_jardin_events_date',
 			array(
 				'show_in_rest'      => true,
 				'single'            => true,
@@ -402,7 +430,7 @@ class Jardin_Events_Core {
 
 		register_post_meta(
 			$post_type,
-			'event_date_end',
+			'_jardin_events_date_end',
 			array(
 				'show_in_rest'      => true,
 				'single'            => true,
@@ -414,7 +442,7 @@ class Jardin_Events_Core {
 
 		register_post_meta(
 			$post_type,
-			'event_city',
+			'_jardin_events_city',
 			array(
 				'show_in_rest'      => true,
 				'single'            => true,
@@ -426,7 +454,7 @@ class Jardin_Events_Core {
 
 		register_post_meta(
 			$post_type,
-			'event_country',
+			'_jardin_events_country',
 			array(
 				'show_in_rest'      => true,
 				'single'            => true,
@@ -438,7 +466,7 @@ class Jardin_Events_Core {
 
 		register_post_meta(
 			$post_type,
-			'event_map_url',
+			'_jardin_events_map_url',
 			array(
 				'show_in_rest'      => true,
 				'single'            => true,
@@ -450,7 +478,7 @@ class Jardin_Events_Core {
 
 		register_post_meta(
 			$post_type,
-			'event_link',
+			'_jardin_events_link',
 			array(
 				'show_in_rest'      => true,
 				'single'            => true,
@@ -462,7 +490,7 @@ class Jardin_Events_Core {
 
 		register_post_meta(
 			$post_type,
-			'event_ticket_url',
+			'_jardin_events_ticket_url',
 			array(
 				'show_in_rest'      => true,
 				'single'            => true,
@@ -474,7 +502,7 @@ class Jardin_Events_Core {
 
 		register_post_meta(
 			$post_type,
-			'event_article',
+			'_jardin_events_article',
 			array(
 				'show_in_rest'      => array(
 					'schema' => array(
@@ -493,7 +521,7 @@ class Jardin_Events_Core {
 
 		register_post_meta(
 			$post_type,
-			'event_slides_url',
+			'_jardin_events_slides_url',
 			array(
 				'show_in_rest'      => true,
 				'single'            => true,
@@ -505,7 +533,7 @@ class Jardin_Events_Core {
 
 		register_post_meta(
 			$post_type,
-			'event_video_url',
+			'_jardin_events_video_url',
 			array(
 				'show_in_rest'      => true,
 				'single'            => true,
@@ -547,7 +575,7 @@ class Jardin_Events_Core {
 					if ( $id <= 0 ) {
 						return '';
 					}
-					$start = get_post_meta( $id, 'event_date', true );
+					$start = get_post_meta( $id, '_jardin_events_date', true );
 					return is_string( $start ) ? $start : '';
 				},
 				'schema'       => array(
@@ -568,7 +596,7 @@ class Jardin_Events_Core {
 					if ( $id <= 0 ) {
 						return '';
 					}
-					$end = function_exists( 'jardin_events_get_event_date_end' ) ? jardin_events_get_event_date_end( $id ) : get_post_meta( $id, 'event_date_end', true );
+					$end = function_exists( 'jardin_events_get_event_date_end' ) ? jardin_events_get_event_date_end( $id ) : get_post_meta( $id, '_jardin_events_date_end', true );
 					return is_string( $end ) ? $end : '';
 				},
 				'schema'       => array(
@@ -630,7 +658,7 @@ class Jardin_Events_Core {
 				'posts_per_page' => $limit,
 				'meta_query'     => self::build_upcoming_meta_query(),
 				'orderby'        => 'meta_value',
-				'meta_key'       => 'event_date',
+				'meta_key'       => '_jardin_events_date',
 				'meta_type'      => 'DATE',
 				'order'          => 'ASC',
 			),
@@ -654,7 +682,7 @@ class Jardin_Events_Core {
 				'posts_per_page' => $limit,
 				'meta_query'     => self::build_past_meta_query(),
 				'orderby'        => 'meta_value',
-				'meta_key'       => 'event_date',
+				'meta_key'       => '_jardin_events_date',
 				'meta_type'      => 'DATE',
 				'order'          => 'DESC',
 			),
@@ -671,7 +699,7 @@ class Jardin_Events_Core {
 	 * @return string
 	 */
 	public static function format_event_date( $post_id ) {
-		$start = get_post_meta( $post_id, 'event_date', true );
+		$start = get_post_meta( $post_id, '_jardin_events_date', true );
 		$end   = jardin_events_get_event_date_end( $post_id );
 
 		if ( ! $start ) {

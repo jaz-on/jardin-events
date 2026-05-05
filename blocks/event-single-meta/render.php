@@ -12,7 +12,7 @@ if ( ! $event_post_id || jardin_events_get_post_type() !== get_post_type( $event
 	return '';
 }
 
-$start = (string) get_post_meta( $event_post_id, 'event_date', true );
+$start = (string) get_post_meta( $event_post_id, '_jardin_events_date', true );
 $loc   = function_exists( 'jardin_events_get_event_location_label' ) ? jardin_events_get_event_location_label( $event_post_id ) : '';
 $loc   = is_string( $loc ) ? trim( $loc ) : '';
 

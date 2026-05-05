@@ -41,14 +41,14 @@
 			editPost({ meta: next });
 		}
 
-		var eventDate = meta.event_date || '';
-		var eventEndDate = meta.event_date_end || '';
-		var eventCity = meta.event_city || '';
-		var eventCountry = meta.event_country || '';
-		var eventMapUrl = meta.event_map_url || '';
-		var eventLink = meta.event_link || '';
-		var eventTicketUrl = meta.event_ticket_url || '';
-		var rawEventArticle = meta.event_article;
+		var eventDate = meta['_jardin_events_date'] || '';
+		var eventEndDate = meta['_jardin_events_date_end'] || '';
+		var eventCity = meta['_jardin_events_city'] || '';
+		var eventCountry = meta['_jardin_events_country'] || '';
+		var eventMapUrl = meta['_jardin_events_map_url'] || '';
+		var eventLink = meta['_jardin_events_link'] || '';
+		var eventTicketUrl = meta['_jardin_events_ticket_url'] || '';
+		var rawEventArticle = meta['_jardin_events_article'];
 		var eventArticleIds = [];
 		if (Array.isArray(rawEventArticle)) {
 			eventArticleIds = rawEventArticle
@@ -60,8 +60,8 @@
 				eventArticleIds = [singleRelatedId];
 			}
 		}
-		var eventSlidesUrl = meta.event_slides_url || '';
-		var eventVideoUrl = meta.event_video_url || '';
+		var eventSlidesUrl = meta['_jardin_events_slides_url'] || '';
+		var eventVideoUrl = meta['_jardin_events_video_url'] || '';
 
 		var postSearchValueState = useState('');
 		var postSearchValue = postSearchValueState[0];
@@ -234,41 +234,41 @@
 				label: __('Start date', 'jardin-events'),
 				type: 'date',
 				value: eventDate,
-				onChange: function (v) { setMeta('event_date', v || ''); }
+				onChange: function (v) { setMeta('_jardin_events_date', v || ''); }
 			}),
 			el(TextControl, {
 				label: __('End date', 'jardin-events'),
 				type: 'date',
 				value: eventEndDate,
-				onChange: function (v) { setMeta('event_date_end', v || ''); }
+				onChange: function (v) { setMeta('_jardin_events_date_end', v || ''); }
 			}),
 			el(TextControl, {
 				label: __('City', 'jardin-events'),
 				value: eventCity,
-				onChange: function (v) { setMeta('event_city', v || ''); }
+				onChange: function (v) { setMeta('_jardin_events_city', v || ''); }
 			}),
 			el(TextControl, {
 				label: __('Country', 'jardin-events'),
 				value: eventCountry,
-				onChange: function (v) { setMeta('event_country', v || ''); }
+				onChange: function (v) { setMeta('_jardin_events_country', v || ''); }
 			}),
 			el(TextControl, {
 				label: __('Map link', 'jardin-events'),
 				type: 'url',
 				value: eventMapUrl,
-				onChange: function (v) { setMeta('event_map_url', v || ''); }
+				onChange: function (v) { setMeta('_jardin_events_map_url', v || ''); }
 			}),
 			el(TextControl, {
 				label: __('Event page', 'jardin-events'),
 				type: 'url',
 				value: eventLink,
-				onChange: function (v) { setMeta('event_link', v || ''); }
+				onChange: function (v) { setMeta('_jardin_events_link', v || ''); }
 			}),
 			el(TextControl, {
 				label: __('Tickets', 'jardin-events'),
 				type: 'url',
 				value: eventTicketUrl,
-				onChange: function (v) { setMeta('event_ticket_url', v || ''); }
+				onChange: function (v) { setMeta('_jardin_events_ticket_url', v || ''); }
 			}),
 			el(FormTokenField, {
 				label: __('Related content (recap)', 'jardin-events'),
@@ -300,20 +300,20 @@
 							uniqueIds.push(id);
 						}
 					});
-					setMeta('event_article', uniqueIds);
+					setMeta('_jardin_events_article', uniqueIds);
 				}
 			}),
 			el(TextControl, {
 				label: __('URL slides', 'jardin-events'),
 				type: 'url',
 				value: eventSlidesUrl,
-				onChange: function (v) { setMeta('event_slides_url', v || ''); }
+				onChange: function (v) { setMeta('_jardin_events_slides_url', v || ''); }
 			}),
 			el(TextControl, {
 				label: __('Video URL', 'jardin-events'),
 				type: 'url',
 				value: eventVideoUrl,
-				onChange: function (v) { setMeta('event_video_url', v || ''); }
+				onChange: function (v) { setMeta('_jardin_events_video_url', v || ''); }
 			})
 		);
 	}

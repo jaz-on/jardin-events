@@ -87,27 +87,19 @@ function jardin_events_validate_event_dates( $start, $end, $args = array() ) {
  * @return array{0: string|null, 1: string|null} Parsed start and end; null means invalid format for a provided raw value.
  */
 function jardin_events_merge_event_dates_from_request( $request, $post_id ) {
-	$stored_start = $post_id ? (string) get_post_meta( $post_id, 'event_date', true ) : '';
-	$stored_end   = '';
-	if ( $post_id ) {
-		$stored_end = (string) get_post_meta( $post_id, 'event_date_end', true );
-		if ( '' === $stored_end ) {
-			$stored_end = (string) get_post_meta( $post_id, 'event_end_date', true );
-		}
-	}
+	$stored_start = $post_id ? (string) get_post_meta( $post_id, '_jardin_events_date', true ) : '';
+	$stored_end   = $post_id ? (string) get_post_meta( $post_id, '_jardin_events_date_end', true ) : '';
 
 	$start = jardin_events_parse_ymd_meta( $stored_start );
 	$end   = jardin_events_parse_ymd_meta( $stored_end );
 
 	$meta = $request->get_param( 'meta' );
 	if ( is_array( $meta ) ) {
-		if ( array_key_exists( 'event_date', $meta ) ) {
-			$start = jardin_events_parse_ymd_meta( $meta['event_date'] );
+		if ( array_key_exists( '_jardin_events_date', $meta ) ) {
+			$start = jardin_events_parse_ymd_meta( $meta['_jardin_events_date'] );
 		}
-		if ( array_key_exists( 'event_date_end', $meta ) ) {
-			$end = jardin_events_parse_ymd_meta( $meta['event_date_end'] );
-		} elseif ( array_key_exists( 'event_end_date', $meta ) ) {
-			$end = jardin_events_parse_ymd_meta( $meta['event_end_date'] );
+		if ( array_key_exists( '_jardin_events_date_end', $meta ) ) {
+			$end = jardin_events_parse_ymd_meta( $meta['_jardin_events_date_end'] );
 		}
 	}
 
@@ -238,16 +230,16 @@ function jardin_events_sanitize_meta_linked_post( $meta_value ) {
  */
 function jardin_events_get_meta_key_list() {
 	$keys = array(
-		'event_date',
-		'event_date_end',
-		'event_city',
-		'event_country',
-		'event_map_url',
-		'event_link',
-		'event_ticket_url',
-		'event_article',
-		'event_slides_url',
-		'event_video_url',
+		'_jardin_events_date',
+		'_jardin_events_date_end',
+		'_jardin_events_city',
+		'_jardin_events_country',
+		'_jardin_events_map_url',
+		'_jardin_events_link',
+		'_jardin_events_ticket_url',
+		'_jardin_events_article',
+		'_jardin_events_slides_url',
+		'_jardin_events_video_url',
 	);
 	return apply_filters( 'jardin_events_meta_keys', $keys );
 }

@@ -32,7 +32,7 @@ if ( ! $event_post_id || jardin_events_get_post_type() !== get_post_type( $event
 	return '';
 }
 
-$start     = (string) get_post_meta( $event_post_id, 'event_date', true );
+$start     = (string) get_post_meta( $event_post_id, '_jardin_events_date', true );
 $class     = 'entry-when';
 $formatted = '';
 
