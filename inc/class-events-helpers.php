@@ -395,31 +395,6 @@ function jardin_events_get_event_article_id( $post_id ) {
 }
 
 /**
- * Linked recap article post ID from event meta (alias).
- *
- * @param int $post_id Event post ID.
- * @return int
- */
-function jardin_events_get_linked_post_id( $post_id ) {
-	return jardin_events_get_event_article_id( $post_id );
-}
-
-/**
- * Linked recap article post object if valid.
- *
- * @param int $post_id Event post ID.
- * @return \WP_Post|null
- */
-function jardin_events_get_linked_post( $post_id ) {
-	$lid = jardin_events_get_event_article_id( $post_id );
-	if ( $lid <= 0 ) {
-		return null;
-	}
-	$p = get_post( $lid );
-	return ( $p instanceof \WP_Post ) ? $p : null;
-}
-
-/**
  * Find a published event that links to this article as recap (event_article).
  *
  * @param int $post_id Article post ID.

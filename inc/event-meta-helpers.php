@@ -211,19 +211,6 @@ function jardin_events_sanitize_meta_event_article( $meta_value ) {
 }
 
 /**
- * Back-compat sanitize alias for recap article meta.
- *
- * @deprecated Use {@see jardin_events_sanitize_meta_event_article()}
- *
- * @param mixed $meta_value Meta value.
- * @return int
- */
-function jardin_events_sanitize_meta_linked_post( $meta_value ) {
-	$ids = jardin_events_sanitize_meta_event_article( $meta_value );
-	return empty( $ids ) ? 0 : (int) $ids[0];
-}
-
-/**
  * Canonical list of registered meta keys (extend via filter).
  *
  * @return string[]
