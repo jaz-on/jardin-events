@@ -61,7 +61,14 @@ function jardin_events_load_textdomain() {
 		dirname( plugin_basename( JARDIN_EVENTS_PLUGIN_FILE ) ) . '/languages'
 	);
 }
-add_action( 'init', 'jardin_events_load_textdomain' );
+add_action( 'init', 'jardin_events_load_textdomain', 0 );
+add_action(
+	'change_locale',
+	static function () {
+		unload_textdomain( 'jardin-events' );
+		jardin_events_load_textdomain();
+	}
+);
 
 /**
  * Initialize plugin.

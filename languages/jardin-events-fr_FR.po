@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Jardin Events\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-05T14:40:00+00:00\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/jardin-events\n"
+"POT-Creation-Date: 2026-05-05T15:09:29+00:00\n"
 "PO-Revision-Date: 2026-05-05 14:40+0000\n"
 "Last-Translator: Jason Rouet\n"
 "Language-Team: French\n"
@@ -34,8 +34,7 @@ msgstr "Jason Rouet"
 msgid "https://jasonrouet.com"
 msgstr "https://jasonrouet.com"
 
-#: blocks/event-archive-meta/render.php:25
-#: inc/class-events-core.php:370
+#: blocks/event-archive-meta/render.php:25 inc/class-events-core.php:370
 msgid "Event"
 msgstr "Événement"
 
@@ -72,7 +71,8 @@ msgstr "Événements à venir"
 
 #: docs/theme-handoff/events-upcoming.php:23
 msgid "Upcoming events list (dates and location via jardin-events meta)."
-msgstr "Liste des événements à venir (dates et lieu via les meta jardin-events)."
+msgstr ""
+"Liste des événements à venir (dates et lieu via les meta jardin-events)."
 
 #: inc/class-events-block-bindings.php:45
 msgid "Event — date (formatted)"
@@ -86,8 +86,7 @@ msgstr "Événement — lieu (ville · pays)"
 msgid "Event — roles (plain text)"
 msgstr "Événement — rôles (texte brut)"
 
-#: inc/class-events-core.php:335
-#: inc/class-events-core.php:343
+#: inc/class-events-core.php:335 inc/class-events-core.php:343
 msgid "Roles"
 msgstr "Rôles"
 
@@ -119,10 +118,8 @@ msgstr "Ajouter un rôle"
 msgid "New role"
 msgstr "Nouveau rôle"
 
-#: inc/class-events-core.php:369
-#: inc/class-events-core.php:381
-#: inc/class-events-core.php:385
-#: jardin-events.php:101
+#: inc/class-events-core.php:369 inc/class-events-core.php:381
+#: inc/class-events-core.php:385 jardin-events.php:108
 msgid "Events"
 msgstr "Événements"
 
@@ -228,11 +225,11 @@ msgstr "La date de début est obligatoire."
 msgid "The end date must be the same as or after the start date."
 msgstr "La date de fin doit être identique ou postérieure à la date de début."
 
-#: jardin-events.php:123
+#: jardin-events.php:130
 msgid "GitHub"
 msgstr "GitHub"
 
-#: jardin-events.php:128
+#: jardin-events.php:135
 msgid "Donate"
 msgstr "Soutenir"
 
@@ -280,7 +277,8 @@ msgstr "Méta archive événement"
 #: blocks/event-archive-meta/block.json
 msgctxt "block description"
 msgid "Roles and location row for event archive list items (.entry-meta)."
-msgstr "Ligne rôles + lieu pour les items de l’archive événement (.entry-meta)."
+msgstr ""
+"Ligne rôles + lieu pour les items de l’archive événement (.entry-meta)."
 
 #: blocks/event-external-link/block.json
 msgctxt "block title"
@@ -300,7 +298,8 @@ msgstr "Filtres rôles événements"
 #: blocks/event-filter/block.json
 msgctxt "block description"
 msgid "Chip links to filter the events archive by role (?event_role=)."
-msgstr "Liens chips pour filtrer l’archive des événements par rôle (?event_role=)."
+msgstr ""
+"Liens chips pour filtrer l’archive des événements par rôle (?event_role=)."
 
 #: blocks/event-inline-date/block.json
 msgctxt "block title"
@@ -330,7 +329,9 @@ msgstr "Méta événement (en ligne)"
 #: blocks/event-inline-meta/block.json
 msgctxt "block description"
 msgid "Inline event metadata line for home IRL rows: date(s) - city, country."
-msgstr "Ligne de métadonnées événement en ligne pour les rangées IRL d’accueil : date(s) — ville, pays."
+msgstr ""
+"Ligne de métadonnées événement en ligne pour les rangées IRL d’accueil : "
+"date(s) — ville, pays."
 
 #: blocks/event-single-meta/block.json
 msgctxt "block title"
@@ -350,5 +351,6 @@ msgstr "Barre de statut événement"
 #: blocks/event-status-bar/block.json
 msgctxt "block description"
 msgid "Badge (upcoming / ongoing / past) and countdown for the current event."
-msgstr "Badge (à venir / en cours / passé) et compte à rebours pour l’événement courant."
-
+msgstr ""
+"Badge (à venir / en cours / passé) et compte à rebours pour l’événement "
+"courant."
